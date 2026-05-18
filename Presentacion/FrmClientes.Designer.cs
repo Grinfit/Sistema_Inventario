@@ -1,236 +1,634 @@
-﻿namespace Sistema_Inventario.Presentacion
+﻿using System.Drawing;
+using System.Windows.Forms;
+using FontAwesome.Sharp;
+
+namespace Sistema_Inventario.Presentacion
 {
     partial class FrmClientes
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            this.label5 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.Label1 = new System.Windows.Forms.Label();
-            this.txtBuscar = new System.Windows.Forms.TextBox();
-            this.txtCorreo = new System.Windows.Forms.TextBox();
-            this.txtTelefono = new System.Windows.Forms.TextBox();
-            this.txtNombre = new System.Windows.Forms.TextBox();
-            this.btnGuardar = new System.Windows.Forms.Button();
-            this.btnEditar = new System.Windows.Forms.Button();
-            this.btnEliminar = new System.Windows.Forms.Button();
-            this.btnNuevo = new System.Windows.Forms.Button();
-            this.btnBuscar = new System.Windows.Forms.Button();
-            this.dgvClientes = new System.Windows.Forms.DataGridView();
+            DataGridViewCellStyle headerStyle =
+                new DataGridViewCellStyle();
+
+            DataGridViewCellStyle rowsStyle =
+                new DataGridViewCellStyle();
+
+            this.lblTitulo = new Label();
+
+            this.label1 = new Label();
+            this.label2 = new Label();
+            this.label3 = new Label();
+            this.label5 = new Label();
+
+            this.txtBuscar = new TextBox();
+            this.txtNombre = new TextBox();
+            this.txtTelefono = new TextBox();
+            this.txtCorreo = new TextBox();
+
+            this.btnBuscar = new IconButton();
+
+            this.btnNuevo = new IconButton();
+            this.btnGuardar = new IconButton();
+            this.btnEditar = new IconButton();
+            this.btnEliminar = new IconButton();
+
+            this.dgvClientes = new DataGridView();
+
             ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).BeginInit();
+
             this.SuspendLayout();
-            // 
-            // label5
-            // 
+
+            // =====================================================
+            // FORMULARIO
+            // =====================================================
+
+            this.ClientSize =
+                new Size(1350, 860);
+
+            this.BackColor =
+                Color.FromArgb(236, 240, 245);
+
+            this.FormBorderStyle =
+                FormBorderStyle.None;
+
+            this.Name =
+                "FrmClientes";
+
+            this.Text =
+                "FrmClientes";
+
+            this.Load +=
+                new System.EventHandler(this.FrmClientes_Load);
+
+            // =====================================================
+            // TITULO
+            // =====================================================
+
+            this.lblTitulo.AutoSize = true;
+
+            this.lblTitulo.Font =
+                new Font(
+                    "Segoe UI",
+                    30F,
+                    FontStyle.Bold);
+
+            this.lblTitulo.ForeColor =
+                Color.FromArgb(10, 35, 66);
+
+            this.lblTitulo.Location =
+                new Point(50, 35);
+
+            this.lblTitulo.Text =
+                "Gestión de Clientes";
+
+            // =====================================================
+            // LABEL BUSCAR
+            // =====================================================
+
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(79, 80);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(80, 28);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Buscar";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(79, 308);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(78, 28);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Correo";
-            // 
-            // label2
-            // 
+
+            this.label5.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    13F,
+                    FontStyle.Bold);
+
+            this.label5.Location =
+                new Point(60, 115);
+
+            this.label5.Text =
+                "Buscar Cliente";
+
+            // =====================================================
+            // TXT BUSCAR
+            // =====================================================
+
+            this.txtBuscar.Font =
+                new Font(
+                    "Segoe UI",
+                    12F);
+
+            this.txtBuscar.Location =
+                new Point(60, 150);
+
+            this.txtBuscar.Size =
+                new Size(360, 34);
+
+            this.txtBuscar.BorderStyle =
+                BorderStyle.FixedSingle;
+
+            // =====================================================
+            // BTN BUSCAR
+            // =====================================================
+
+            this.btnBuscar.BackColor =
+                Color.FromArgb(10, 35, 66);
+
+            this.btnBuscar.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnBuscar.FlatAppearance.BorderSize = 0;
+
+            this.btnBuscar.ForeColor =
+                Color.White;
+
+            this.btnBuscar.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnBuscar.IconChar =
+                IconChar.Search;
+
+            this.btnBuscar.IconColor =
+                Color.White;
+
+            this.btnBuscar.IconFont =
+                IconFont.Auto;
+
+            this.btnBuscar.IconSize = 24;
+
+            this.btnBuscar.Text =
+                " Buscar";
+
+            this.btnBuscar.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnBuscar.Location =
+                new Point(450, 145);
+
+            this.btnBuscar.Size =
+                new Size(160, 42);
+
+            this.btnBuscar.Cursor =
+                Cursors.Hand;
+
+            this.btnBuscar.Click +=
+                new System.EventHandler(this.btnBuscar_Click);
+
+            // =====================================================
+            // LABEL NOMBRE
+            // =====================================================
+
+            this.label1.AutoSize = true;
+
+            this.label1.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    13F,
+                    FontStyle.Bold);
+
+            this.label1.Location =
+                new Point(60, 230);
+
+            this.label1.Text =
+                "Nombre";
+
+            // =====================================================
+            // TXT NOMBRE
+            // =====================================================
+
+            this.txtNombre.Font =
+                new Font(
+                    "Segoe UI",
+                    12F);
+
+            this.txtNombre.Location =
+                new Point(60, 265);
+
+            this.txtNombre.Size =
+                new Size(360, 34);
+
+            this.txtNombre.BorderStyle =
+                BorderStyle.FixedSingle;
+
+            // =====================================================
+            // LABEL TELEFONO
+            // =====================================================
+
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(79, 241);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 28);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Teléfono";
-            // 
-            // Label1
-            // 
-            this.Label1.AutoSize = true;
-            this.Label1.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label1.Location = new System.Drawing.Point(79, 161);
-            this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(91, 28);
-            this.Label1.TabIndex = 6;
-            this.Label1.Text = "Nombre";
-            // 
-            // txtBuscar
-            // 
-            this.txtBuscar.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBuscar.Location = new System.Drawing.Point(235, 77);
-            this.txtBuscar.Name = "txtBuscar";
-            this.txtBuscar.Size = new System.Drawing.Size(368, 35);
-            this.txtBuscar.TabIndex = 14;
-            // 
-            // txtCorreo
-            // 
-            this.txtCorreo.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCorreo.Location = new System.Drawing.Point(235, 305);
-            this.txtCorreo.Name = "txtCorreo";
-            this.txtCorreo.Size = new System.Drawing.Size(368, 35);
-            this.txtCorreo.TabIndex = 13;
-            // 
-            // txtTelefono
-            // 
-            this.txtTelefono.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTelefono.Location = new System.Drawing.Point(235, 234);
-            this.txtTelefono.Name = "txtTelefono";
-            this.txtTelefono.Size = new System.Drawing.Size(368, 35);
-            this.txtTelefono.TabIndex = 12;
-            // 
-            // txtNombre
-            // 
-            this.txtNombre.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNombre.Location = new System.Drawing.Point(235, 154);
-            this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(368, 35);
-            this.txtNombre.TabIndex = 11;
-            // 
-            // btnGuardar
-            // 
-            this.btnGuardar.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGuardar.Location = new System.Drawing.Point(280, 385);
-            this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(182, 45);
-            this.btnGuardar.TabIndex = 19;
-            this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = true;
-            this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            // 
-            // btnEditar
-            // 
-            this.btnEditar.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditar.Location = new System.Drawing.Point(484, 385);
-            this.btnEditar.Name = "btnEditar";
-            this.btnEditar.Size = new System.Drawing.Size(193, 46);
-            this.btnEditar.TabIndex = 18;
-            this.btnEditar.Text = "Editar";
-            this.btnEditar.UseVisualStyleBackColor = true;
-            this.btnEditar.Click += new System.EventHandler(this.btnEditar_Click);
-            // 
-            // btnEliminar
-            // 
-            this.btnEliminar.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEliminar.Location = new System.Drawing.Point(694, 384);
-            this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(193, 46);
-            this.btnEliminar.TabIndex = 17;
-            this.btnEliminar.Text = "Eliminar";
-            this.btnEliminar.UseVisualStyleBackColor = true;
-            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
-            // 
-            // btnNuevo
-            // 
-            this.btnNuevo.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNuevo.Location = new System.Drawing.Point(63, 384);
-            this.btnNuevo.Name = "btnNuevo";
-            this.btnNuevo.Size = new System.Drawing.Size(193, 46);
-            this.btnNuevo.TabIndex = 16;
-            this.btnNuevo.Text = "Nuevo";
-            this.btnNuevo.UseVisualStyleBackColor = true;
-            this.btnNuevo.Click += new System.EventHandler(this.btnNuevo_Click);
-            // 
-            // btnBuscar
-            // 
-            this.btnBuscar.Font = new System.Drawing.Font("Tahoma", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBuscar.Location = new System.Drawing.Point(694, 66);
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(193, 46);
-            this.btnBuscar.TabIndex = 20;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.UseVisualStyleBackColor = true;
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
-            // 
-            // dgvClientes
-            // 
+
+            this.label2.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    13F,
+                    FontStyle.Bold);
+
+            this.label2.Location =
+                new Point(520, 230);
+
+            this.label2.Text =
+                "Teléfono";
+
+            // =====================================================
+            // TXT TELEFONO
+            // =====================================================
+
+            this.txtTelefono.Font =
+                new Font(
+                    "Segoe UI",
+                    12F);
+
+            this.txtTelefono.Location =
+                new Point(520, 265);
+
+            this.txtTelefono.Size =
+                new Size(220, 34);
+
+            this.txtTelefono.BorderStyle =
+                BorderStyle.FixedSingle;
+
+            // =====================================================
+            // LABEL CORREO
+            // =====================================================
+
+            this.label3.AutoSize = true;
+
+            this.label3.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    13F,
+                    FontStyle.Bold);
+
+            this.label3.Location =
+                new Point(60, 340);
+
+            this.label3.Text =
+                "Correo";
+
+            // =====================================================
+            // TXT CORREO
+            // =====================================================
+
+            this.txtCorreo.Font =
+                new Font(
+                    "Segoe UI",
+                    12F);
+
+            this.txtCorreo.Location =
+                new Point(60, 375);
+
+            this.txtCorreo.Size =
+                new Size(680, 34);
+
+            this.txtCorreo.BorderStyle =
+                BorderStyle.FixedSingle;
+
+            // =====================================================
+            // BTN NUEVO
+            // =====================================================
+
+            this.btnNuevo.BackColor =
+                Color.FromArgb(52, 152, 219);
+
+            this.btnNuevo.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnNuevo.FlatAppearance.BorderSize = 0;
+
+            this.btnNuevo.ForeColor =
+                Color.White;
+
+            this.btnNuevo.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnNuevo.IconChar =
+                IconChar.CirclePlus;
+
+            this.btnNuevo.IconColor =
+                Color.White;
+
+            this.btnNuevo.IconFont =
+                IconFont.Auto;
+
+            this.btnNuevo.IconSize = 28;
+
+            this.btnNuevo.Text =
+                " Nuevo";
+
+            this.btnNuevo.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnNuevo.Size =
+                new Size(170, 58);
+
+            this.btnNuevo.Location =
+                new Point(60, 470);
+
+            this.btnNuevo.Cursor =
+                Cursors.Hand;
+
+            this.btnNuevo.Click +=
+                new System.EventHandler(this.btnNuevo_Click);
+
+            // =====================================================
+            // BTN GUARDAR
+            // =====================================================
+
+            this.btnGuardar.BackColor =
+                Color.FromArgb(46, 204, 113);
+
+            this.btnGuardar.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnGuardar.FlatAppearance.BorderSize = 0;
+
+            this.btnGuardar.ForeColor =
+                Color.White;
+
+            this.btnGuardar.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnGuardar.IconChar =
+                IconChar.FloppyDisk;
+
+            this.btnGuardar.IconColor =
+                Color.White;
+
+            this.btnGuardar.IconFont =
+                IconFont.Auto;
+
+            this.btnGuardar.IconSize = 28;
+
+            this.btnGuardar.Text =
+                " Guardar";
+
+            this.btnGuardar.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnGuardar.Size =
+                new Size(170, 58);
+
+            this.btnGuardar.Location =
+                new Point(260, 470);
+
+            this.btnGuardar.Cursor =
+                Cursors.Hand;
+
+            this.btnGuardar.Click +=
+                new System.EventHandler(this.btnGuardar_Click);
+
+            // =====================================================
+            // BTN EDITAR
+            // =====================================================
+
+            this.btnEditar.BackColor =
+                Color.FromArgb(241, 196, 15);
+
+            this.btnEditar.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnEditar.FlatAppearance.BorderSize = 0;
+
+            this.btnEditar.ForeColor =
+                Color.White;
+
+            this.btnEditar.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnEditar.IconChar =
+                IconChar.PenToSquare;
+
+            this.btnEditar.IconColor =
+                Color.White;
+
+            this.btnEditar.IconFont =
+                IconFont.Auto;
+
+            this.btnEditar.IconSize = 28;
+
+            this.btnEditar.Text =
+                " Editar";
+
+            this.btnEditar.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnEditar.Size =
+                new Size(170, 58);
+
+            this.btnEditar.Location =
+                new Point(460, 470);
+
+            this.btnEditar.Cursor =
+                Cursors.Hand;
+
+            this.btnEditar.Click +=
+                new System.EventHandler(this.btnEditar_Click);
+
+            // =====================================================
+            // BTN ELIMINAR
+            // =====================================================
+
+            this.btnEliminar.BackColor =
+                Color.FromArgb(231, 76, 60);
+
+            this.btnEliminar.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnEliminar.FlatAppearance.BorderSize = 0;
+
+            this.btnEliminar.ForeColor =
+                Color.White;
+
+            this.btnEliminar.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnEliminar.IconChar =
+                IconChar.Trash;
+
+            this.btnEliminar.IconColor =
+                Color.White;
+
+            this.btnEliminar.IconFont =
+                IconFont.Auto;
+
+            this.btnEliminar.IconSize = 28;
+
+            this.btnEliminar.Text =
+                " Eliminar";
+
+            this.btnEliminar.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnEliminar.Size =
+                new Size(170, 58);
+
+            this.btnEliminar.Location =
+                new Point(660, 470);
+
+            this.btnEliminar.Cursor =
+                Cursors.Hand;
+
+            this.btnEliminar.Click +=
+                new System.EventHandler(this.btnEliminar_Click);
+
+            // =====================================================
+            // DATAGRIDVIEW
+            // =====================================================
+
             this.dgvClientes.AllowUserToAddRows = false;
-            this.dgvClientes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvClientes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvClientes.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dgvClientes.Location = new System.Drawing.Point(0, 491);
-            this.dgvClientes.Name = "dgvClientes";
+
+            this.dgvClientes.AllowUserToDeleteRows = false;
+
+            this.dgvClientes.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill;
+
+            this.dgvClientes.BackgroundColor =
+                Color.White;
+
+            this.dgvClientes.BorderStyle =
+                BorderStyle.None;
+
+            this.dgvClientes.CellBorderStyle =
+                DataGridViewCellBorderStyle.SingleHorizontal;
+
+            this.dgvClientes.Location =
+                new Point(40, 570);
+
+            this.dgvClientes.Size =
+                new Size(1520, 260);
+
             this.dgvClientes.ReadOnly = true;
-            this.dgvClientes.RowHeadersWidth = 51;
-            this.dgvClientes.RowTemplate.Height = 24;
-            this.dgvClientes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvClientes.Size = new System.Drawing.Size(1094, 300);
-            this.dgvClientes.TabIndex = 21;
-            this.dgvClientes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvClientes_CellClick);
-            // 
-            // FrmClientes
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1094, 791);
-            this.Controls.Add(this.dgvClientes);
+
+            this.dgvClientes.RowHeadersVisible = false;
+
+            this.dgvClientes.SelectionMode =
+                DataGridViewSelectionMode.FullRowSelect;
+
+            this.dgvClientes.MultiSelect = false;
+
+            this.dgvClientes.EnableHeadersVisualStyles = false;
+
+            this.dgvClientes.ColumnHeadersHeight = 45;
+
+            this.dgvClientes.ColumnHeadersHeightSizeMode =
+                DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+
+            this.dgvClientes.RowTemplate.Height = 42;
+
+            headerStyle.BackColor =
+                Color.FromArgb(10, 35, 66);
+
+            headerStyle.ForeColor =
+                Color.White;
+
+            headerStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    11F,
+                    FontStyle.Bold);
+
+            this.dgvClientes.ColumnHeadersDefaultCellStyle =
+                headerStyle;
+
+            rowsStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    10F);
+
+            rowsStyle.SelectionBackColor =
+                Color.FromArgb(52, 152, 219);
+
+            rowsStyle.SelectionForeColor =
+                Color.White;
+
+            this.dgvClientes.RowsDefaultCellStyle =
+                rowsStyle;
+
+            this.dgvClientes.AlternatingRowsDefaultCellStyle.BackColor =
+                Color.FromArgb(245, 247, 250);
+
+            this.dgvClientes.DefaultCellStyle.Padding =
+                new Padding(5);
+
+            this.dgvClientes.GridColor =
+                Color.FromArgb(225, 225, 225);
+
+            this.dgvClientes.CellClick +=
+                new DataGridViewCellEventHandler(
+                    this.dgvClientes_CellClick);
+
+            // =====================================================
+            // CONTROLES
+            // =====================================================
+
+            this.Controls.Add(this.lblTitulo);
+
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label5);
+
+            this.Controls.Add(this.txtBuscar);
+            this.Controls.Add(this.txtNombre);
+            this.Controls.Add(this.txtTelefono);
+            this.Controls.Add(this.txtCorreo);
+
             this.Controls.Add(this.btnBuscar);
+
+            this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.btnEditar);
             this.Controls.Add(this.btnEliminar);
-            this.Controls.Add(this.btnNuevo);
-            this.Controls.Add(this.txtBuscar);
-            this.Controls.Add(this.txtCorreo);
-            this.Controls.Add(this.txtTelefono);
-            this.Controls.Add(this.txtNombre);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.Label1);
-            this.Name = "FrmClientes";
-            this.Text = "FrmClientes";
-            this.Load += new System.EventHandler(this.FrmClientes_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
 
+            this.Controls.Add(this.dgvClientes);
+
+            ((System.ComponentModel.ISupportInitialize)(this.dgvClientes)).EndInit();
+
+            this.ResumeLayout(false);
+
+            this.PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label Label1;
-        private System.Windows.Forms.TextBox txtBuscar;
-        private System.Windows.Forms.TextBox txtCorreo;
-        private System.Windows.Forms.TextBox txtTelefono;
-        private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.Button btnGuardar;
-        private System.Windows.Forms.Button btnEditar;
-        private System.Windows.Forms.Button btnEliminar;
-        private System.Windows.Forms.Button btnNuevo;
-        private System.Windows.Forms.Button btnBuscar;
-        private System.Windows.Forms.DataGridView dgvClientes;
+        private Label lblTitulo;
+
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Label label5;
+
+        private TextBox txtBuscar;
+        private TextBox txtNombre;
+        private TextBox txtTelefono;
+        private TextBox txtCorreo;
+
+        private IconButton btnBuscar;
+
+        private IconButton btnNuevo;
+        private IconButton btnGuardar;
+        private IconButton btnEditar;
+        private IconButton btnEliminar;
+
+        private DataGridView dgvClientes;
     }
 }
