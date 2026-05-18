@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Windows.Forms;
 
 using Sistema_Inventario.Datos;
 using Sistema_Inventario.Utilidades;
@@ -26,61 +20,154 @@ namespace Sistema_Inventario.Presentacion
             InitializeComponent();
         }
 
+        // =====================================================
+        // CARGAR CLIENTES
+        // =====================================================
+
         private void CargarClientes()
         {
-            SqlDataAdapter da = new SqlDataAdapter(
-                "SELECT * FROM Clientes",
-                cn.AbrirConexion());
+            try
+            {
+                SqlDataAdapter da =
+                    new SqlDataAdapter(
+                        "SELECT * FROM Clientes",
+                        cn.AbrirConexion());
 
-            DataTable dt = new DataTable();
+                DataTable dt =
+                    new DataTable();
 
-            da.Fill(dt);
+                da.Fill(dt);
 
-            cbClientes.DataSource = dt;
+                cbClientes.DataSource = dt;
 
-            cbClientes.DisplayMember = "Nombre";
+                cbClientes.DisplayMember =
+                    "Nombre";
 
-            cbClientes.ValueMember = "IdCliente";
+                cbClientes.ValueMember =
+                    "IdCliente";
 
-            cn.CerrarConexion();
+                cn.CerrarConexion();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
+
+        // =====================================================
+        // CARGAR PRODUCTOS
+        // =====================================================
 
         private void CargarProductos()
         {
-            SqlDataAdapter da = new SqlDataAdapter(
-                "SELECT * FROM Productos",
-                cn.AbrirConexion());
+            try
+            {
+                SqlDataAdapter da =
+                    new SqlDataAdapter(
+                        "SELECT * FROM Productos",
+                        cn.AbrirConexion());
 
-            DataTable dt = new DataTable();
+                DataTable dt =
+                    new DataTable();
 
-            da.Fill(dt);
+                da.Fill(dt);
 
-            cbProductos.DataSource = dt;
+                cbProductos.DataSource = dt;
 
-            cbProductos.DisplayMember = "Nombre";
+                cbProductos.DisplayMember =
+                    "Nombre";
 
-            cbProductos.ValueMember = "IdProducto";
+                cbProductos.ValueMember =
+                    "IdProducto";
 
-            cn.CerrarConexion();
+                cn.CerrarConexion();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
+
+        // =====================================================
+        // MOSTRAR VENTAS
+        // =====================================================
 
         private void MostrarVentas()
         {
-            SqlDataAdapter da = new SqlDataAdapter(
-                "sp_MostrarVentas",
-                cn.AbrirConexion());
+            try
+            {
+                SqlDataAdapter da =
+                    new SqlDataAdapter(
+                        "sp_MostrarVentas",
+                        cn.AbrirConexion());
 
-            da.SelectCommand.CommandType =
-                CommandType.StoredProcedure;
+                da.SelectCommand.CommandType =
+                    CommandType.StoredProcedure;
 
-            DataTable dt = new DataTable();
+                DataTable dt =
+                    new DataTable();
 
-            da.Fill(dt);
+                da.Fill(dt);
 
-            dgvVentas.DataSource = dt;
+                dgvVentas.DataSource = dt;
 
-            cn.CerrarConexion();
+                // ============================================
+                // OCULTAR ID
+                // ============================================
+
+                if (dgvVentas.Columns.Count > 0)
+                {
+                    dgvVentas.Columns["IdVenta"].Visible = false;
+                }
+
+                // ============================================
+                // FORMATO MONEDA
+                // ============================================
+
+                dgvVentas.Columns["PrecioUnitario"]
+                    .DefaultCellStyle.Format = "C2";
+
+                dgvVentas.Columns["Subtotal"]
+                    .DefaultCellStyle.Format = "C2";
+
+                // ============================================
+                // ALINEACION
+                // ============================================
+
+                dgvVentas.ColumnHeadersDefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleCenter;
+
+                dgvVentas.DefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleLeft;
+
+                cn.CerrarConexion();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                log.RegistrarLog(
+                    "ERROR MOSTRAR VENTAS",
+                    "admin",
+                    ex.Message);
+            }
         }
+
+        // =====================================================
+        // LOAD
+        // =====================================================
 
         private void FrmVentas_Load(
             object sender,
@@ -91,7 +178,21 @@ namespace Sistema_Inventario.Presentacion
             CargarProductos();
 
             MostrarVentas();
+
+            // ============================================
+            // EFECTOS HOVER
+            // ============================================
+
+            btnNuevo.FlatAppearance.MouseOverBackColor =
+                ControlPaint.Light(btnNuevo.BackColor);
+
+            btnRegistrarVenta.FlatAppearance.MouseOverBackColor =
+                ControlPaint.Light(btnRegistrarVenta.BackColor);
         }
+
+        // =====================================================
+        // PRODUCTO SELECCIONADO
+        // =====================================================
 
         private void cbProductos_SelectedIndexChanged(
             object sender,
@@ -99,20 +200,25 @@ namespace Sistema_Inventario.Presentacion
         {
             try
             {
-                SqlCommand cmd = new SqlCommand(
-                    "SELECT Precio FROM Productos WHERE IdProducto=@Id",
-                    cn.AbrirConexion());
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "SELECT Precio FROM Productos WHERE IdProducto=@Id",
+                        cn.AbrirConexion());
 
                 cmd.Parameters.AddWithValue(
                     "@Id",
                     cbProductos.SelectedValue);
 
-                SqlDataReader dr = cmd.ExecuteReader();
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
 
                 if (dr.Read())
                 {
+                    decimal precio =
+                        Convert.ToDecimal(dr["Precio"]);
+
                     txtPrecio.Text =
-                        dr["Precio"].ToString();
+                        precio.ToString("0.00");
                 }
 
                 dr.Close();
@@ -124,6 +230,10 @@ namespace Sistema_Inventario.Presentacion
 
             }
         }
+
+        // =====================================================
+        // CALCULAR TOTAL
+        // =====================================================
 
         private void txtCantidad_TextChanged(
             object sender,
@@ -137,9 +247,11 @@ namespace Sistema_Inventario.Presentacion
                 int cantidad =
                     Convert.ToInt32(txtCantidad.Text);
 
-                decimal total = precio * cantidad;
+                decimal total =
+                    precio * cantidad;
 
-                txtTotal.Text = total.ToString();
+                txtTotal.Text =
+                    total.ToString("0.00");
             }
             catch
             {
@@ -147,15 +259,77 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
+        // =====================================================
+        // VALIDAR CAMPOS
+        // =====================================================
+
+        private bool ValidarCampos()
+        {
+            if (txtCantidad.Text.Trim() == "")
+            {
+                MessageBox.Show(
+                    "Ingrese la cantidad",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtCantidad.Focus();
+
+                return false;
+            }
+
+            int cantidad;
+
+            if (!int.TryParse(
+                txtCantidad.Text,
+                out cantidad))
+            {
+                MessageBox.Show(
+                    "Ingrese una cantidad válida",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtCantidad.Focus();
+
+                return false;
+            }
+
+            if (cantidad <= 0)
+            {
+                MessageBox.Show(
+                    "La cantidad debe ser mayor a cero",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtCantidad.Focus();
+
+                return false;
+            }
+
+            return true;
+        }
+
+        // =====================================================
+        // REGISTRAR VENTA
+        // =====================================================
+
         private void btnRegistrarVenta_Click(
             object sender,
             EventArgs e)
         {
             try
             {
-                SqlCommand cmd = new SqlCommand(
-                    "sp_InsertarVenta",
-                    cn.AbrirConexion());
+                if (!ValidarCampos())
+                {
+                    return;
+                }
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "sp_InsertarVenta",
+                        cn.AbrirConexion());
 
                 cmd.CommandType =
                     CommandType.StoredProcedure;
@@ -188,7 +362,10 @@ namespace Sistema_Inventario.Presentacion
                     "Venta registrada correctamente");
 
                 MessageBox.Show(
-                    "Venta registrada correctamente");
+                    "Venta registrada correctamente",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 MostrarVentas();
 
@@ -198,7 +375,11 @@ namespace Sistema_Inventario.Presentacion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
                 log.RegistrarLog(
                     "ERROR VENTA",
@@ -207,12 +388,28 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
+        // =====================================================
+        // LIMPIAR CAMPOS
+        // =====================================================
+
         private void LimpiarCampos()
         {
             txtCantidad.Clear();
+
             txtPrecio.Clear();
+
             txtTotal.Clear();
+
+            cbClientes.SelectedIndex = 0;
+
+            cbProductos.SelectedIndex = 0;
+
+            txtCantidad.Focus();
         }
+
+        // =====================================================
+        // NUEVO
+        // =====================================================
 
         private void btnNuevo_Click(
             object sender,
