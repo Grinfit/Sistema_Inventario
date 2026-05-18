@@ -23,7 +23,7 @@ namespace Sistema_Inventario.Presentacion
         private void InitializeComponent()
         {
             // =====================================================
-            // ESTILOS DEL DATAGRIDVIEW
+            // ESTILOS DATAGRIDVIEW
             // =====================================================
 
             DataGridViewCellStyle headerStyle =
@@ -63,48 +63,45 @@ namespace Sistema_Inventario.Presentacion
             this.SuspendLayout();
 
             // =====================================================
-            // CONFIGURACION GENERAL DEL FORMULARIO
+            // FORMULARIO
             // =====================================================
 
-            // Tamaño general de la ventana
-            this.ClientSize = new Size(1350, 860);
+            this.ClientSize =
+                new Size(1350, 860);
 
-            // Color de fondo principal
-            this.BackColor = Color.FromArgb(236, 240, 245);
+            this.BackColor =
+                Color.FromArgb(236, 240, 245);
 
-            // Elimina bordes del formulario
-            this.FormBorderStyle = FormBorderStyle.None;
+            this.FormBorderStyle =
+                FormBorderStyle.None;
 
-            // Nombre del formulario
-            this.Name = "FrmProductos";
+            this.Name =
+                "FrmProductos";
 
-            this.Text = "FrmProductos";
+            this.Text =
+                "FrmProductos";
 
-            // Evento Load
-            this.Load += new System.EventHandler(this.FrmProductos_Load);
+            this.Load +=
+                new System.EventHandler(this.FrmProductos_Load);
 
             // =====================================================
-            // TITULO PRINCIPAL
+            // TITULO
             // =====================================================
 
             this.lblTitulo.AutoSize = true;
 
-            // Fuente grande y moderna
             this.lblTitulo.Font =
                 new Font(
                     "Segoe UI",
                     30F,
                     FontStyle.Bold);
 
-            // Color azul oscuro elegante
             this.lblTitulo.ForeColor =
                 Color.FromArgb(10, 35, 66);
 
-            // Posición del título
             this.lblTitulo.Location =
                 new Point(50, 35);
 
-            // Texto
             this.lblTitulo.Text =
                 "Gestión de Productos";
 
@@ -120,10 +117,6 @@ namespace Sistema_Inventario.Presentacion
                     12F,
                     FontStyle.Bold);
 
-            this.label5.ForeColor =
-                Color.FromArgb(45, 45, 45);
-
-            // Posición
             this.label5.Location =
                 new Point(60, 115);
 
@@ -131,7 +124,7 @@ namespace Sistema_Inventario.Presentacion
                 "Buscar Producto";
 
             // =====================================================
-            // TEXTBOX BUSCAR
+            // TXT BUSCAR
             // =====================================================
 
             this.txtBuscar.Font =
@@ -139,20 +132,17 @@ namespace Sistema_Inventario.Presentacion
                     "Segoe UI",
                     11F);
 
-            // Posición
             this.txtBuscar.Location =
                 new Point(60, 145);
 
-            // Tamaño
             this.txtBuscar.Size =
                 new Size(420, 38);
 
-            // Borde moderno
             this.txtBuscar.BorderStyle =
                 BorderStyle.FixedSingle;
 
             // =====================================================
-            // BOTON BUSCAR
+            // BTN BUSCAR
             // =====================================================
 
             this.btnBuscar.BackColor =
@@ -163,10 +153,6 @@ namespace Sistema_Inventario.Presentacion
 
             this.btnBuscar.FlatAppearance.BorderSize = 0;
 
-            // Color hover
-            this.btnBuscar.FlatAppearance.MouseOverBackColor =
-                Color.FromArgb(22, 52, 88);
-
             this.btnBuscar.ForeColor =
                 Color.White;
 
@@ -176,7 +162,6 @@ namespace Sistema_Inventario.Presentacion
                     10F,
                     FontStyle.Bold);
 
-            // Icono de lupa
             this.btnBuscar.IconChar =
                 IconChar.Search;
 
@@ -188,26 +173,20 @@ namespace Sistema_Inventario.Presentacion
 
             this.btnBuscar.IconSize = 24;
 
-            // Texto del botón
             this.btnBuscar.Text =
                 " Buscar";
 
-            // Coloca el icono antes del texto
             this.btnBuscar.TextImageRelation =
                 TextImageRelation.ImageBeforeText;
 
-            // Posición
             this.btnBuscar.Location =
                 new Point(500, 142);
 
-            // Tamaño
             this.btnBuscar.Size =
                 new Size(160, 42);
 
             this.btnBuscar.Cursor =
                 Cursors.Hand;
-
-            this.btnBuscar.UseVisualStyleBackColor = false;
 
             this.btnBuscar.Click +=
                 new System.EventHandler(this.btnBuscar_Click);
@@ -218,10 +197,11 @@ namespace Sistema_Inventario.Presentacion
 
             this.label1.AutoSize = true;
 
+            // Fuente más grande
             this.label1.Font =
                 new Font(
                     "Segoe UI Semibold",
-                    12F,
+                    13F,
                     FontStyle.Bold);
 
             this.label1.Location =
@@ -231,19 +211,19 @@ namespace Sistema_Inventario.Presentacion
                 "Nombre";
 
             // =====================================================
-            // TEXTBOX NOMBRE
+            // TXT NOMBRE
             // =====================================================
 
             this.txtNombre.Font =
                 new Font(
                     "Segoe UI",
-                    11F);
+                    12F);
 
             this.txtNombre.Location =
-                new Point(60, 250);
+                new Point(60, 255);
 
             this.txtNombre.Size =
-                new Size(450, 38);
+                new Size(360, 38);
 
             this.txtNombre.BorderStyle =
                 BorderStyle.FixedSingle;
@@ -257,29 +237,29 @@ namespace Sistema_Inventario.Presentacion
             this.label2.Font =
                 new Font(
                     "Segoe UI Semibold",
-                    12F,
+                    13F,
                     FontStyle.Bold);
 
             this.label2.Location =
-                new Point(60, 315);
+                new Point(60, 320);
 
             this.label2.Text =
                 "Categoría";
 
             // =====================================================
-            // TEXTBOX CATEGORIA
+            // TXT CATEGORIA
             // =====================================================
 
             this.txtCategoria.Font =
                 new Font(
                     "Segoe UI",
-                    11F);
+                    12F);
 
             this.txtCategoria.Location =
-                new Point(60, 345);
+                new Point(60, 355);
 
             this.txtCategoria.Size =
-                new Size(450, 38);
+                new Size(360, 38);
 
             this.txtCategoria.BorderStyle =
                 BorderStyle.FixedSingle;
@@ -293,29 +273,29 @@ namespace Sistema_Inventario.Presentacion
             this.label3.Font =
                 new Font(
                     "Segoe UI Semibold",
-                    12F,
+                    13F,
                     FontStyle.Bold);
 
             this.label3.Location =
-                new Point(600, 220);
+                new Point(520, 220);
 
             this.label3.Text =
                 "Precio";
 
             // =====================================================
-            // TEXTBOX PRECIO
+            // TXT PRECIO
             // =====================================================
 
             this.txtPrecio.Font =
                 new Font(
                     "Segoe UI",
-                    11F);
+                    12F);
 
             this.txtPrecio.Location =
-                new Point(600, 250);
+                new Point(520, 255);
 
             this.txtPrecio.Size =
-                new Size(300, 38);
+                new Size(180, 38);
 
             this.txtPrecio.BorderStyle =
                 BorderStyle.FixedSingle;
@@ -329,68 +309,220 @@ namespace Sistema_Inventario.Presentacion
             this.label4.Font =
                 new Font(
                     "Segoe UI Semibold",
-                    12F,
+                    13F,
                     FontStyle.Bold);
 
             this.label4.Location =
-                new Point(600, 315);
+                new Point(520, 320);
 
             this.label4.Text =
                 "Stock";
 
             // =====================================================
-            // TEXTBOX STOCK
+            // TXT STOCK
             // =====================================================
 
             this.txtStock.Font =
                 new Font(
                     "Segoe UI",
-                    11F);
+                    12F);
 
             this.txtStock.Location =
-                new Point(600, 345);
+                new Point(520, 355);
 
             this.txtStock.Size =
-                new Size(300, 38);
+                new Size(180, 38);
 
             this.txtStock.BorderStyle =
                 BorderStyle.FixedSingle;
 
             // =====================================================
-            // BOTONES CRUD
+            // BTN NUEVO
             // =====================================================
 
-            // Botón Nuevo
-            ConfigurarBoton(
-                this.btnNuevo,
-                "Nuevo",
-                IconChar.CirclePlus,
-                Color.FromArgb(52, 152, 219),
-                new Point(60, 450));
+            this.btnNuevo.BackColor =
+                Color.FromArgb(52, 152, 219);
 
-            // Botón Guardar
-            ConfigurarBoton(
-                this.btnGuardar,
-                "Guardar",
-                IconChar.FloppyDisk,
-                Color.FromArgb(46, 204, 113),
-                new Point(260, 450));
+            this.btnNuevo.FlatStyle =
+                FlatStyle.Flat;
 
-            // Botón Editar
-            ConfigurarBoton(
-                this.btnEditar,
-                "Editar",
-                IconChar.PenToSquare,
-                Color.FromArgb(241, 196, 15),
-                new Point(460, 450));
+            this.btnNuevo.FlatAppearance.BorderSize = 0;
 
-            // Botón Eliminar
-            ConfigurarBoton(
-                this.btnEliminar,
-                "Eliminar",
-                IconChar.Trash,
-                Color.FromArgb(231, 76, 60),
-                new Point(660, 450));
+            this.btnNuevo.ForeColor =
+                Color.White;
+
+            this.btnNuevo.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnNuevo.IconChar =
+                IconChar.CirclePlus;
+
+            this.btnNuevo.IconColor =
+                Color.White;
+
+            this.btnNuevo.IconFont =
+                IconFont.Auto;
+
+            this.btnNuevo.IconSize = 28;
+
+            this.btnNuevo.Text =
+                " Nuevo";
+
+            this.btnNuevo.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnNuevo.Size =
+                new Size(170, 58);
+
+            this.btnNuevo.Location =
+                new Point(60, 450);
+
+            this.btnNuevo.Cursor =
+                Cursors.Hand;
+
+            // =====================================================
+            // BTN GUARDAR
+            // =====================================================
+
+            this.btnGuardar.BackColor =
+                Color.FromArgb(46, 204, 113);
+
+            this.btnGuardar.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnGuardar.FlatAppearance.BorderSize = 0;
+
+            this.btnGuardar.ForeColor =
+                Color.White;
+
+            this.btnGuardar.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnGuardar.IconChar =
+                IconChar.FloppyDisk;
+
+            this.btnGuardar.IconColor =
+                Color.White;
+
+            this.btnGuardar.IconFont =
+                IconFont.Auto;
+
+            this.btnGuardar.IconSize = 28;
+
+            this.btnGuardar.Text =
+                " Guardar";
+
+            this.btnGuardar.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnGuardar.Size =
+                new Size(170, 58);
+
+            this.btnGuardar.Location =
+                new Point(260, 450);
+
+            this.btnGuardar.Cursor =
+                Cursors.Hand;
+
+            // =====================================================
+            // BTN EDITAR
+            // =====================================================
+
+            this.btnEditar.BackColor =
+                Color.FromArgb(241, 196, 15);
+
+            this.btnEditar.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnEditar.FlatAppearance.BorderSize = 0;
+
+            this.btnEditar.ForeColor =
+                Color.White;
+
+            this.btnEditar.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnEditar.IconChar =
+                IconChar.PenToSquare;
+
+            this.btnEditar.IconColor =
+                Color.White;
+
+            this.btnEditar.IconFont =
+                IconFont.Auto;
+
+            this.btnEditar.IconSize = 28;
+
+            this.btnEditar.Text =
+                " Editar";
+
+            this.btnEditar.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnEditar.Size =
+                new Size(170, 58);
+
+            this.btnEditar.Location =
+                new Point(460, 450);
+
+            this.btnEditar.Cursor =
+                Cursors.Hand;
+
+            // =====================================================
+            // BTN ELIMINAR
+            // =====================================================
+
+            this.btnEliminar.BackColor =
+                Color.FromArgb(231, 76, 60);
+
+            this.btnEliminar.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnEliminar.FlatAppearance.BorderSize = 0;
+
+            this.btnEliminar.ForeColor =
+                Color.White;
+
+            this.btnEliminar.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnEliminar.IconChar =
+                IconChar.Trash;
+
+            this.btnEliminar.IconColor =
+                Color.White;
+
+            this.btnEliminar.IconFont =
+                IconFont.Auto;
+
+            this.btnEliminar.IconSize = 28;
+
+            this.btnEliminar.Text =
+                " Eliminar";
+
+            this.btnEliminar.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnEliminar.Size =
+                new Size(170, 58);
+
+            this.btnEliminar.Location =
+                new Point(660, 450);
+
+            this.btnEliminar.Cursor =
+                Cursors.Hand;
 
             // =====================================================
             // DATAGRIDVIEW
@@ -400,51 +532,40 @@ namespace Sistema_Inventario.Presentacion
 
             this.dgvProductos.AllowUserToDeleteRows = false;
 
-            // Ajusta columnas automáticamente
             this.dgvProductos.AutoSizeColumnsMode =
                 DataGridViewAutoSizeColumnsMode.Fill;
 
-            // Fondo blanco
             this.dgvProductos.BackgroundColor =
                 Color.White;
 
             this.dgvProductos.BorderStyle =
                 BorderStyle.None;
 
-            // Bordes horizontales suaves
             this.dgvProductos.CellBorderStyle =
                 DataGridViewCellBorderStyle.SingleHorizontal;
 
-            // Posición de la tabla
             this.dgvProductos.Location =
                 new Point(60, 585);
 
-            // Tamaño de la tabla
             this.dgvProductos.Size =
                 new Size(1500, 400);
 
-            // Solo lectura
             this.dgvProductos.ReadOnly = true;
 
-            // Oculta encabezados laterales
             this.dgvProductos.RowHeadersVisible = false;
 
-            // Selección completa de filas
             this.dgvProductos.SelectionMode =
                 DataGridViewSelectionMode.FullRowSelect;
 
             this.dgvProductos.MultiSelect = false;
 
-            // Permite estilos personalizados
             this.dgvProductos.EnableHeadersVisualStyles = false;
 
-            // Altura del header
             this.dgvProductos.ColumnHeadersHeight = 45;
 
             this.dgvProductos.ColumnHeadersHeightSizeMode =
                 DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
-            // Altura de filas
             this.dgvProductos.RowTemplate.Height = 42;
 
             // =====================================================
@@ -467,7 +588,7 @@ namespace Sistema_Inventario.Presentacion
                 headerStyle;
 
             // =====================================================
-            // ROWS STYLE
+            // ROW STYLE
             // =====================================================
 
             rowsStyle.Font =
@@ -475,7 +596,6 @@ namespace Sistema_Inventario.Presentacion
                     "Segoe UI",
                     10F);
 
-            // Color selección
             rowsStyle.SelectionBackColor =
                 Color.FromArgb(52, 152, 219);
 
@@ -485,15 +605,12 @@ namespace Sistema_Inventario.Presentacion
             this.dgvProductos.RowsDefaultCellStyle =
                 rowsStyle;
 
-            // Filas alternas
             this.dgvProductos.AlternatingRowsDefaultCellStyle.BackColor =
                 Color.FromArgb(245, 247, 250);
 
-            // Espaciado interno
             this.dgvProductos.DefaultCellStyle.Padding =
                 new Padding(5);
 
-            // Color líneas
             this.dgvProductos.GridColor =
                 Color.FromArgb(225, 225, 225);
 
@@ -518,7 +635,7 @@ namespace Sistema_Inventario.Presentacion
                 new System.EventHandler(this.btnEliminar_Click);
 
             // =====================================================
-            // AGREGAR CONTROLES AL FORM
+            // CONTROLES
             // =====================================================
 
             this.Controls.Add(this.lblTitulo);
@@ -551,75 +668,7 @@ namespace Sistema_Inventario.Presentacion
             this.PerformLayout();
         }
 
-        // =====================================================
-        // METODO PARA CONFIGURAR BOTONES
-        // =====================================================
-
-        private void ConfigurarBoton(
-            IconButton boton,
-            string texto,
-            IconChar icono,
-            Color color,
-            Point ubicacion)
-        {
-            // Color fondo
-            boton.BackColor = color;
-
-            // Estilo plano
-            boton.FlatStyle = FlatStyle.Flat;
-
-            boton.FlatAppearance.BorderSize = 0;
-
-            // Hover
-            boton.FlatAppearance.MouseOverBackColor =
-                ControlPaint.Light(color);
-
-            // Click
-            boton.FlatAppearance.MouseDownBackColor =
-                ControlPaint.Dark(color);
-
-            // Texto blanco
-            boton.ForeColor = Color.White;
-
-            // Fuente moderna
-            boton.Font =
-                new Font(
-                    "Segoe UI Semibold",
-                    10F,
-                    FontStyle.Bold);
-
-            // Icono
-            boton.IconChar = icono;
-
-            boton.IconColor = Color.White;
-
-            boton.IconFont = IconFont.Auto;
-
-            boton.IconSize = 28;
-
-            // Texto
-            boton.Text = " " + texto;
-
-            // Icono antes del texto
-            boton.TextImageRelation =
-                TextImageRelation.ImageBeforeText;
-
-            // Tamaño botón
-            boton.Size =
-                new Size(170, 58);
-
-            // Posición
-            boton.Location = ubicacion;
-
-            // Cursor mano
-            boton.Cursor = Cursors.Hand;
-        }
-
         #endregion
-
-        // =====================================================
-        // VARIABLES CONTROLES
-        // =====================================================
 
         private Label lblTitulo;
 

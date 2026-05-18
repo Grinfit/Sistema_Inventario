@@ -7,21 +7,6 @@ using FontAwesome.Sharp;
 using Sistema_Inventario.Datos;
 using Sistema_Inventario.Utilidades;
 
-
-// ======================================================
-// FrmProductos.cs
-// ======================================================
-
-using FontAwesome.Sharp;
-using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Windows.Forms;
-
-using Sistema_Inventario.Datos;
-using Sistema_Inventario.Utilidades;
-
 namespace Sistema_Inventario.Presentacion
 {
     public partial class FrmProductos : Form

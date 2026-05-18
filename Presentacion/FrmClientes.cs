@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Windows.Forms;
 
 using Sistema_Inventario.Datos;
 using Sistema_Inventario.Utilidades;
@@ -28,28 +22,57 @@ namespace Sistema_Inventario.Presentacion
             InitializeComponent();
         }
 
+        // =====================================================
+        // MOSTRAR CLIENTES
+        // =====================================================
+
         private void MostrarClientes()
         {
             try
             {
-                SqlDataAdapter da = new SqlDataAdapter(
-                    "sp_MostrarClientes",
-                    cn.AbrirConexion());
+                SqlDataAdapter da =
+                    new SqlDataAdapter(
+                        "sp_MostrarClientes",
+                        cn.AbrirConexion());
 
                 da.SelectCommand.CommandType =
                     CommandType.StoredProcedure;
 
-                DataTable dt = new DataTable();
+                DataTable dt =
+                    new DataTable();
 
                 da.Fill(dt);
 
                 dgvClientes.DataSource = dt;
 
+                // ============================================
+                // OCULTAR ID
+                // ============================================
+
+                if (dgvClientes.Columns.Count > 0)
+                {
+                    dgvClientes.Columns["IdCliente"].Visible = false;
+                }
+
+                // ============================================
+                // ESTILOS COLUMNAS
+                // ============================================
+
+                dgvClientes.ColumnHeadersDefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleCenter;
+
+                dgvClientes.DefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleLeft;
+
                 cn.CerrarConexion();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
                 log.RegistrarLog(
                     "ERROR CLIENTES",
@@ -58,21 +81,119 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
+        // =====================================================
+        // LIMPIAR CAMPOS
+        // =====================================================
+
         private void LimpiarCampos()
         {
             txtNombre.Clear();
+
             txtTelefono.Clear();
+
             txtCorreo.Clear();
+
+            txtBuscar.Clear();
 
             txtNombre.Focus();
         }
+
+        // =====================================================
+        // VALIDAR CAMPOS
+        // =====================================================
+
+        private bool ValidarCampos()
+        {
+            if (txtNombre.Text.Trim() == "")
+            {
+                MessageBox.Show(
+                    "Ingrese el nombre del cliente",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtNombre.Focus();
+
+                return false;
+            }
+
+            if (txtTelefono.Text.Trim() == "")
+            {
+                MessageBox.Show(
+                    "Ingrese el teléfono",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtTelefono.Focus();
+
+                return false;
+            }
+
+            if (txtCorreo.Text.Trim() == "")
+            {
+                MessageBox.Show(
+                    "Ingrese el correo",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtCorreo.Focus();
+
+                return false;
+            }
+
+            // VALIDAR EMAIL
+
+            if (!txtCorreo.Text.Contains("@"))
+            {
+                MessageBox.Show(
+                    "Correo electrónico inválido",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                txtCorreo.Focus();
+
+                return false;
+            }
+
+            return true;
+        }
+
+        // =====================================================
+        // LOAD
+        // =====================================================
 
         private void FrmClientes_Load(
             object sender,
             EventArgs e)
         {
             MostrarClientes();
+
+            // ============================================
+            // EFECTO HOVER BOTONES
+            // ============================================
+
+            btnNuevo.FlatAppearance.MouseOverBackColor =
+                ControlPaint.Light(btnNuevo.BackColor);
+
+            btnGuardar.FlatAppearance.MouseOverBackColor =
+                ControlPaint.Light(btnGuardar.BackColor);
+
+            btnEditar.FlatAppearance.MouseOverBackColor =
+                ControlPaint.Light(btnEditar.BackColor);
+
+            btnEliminar.FlatAppearance.MouseOverBackColor =
+                ControlPaint.Light(btnEliminar.BackColor);
+
+            btnBuscar.FlatAppearance.MouseOverBackColor =
+                Color.FromArgb(22, 52, 88);
         }
+
+        // =====================================================
+        // GUARDAR
+        // =====================================================
 
         private void btnGuardar_Click(
             object sender,
@@ -80,9 +201,15 @@ namespace Sistema_Inventario.Presentacion
         {
             try
             {
-                SqlCommand cmd = new SqlCommand(
-                    "sp_InsertarCliente",
-                    cn.AbrirConexion());
+                if (!ValidarCampos())
+                {
+                    return;
+                }
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "sp_InsertarCliente",
+                        cn.AbrirConexion());
 
                 cmd.CommandType =
                     CommandType.StoredProcedure;
@@ -102,7 +229,10 @@ namespace Sistema_Inventario.Presentacion
                 cmd.ExecuteNonQuery();
 
                 MessageBox.Show(
-                    "Cliente guardado correctamente");
+                    "Cliente guardado correctamente",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 MostrarClientes();
 
@@ -112,7 +242,11 @@ namespace Sistema_Inventario.Presentacion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
                 log.RegistrarLog(
                     "ERROR CLIENTE",
@@ -121,23 +255,39 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
+        // =====================================================
+        // SELECCIONAR GRID
+        // =====================================================
+
         private void dgvClientes_CellClick(
             object sender,
             DataGridViewCellEventArgs e)
         {
             try
             {
-                IdCliente = Convert.ToInt32(
-                    dgvClientes.CurrentRow.Cells[0].Value);
+                if (dgvClientes.CurrentRow == null)
+                {
+                    return;
+                }
+
+                IdCliente =
+                    Convert.ToInt32(
+                        dgvClientes.CurrentRow.Cells[0].Value);
 
                 txtNombre.Text =
-                    dgvClientes.CurrentRow.Cells[1].Value.ToString();
+                    dgvClientes.CurrentRow.Cells[1]
+                    .Value
+                    .ToString();
 
                 txtTelefono.Text =
-                    dgvClientes.CurrentRow.Cells[2].Value.ToString();
+                    dgvClientes.CurrentRow.Cells[2]
+                    .Value
+                    .ToString();
 
                 txtCorreo.Text =
-                    dgvClientes.CurrentRow.Cells[3].Value.ToString();
+                    dgvClientes.CurrentRow.Cells[3]
+                    .Value
+                    .ToString();
             }
             catch
             {
@@ -145,15 +295,36 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
+        // =====================================================
+        // EDITAR
+        // =====================================================
+
         private void btnEditar_Click(
             object sender,
             EventArgs e)
         {
             try
             {
-                SqlCommand cmd = new SqlCommand(
-                    "sp_EditarCliente",
-                    cn.AbrirConexion());
+                if (IdCliente == 0)
+                {
+                    MessageBox.Show(
+                        "Seleccione un cliente",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+                if (!ValidarCampos())
+                {
+                    return;
+                }
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "sp_EditarCliente",
+                        cn.AbrirConexion());
 
                 cmd.CommandType =
                     CommandType.StoredProcedure;
@@ -177,17 +348,26 @@ namespace Sistema_Inventario.Presentacion
                 cmd.ExecuteNonQuery();
 
                 MessageBox.Show(
-                    "Cliente actualizado");
+                    "Cliente actualizado correctamente",
+                    "Sistema",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 MostrarClientes();
 
                 LimpiarCampos();
 
+                IdCliente = 0;
+
                 cn.CerrarConexion();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
                 log.RegistrarLog(
                     "ERROR EDITAR CLIENTE",
@@ -196,25 +376,42 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
+        // =====================================================
+        // ELIMINAR
+        // =====================================================
+
         private void btnEliminar_Click(
             object sender,
             EventArgs e)
         {
             try
             {
+                if (IdCliente == 0)
+                {
+                    MessageBox.Show(
+                        "Seleccione un cliente",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
                 DialogResult resultado;
 
-                resultado = MessageBox.Show(
-                    "¿Desea eliminar este cliente?",
-                    "Confirmar eliminación",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
+                resultado =
+                    MessageBox.Show(
+                        "¿Desea eliminar este cliente?",
+                        "Confirmar eliminación",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
 
                 if (resultado == DialogResult.Yes)
                 {
-                    SqlCommand cmd = new SqlCommand(
-                        "sp_EliminarCliente",
-                        cn.AbrirConexion());
+                    SqlCommand cmd =
+                        new SqlCommand(
+                            "sp_EliminarCliente",
+                            cn.AbrirConexion());
 
                     cmd.CommandType =
                         CommandType.StoredProcedure;
@@ -231,18 +428,27 @@ namespace Sistema_Inventario.Presentacion
                         "Cliente eliminado correctamente");
 
                     MessageBox.Show(
-                        "Cliente eliminado");
+                        "Cliente eliminado correctamente",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     MostrarClientes();
 
                     LimpiarCampos();
+
+                    IdCliente = 0;
 
                     cn.CerrarConexion();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
                 log.RegistrarLog(
                     "ERROR ELIMINAR CLIENTE",
@@ -251,15 +457,20 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
+        // =====================================================
+        // BUSCAR
+        // =====================================================
+
         private void btnBuscar_Click(
             object sender,
             EventArgs e)
         {
             try
             {
-                SqlDataAdapter da = new SqlDataAdapter(
-                    "sp_BuscarCliente",
-                    cn.AbrirConexion());
+                SqlDataAdapter da =
+                    new SqlDataAdapter(
+                        "sp_BuscarCliente",
+                        cn.AbrirConexion());
 
                 da.SelectCommand.CommandType =
                     CommandType.StoredProcedure;
@@ -268,7 +479,8 @@ namespace Sistema_Inventario.Presentacion
                     "@Texto",
                     txtBuscar.Text);
 
-                DataTable dt = new DataTable();
+                DataTable dt =
+                    new DataTable();
 
                 da.Fill(dt);
 
@@ -278,7 +490,11 @@ namespace Sistema_Inventario.Presentacion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
                 log.RegistrarLog(
                     "ERROR BUSCAR CLIENTE",
@@ -286,6 +502,10 @@ namespace Sistema_Inventario.Presentacion
                     ex.Message);
             }
         }
+
+        // =====================================================
+        // NUEVO
+        // =====================================================
 
         private void btnNuevo_Click(
             object sender,
