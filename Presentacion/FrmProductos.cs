@@ -1,6 +1,22 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Windows.Forms;
+using FontAwesome.Sharp;
+using Sistema_Inventario.Datos;
+using Sistema_Inventario.Utilidades;
+
+
+// ======================================================
+// FrmProductos.cs
+// ======================================================
+
+using FontAwesome.Sharp;
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
 using System.Windows.Forms;
 
 using Sistema_Inventario.Datos;
@@ -12,13 +28,144 @@ namespace Sistema_Inventario.Presentacion
     {
         Conexion cn = new Conexion();
 
-        Logger log = new Logger();
+    Logger log = new Logger();
 
         int IdProducto = 0;
 
         public FrmProductos()
         {
             InitializeComponent();
+
+            AplicarEstilos();
+        }
+
+        private void AplicarEstilos()
+        {
+            ConfigurarBoton(btnNuevo,
+                Color.FromArgb(52, 152, 219));
+
+            ConfigurarBoton(btnGuardar,
+                Color.FromArgb(46, 204, 113));
+
+            ConfigurarBoton(btnEditar,
+                Color.FromArgb(241, 196, 15));
+
+            ConfigurarBoton(btnEliminar,
+                Color.FromArgb(231, 76, 60));
+
+            ConfigurarBoton(btnBuscar,
+                Color.FromArgb(11, 31, 58));
+
+            ConfigurarGrid();
+        }
+
+        private void ConfigurarBoton(
+            IconButton btn,
+            Color color)
+        {
+            btn.BackColor = color;
+
+            btn.ForeColor = Color.White;
+
+            btn.FlatStyle = FlatStyle.Flat;
+
+            btn.FlatAppearance.BorderSize = 0;
+
+            btn.Font =
+                new Font(
+                    "Segoe UI",
+                    10F,
+                    FontStyle.Bold);
+
+            btn.IconColor = Color.White;
+
+            btn.IconSize = 24;
+
+            btn.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            btn.ImageAlign =
+                ContentAlignment.MiddleLeft;
+
+            btn.Padding =
+                new Padding(12, 0, 0, 0);
+
+            btn.Cursor =
+                Cursors.Hand;
+
+            btn.MouseEnter +=
+                (s, e) =>
+                {
+                    btn.BackColor =
+                        ControlPaint.Dark(color);
+                };
+
+            btn.MouseLeave +=
+                (s, e) =>
+                {
+                    btn.BackColor = color;
+                };
+        }
+
+        private void ConfigurarGrid()
+        {
+            dgvProductos.BorderStyle =
+                BorderStyle.None;
+
+            dgvProductos.BackgroundColor =
+                Color.White;
+
+            dgvProductos.EnableHeadersVisualStyles =
+                false;
+
+            dgvProductos.ColumnHeadersBorderStyle =
+                DataGridViewHeaderBorderStyle.None;
+
+            dgvProductos.ColumnHeadersDefaultCellStyle.BackColor =
+                Color.FromArgb(11, 31, 58);
+
+            dgvProductos.ColumnHeadersDefaultCellStyle.ForeColor =
+                Color.White;
+
+            dgvProductos.ColumnHeadersDefaultCellStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    11F,
+                    FontStyle.Bold);
+
+            dgvProductos.ColumnHeadersHeight = 45;
+
+            dgvProductos.DefaultCellStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    10F);
+
+            dgvProductos.DefaultCellStyle.SelectionBackColor =
+                Color.FromArgb(52, 152, 219);
+
+            dgvProductos.DefaultCellStyle.SelectionForeColor =
+                Color.White;
+
+            dgvProductos.RowsDefaultCellStyle.BackColor =
+                Color.White;
+
+            dgvProductos.AlternatingRowsDefaultCellStyle.BackColor =
+                Color.FromArgb(245, 247, 250);
+
+            dgvProductos.RowTemplate.Height = 38;
+
+            dgvProductos.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvProductos.SelectionMode =
+                DataGridViewSelectionMode.FullRowSelect;
+
+            dgvProductos.MultiSelect = false;
+
+            dgvProductos.RowHeadersVisible = false;
+
+            dgvProductos.GridColor =
+                Color.LightGray;
         }
 
         private void FrmProductos_Load(
@@ -40,7 +187,8 @@ namespace Sistema_Inventario.Presentacion
                 da.SelectCommand.CommandType =
                     CommandType.StoredProcedure;
 
-                DataTable dt = new DataTable();
+                DataTable dt =
+                    new DataTable();
 
                 da.Fill(dt);
 
@@ -62,8 +210,11 @@ namespace Sistema_Inventario.Presentacion
         private void LimpiarCampos()
         {
             txtNombre.Clear();
+
             txtCategoria.Clear();
+
             txtPrecio.Clear();
+
             txtStock.Clear();
 
             txtNombre.Focus();
@@ -101,11 +252,6 @@ namespace Sistema_Inventario.Presentacion
 
                 cmd.ExecuteNonQuery();
 
-                log.RegistrarLog(
-                    "GUARDAR PRODUCTO",
-                    "admin",
-                    "Producto guardado correctamente");
-
                 MessageBox.Show(
                     "Producto guardado correctamente");
 
@@ -118,11 +264,6 @@ namespace Sistema_Inventario.Presentacion
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-
-                log.RegistrarLog(
-                    "ERROR PRODUCTO",
-                    "admin",
-                    ex.Message);
             }
         }
 
@@ -134,9 +275,10 @@ namespace Sistema_Inventario.Presentacion
             {
                 if (e.RowIndex >= 0)
                 {
-                    IdProducto = Convert.ToInt32(
-                        dgvProductos.Rows[e.RowIndex]
-                        .Cells[0].Value);
+                    IdProducto =
+                        Convert.ToInt32(
+                            dgvProductos.Rows[e.RowIndex]
+                            .Cells[0].Value);
 
                     txtNombre.Text =
                         dgvProductos.Rows[e.RowIndex]
@@ -197,11 +339,6 @@ namespace Sistema_Inventario.Presentacion
 
                 cmd.ExecuteNonQuery();
 
-                log.RegistrarLog(
-                    "EDITAR PRODUCTO",
-                    "admin",
-                    "Producto actualizado correctamente");
-
                 MessageBox.Show(
                     "Producto actualizado");
 
@@ -214,11 +351,6 @@ namespace Sistema_Inventario.Presentacion
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-
-                log.RegistrarLog(
-                    "ERROR EDITAR PRODUCTO",
-                    "admin",
-                    ex.Message);
             }
         }
 
@@ -230,13 +362,15 @@ namespace Sistema_Inventario.Presentacion
             {
                 DialogResult resultado;
 
-                resultado = MessageBox.Show(
-                    "¿Desea eliminar este producto?",
-                    "Confirmar eliminación",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
+                resultado =
+                    MessageBox.Show(
+                        "¿Desea eliminar este producto?",
+                        "Confirmar",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
 
-                if (resultado == DialogResult.Yes)
+                if (resultado ==
+                    DialogResult.Yes)
                 {
                     SqlCommand cmd =
                         new SqlCommand(
@@ -252,11 +386,6 @@ namespace Sistema_Inventario.Presentacion
 
                     cmd.ExecuteNonQuery();
 
-                    log.RegistrarLog(
-                        "ELIMINAR PRODUCTO",
-                        "admin",
-                        "Producto eliminado correctamente");
-
                     MessageBox.Show(
                         "Producto eliminado");
 
@@ -269,23 +398,7 @@ namespace Sistema_Inventario.Presentacion
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("REFERENCE"))
-                {
-                    MessageBox.Show(
-                        "No se puede eliminar el producto porque ya tiene ventas registradas.",
-                        "Producto relacionado",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
-                log.RegistrarLog(
-                    "ERROR ELIMINAR PRODUCTO",
-                    "admin",
-                    ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -307,7 +420,8 @@ namespace Sistema_Inventario.Presentacion
                     "@Texto",
                     txtBuscar.Text);
 
-                DataTable dt = new DataTable();
+                DataTable dt =
+                    new DataTable();
 
                 da.Fill(dt);
 
@@ -318,11 +432,6 @@ namespace Sistema_Inventario.Presentacion
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-
-                log.RegistrarLog(
-                    "ERROR BUSCAR PRODUCTO",
-                    "admin",
-                    ex.Message);
             }
         }
 
@@ -337,4 +446,5 @@ namespace Sistema_Inventario.Presentacion
             IdProducto = 0;
         }
     }
+
 }
