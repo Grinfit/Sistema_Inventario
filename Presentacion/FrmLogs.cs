@@ -3,6 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
+
 
 using Sistema_Inventario.Datos;
 
@@ -63,6 +65,8 @@ namespace Sistema_Inventario.Presentacion
             btnRefrescar.Click += BtnRefrescar_Click;
 
             btnLimpiar.Click += BtnLimpiar_Click;
+
+            btnExportar.Click += BtnExportar_Click;
         }
 
         // =====================================================
@@ -74,7 +78,14 @@ namespace Sistema_Inventario.Presentacion
             try
             {
                 string query =
-                    "SELECT * FROM LogsSistema ORDER BY Fecha DESC";
+    @"SELECT 
+        IdLog AS ID,
+        Evento AS TipoEvento,
+        Fecha AS Fecha,
+        Usuario AS Usuario,
+        Descripcion AS Descripcion
+    FROM LogsSistema
+    ORDER BY Fecha DESC";
 
                 SqlDataAdapter da =
                     new SqlDataAdapter(
@@ -86,6 +97,8 @@ namespace Sistema_Inventario.Presentacion
                 da.Fill(dt);
 
                 dgvLogs.DataSource = dt;
+                dgvLogs.Columns["TipoEvento"].HeaderText = "Tipo Evento";
+                dgvLogs.Columns["Descripcion"].HeaderText = "Descripción";
 
                 lblTotalLogs.Text =
                     "Total Logs: " + dt.Rows.Count;
@@ -109,8 +122,8 @@ namespace Sistema_Inventario.Presentacion
         // =====================================================
 
         private void BtnBuscar_Click(
-            object sender,
-            EventArgs e)
+    object sender,
+    EventArgs e)
         {
             try
             {
@@ -121,10 +134,16 @@ namespace Sistema_Inventario.Presentacion
                     cboEvento.Text;
 
                 string query =
-                    @"SELECT * FROM LogsSistema
-                      WHERE
-                      (Usuario LIKE @texto
-                      OR Descripcion LIKE @texto)";
+                    @"SELECT 
+                IdLog AS ID,
+                Evento AS TipoEvento,
+                Fecha,
+                Usuario,
+                Descripcion
+              FROM LogsSistema
+              WHERE
+              (Usuario LIKE @texto
+              OR Descripcion LIKE @texto)";
 
                 if (evento != "TODOS")
                 {
@@ -160,6 +179,13 @@ namespace Sistema_Inventario.Presentacion
 
                 dgvLogs.DataSource = dt;
 
+                // TITULOS VISUALES
+                dgvLogs.Columns["TipoEvento"].HeaderText =
+                    "Tipo Evento";
+
+                dgvLogs.Columns["Descripcion"].HeaderText =
+                    "Descripción";
+
                 lblTotalLogs.Text =
                     "Total Logs: " + dt.Rows.Count;
 
@@ -169,7 +195,11 @@ namespace Sistema_Inventario.Presentacion
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -231,6 +261,101 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
+        private void BtnExportar_Click(
+    object sender,
+    EventArgs e)
+        {
+            try
+            {
+                if (dgvLogs.Rows.Count == 0)
+                {
+                    MessageBox.Show(
+                        "No hay logs para exportar",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+                SaveFileDialog save =
+                    new SaveFileDialog();
+
+                save.Filter =
+                    "Archivo CSV (*.csv)|*.csv";
+
+                save.Title =
+                    "Exportar Logs";
+
+                save.FileName =
+                    "LogsSistema_" +
+                    DateTime.Now.ToString("yyyyMMdd_HHmmss") +
+                    ".csv";
+
+                if (save.ShowDialog() == DialogResult.OK)
+                {
+                    using (StreamWriter sw =
+                        new StreamWriter(save.FileName))
+                    {
+                        // ENCABEZADOS
+                        for (int i = 0;
+                            i < dgvLogs.Columns.Count;
+                            i++)
+                        {
+                            sw.Write(
+                                dgvLogs.Columns[i].HeaderText);
+
+                            if (i <
+                                dgvLogs.Columns.Count - 1)
+                            {
+                                sw.Write(",");
+                            }
+                        }
+
+                        sw.WriteLine();
+
+                        // FILAS
+                        foreach (DataGridViewRow row
+                            in dgvLogs.Rows)
+                        {
+                            if (!row.IsNewRow)
+                            {
+                                for (int i = 0;
+                                    i < dgvLogs.Columns.Count;
+                                    i++)
+                                {
+                                    sw.Write(
+                                        row.Cells[i].Value?.ToString());
+
+                                    if (i <
+                                        dgvLogs.Columns.Count - 1)
+                                    {
+                                        sw.Write(",");
+                                    }
+                                }
+
+                                sw.WriteLine();
+                            }
+                        }
+                    }
+
+                    MessageBox.Show(
+                        "Logs exportados correctamente",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
         // =====================================================
         // COLORES EVENTOS
         // =====================================================
@@ -239,11 +364,11 @@ namespace Sistema_Inventario.Presentacion
         {
             foreach (DataGridViewRow fila in dgvLogs.Rows)
             {
-                if (fila.Cells["Evento"].Value == null)
+                if (fila.Cells["TipoEvento"].Value == null)
                     continue;
 
                 string evento =
-                    fila.Cells["Evento"].Value.ToString();
+                    fila.Cells["TipoEvento"].Value.ToString();
 
                 switch (evento)
                 {

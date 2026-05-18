@@ -72,7 +72,7 @@
             this.lblTitulo.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    26F,
+                    28F,
                     System.Drawing.FontStyle.Bold);
 
             this.lblTitulo.ForeColor =
@@ -93,11 +93,11 @@
             this.lblBuscar.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    12F,
+                    13F,
                     System.Drawing.FontStyle.Bold);
 
             this.lblBuscar.Location =
-                new System.Drawing.Point(50, 130);
+                new System.Drawing.Point(50, 145);
 
             this.lblBuscar.Text =
                 "Buscar";
@@ -109,13 +109,13 @@
             this.txtBuscar.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    11F);
+                    12F);
 
             this.txtBuscar.Location =
-                new System.Drawing.Point(50, 165);
+                new System.Drawing.Point(50, 185);
 
             this.txtBuscar.Size =
-                new System.Drawing.Size(300, 32);
+                new System.Drawing.Size(330, 34);
 
             // =====================================================
             // LABEL EVENTO
@@ -126,11 +126,11 @@
             this.lblEvento.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    12F,
+                    13F,
                     System.Drawing.FontStyle.Bold);
 
             this.lblEvento.Location =
-                new System.Drawing.Point(390, 130);
+                new System.Drawing.Point(430, 145);
 
             this.lblEvento.Text =
                 "Evento";
@@ -142,13 +142,13 @@
             this.cboEvento.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    11F);
+                    12F);
 
             this.cboEvento.Location =
-                new System.Drawing.Point(390, 165);
+                new System.Drawing.Point(430, 185);
 
             this.cboEvento.Size =
-                new System.Drawing.Size(240, 33);
+                new System.Drawing.Size(260, 36);
 
             this.cboEvento.DropDownStyle =
                 System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -168,7 +168,7 @@
             this.btnBuscar.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    11F,
+                    12F,
                     System.Drawing.FontStyle.Bold);
 
             this.btnBuscar.ForeColor =
@@ -183,23 +183,25 @@
             this.btnBuscar.IconFont =
                 FontAwesome.Sharp.IconFont.Auto;
 
-            this.btnBuscar.IconSize = 28;
+            this.btnBuscar.IconSize = 32;
 
             this.btnBuscar.ImageAlign =
                 System.Drawing.ContentAlignment.MiddleLeft;
 
             this.btnBuscar.Location =
-                new System.Drawing.Point(700, 150);
+                new System.Drawing.Point(760, 170);
 
             this.btnBuscar.Size =
-                new System.Drawing.Size(150, 50);
+                new System.Drawing.Size(190, 65);
 
             this.btnBuscar.Text =
-                "Buscar";
+                " Buscar";
 
             this.btnBuscar.TextImageRelation =
                 System.Windows.Forms.TextImageRelation.ImageBeforeText;
 
+            this.btnBuscar.Cursor =
+                System.Windows.Forms.Cursors.Hand;
             // =====================================================
             // BOTON REFRESCAR
             // =====================================================
@@ -230,22 +232,35 @@
             this.btnRefrescar.IconFont =
                 FontAwesome.Sharp.IconFont.Auto;
 
-            this.btnRefrescar.IconSize = 28;
+            // ICONO MAS PEQUEÑO
+            this.btnRefrescar.IconSize = 24;
 
+            // TEXTO
+            this.btnRefrescar.Text = "Refrescar";
+
+            // RELACION ICONO/TEXTO
+            this.btnRefrescar.TextImageRelation =
+                System.Windows.Forms.TextImageRelation.ImageBeforeText;
+
+            // ALINEACION
             this.btnRefrescar.ImageAlign =
                 System.Drawing.ContentAlignment.MiddleLeft;
 
-            this.btnRefrescar.Location =
-                new System.Drawing.Point(870, 150);
+            this.btnRefrescar.TextAlign =
+                System.Drawing.ContentAlignment.MiddleCenter;
 
+            // TAMAÑO
             this.btnRefrescar.Size =
-                new System.Drawing.Size(160, 50);
+                new System.Drawing.Size(190, 65);
 
-            this.btnRefrescar.Text =
-                "Refrescar";
+            // POSICION
+            this.btnRefrescar.Location =
+                new System.Drawing.Point(980, 170);
 
-            this.btnRefrescar.TextImageRelation =
-                System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnRefrescar.Cursor =
+                System.Windows.Forms.Cursors.Hand;
+
+            this.btnRefrescar.UseVisualStyleBackColor = false;
 
             // =====================================================
             // BOTON EXPORTAR
@@ -262,7 +277,7 @@
             this.btnExportar.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    11F,
+                    12F,
                     System.Drawing.FontStyle.Bold);
 
             this.btnExportar.ForeColor =
@@ -277,22 +292,25 @@
             this.btnExportar.IconFont =
                 FontAwesome.Sharp.IconFont.Auto;
 
-            this.btnExportar.IconSize = 28;
+            this.btnExportar.IconSize = 32;
 
             this.btnExportar.ImageAlign =
                 System.Drawing.ContentAlignment.MiddleLeft;
 
             this.btnExportar.Location =
-                new System.Drawing.Point(1050, 150);
+                new System.Drawing.Point(1200, 170);
 
             this.btnExportar.Size =
-                new System.Drawing.Size(160, 50);
+                new System.Drawing.Size(190, 65);
 
             this.btnExportar.Text =
-                "Exportar";
+                " Exportar";
 
             this.btnExportar.TextImageRelation =
                 System.Windows.Forms.TextImageRelation.ImageBeforeText;
+
+            this.btnExportar.Cursor =
+                System.Windows.Forms.Cursors.Hand;
 
             // =====================================================
             // BOTON LIMPIAR
@@ -309,7 +327,7 @@
             this.btnLimpiar.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    11F,
+                    12F,
                     System.Drawing.FontStyle.Bold);
 
             this.btnLimpiar.ForeColor =
@@ -324,22 +342,25 @@
             this.btnLimpiar.IconFont =
                 FontAwesome.Sharp.IconFont.Auto;
 
-            this.btnLimpiar.IconSize = 28;
+            this.btnLimpiar.IconSize = 32;
 
             this.btnLimpiar.ImageAlign =
                 System.Drawing.ContentAlignment.MiddleLeft;
 
             this.btnLimpiar.Location =
-                new System.Drawing.Point(1225, 150);
+                new System.Drawing.Point(1420, 170);
 
             this.btnLimpiar.Size =
-                new System.Drawing.Size(160, 50);
+                new System.Drawing.Size(190, 65);
 
             this.btnLimpiar.Text =
-                "Limpiar";
+                " Limpiar";
 
             this.btnLimpiar.TextImageRelation =
                 System.Windows.Forms.TextImageRelation.ImageBeforeText;
+
+            this.btnLimpiar.Cursor =
+                System.Windows.Forms.Cursors.Hand;
 
             // =====================================================
             // TOTAL LOGS
@@ -350,14 +371,14 @@
             this.lblTotalLogs.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    13F,
+                    14F,
                     System.Drawing.FontStyle.Bold);
 
             this.lblTotalLogs.ForeColor =
                 System.Drawing.Color.FromArgb(5, 35, 85);
 
             this.lblTotalLogs.Location =
-                new System.Drawing.Point(50, 230);
+                new System.Drawing.Point(50, 255);
 
             this.lblTotalLogs.Text =
                 "Total Logs: 0";
@@ -394,7 +415,7 @@
             this.dgvLogs.ColumnHeadersBorderStyle =
                 System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
 
-            this.dgvLogs.ColumnHeadersHeight = 48;
+            this.dgvLogs.ColumnHeadersHeight = 55;
 
             this.dgvLogs.EnableHeadersVisualStyles = false;
 
@@ -402,7 +423,7 @@
                 System.Drawing.Color.FromArgb(230, 230, 230);
 
             this.dgvLogs.Location =
-                new System.Drawing.Point(40, 280);
+                new System.Drawing.Point(40, 310);
 
             this.dgvLogs.MultiSelect = false;
 
@@ -412,7 +433,7 @@
 
             this.dgvLogs.RowHeadersVisible = false;
 
-            this.dgvLogs.RowTemplate.Height = 42;
+            this.dgvLogs.RowTemplate.Height = 45;
 
             this.dgvLogs.ScrollBars =
                 System.Windows.Forms.ScrollBars.Vertical;
@@ -421,7 +442,7 @@
                 System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 
             this.dgvLogs.Size =
-                new System.Drawing.Size(1520, 540);
+                new System.Drawing.Size(1520, 500);
 
             this.dgvLogs.TabIndex = 0;
 
@@ -441,7 +462,7 @@
             this.dgvLogs.ColumnHeadersDefaultCellStyle.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    11F,
+                    12F,
                     System.Drawing.FontStyle.Bold);
 
             // =====================================================
@@ -451,7 +472,7 @@
             this.dgvLogs.DefaultCellStyle.Font =
                 new System.Drawing.Font(
                     "Segoe UI",
-                    10.5F);
+                    11F);
 
             this.dgvLogs.DefaultCellStyle.SelectionBackColor =
                 System.Drawing.Color.FromArgb(52, 152, 219);
