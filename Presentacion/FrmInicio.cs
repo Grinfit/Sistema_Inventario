@@ -95,7 +95,7 @@ namespace Sistema_Inventario.Presentacion
 
             panelClientes =
                 CrearCard(
-                    "Clientes",
+                    "Bodegas",
                     out lblClientes);
 
             panelProductos =
@@ -105,7 +105,7 @@ namespace Sistema_Inventario.Presentacion
 
             panelVentas =
                 CrearCard(
-                    "Ventas",
+                    "Movimientos",
                     out lblVentas);
 
             panelLogin =
@@ -301,6 +301,10 @@ namespace Sistema_Inventario.Presentacion
                 SqlConnection conexion =
                     cn.AbrirConexion();
 
+                // =====================================
+                // PRODUCTOS
+                // =====================================
+
                 SqlCommand cmdProductos =
                     new SqlCommand(
                         "SELECT COUNT(*) FROM Productos",
@@ -309,21 +313,33 @@ namespace Sistema_Inventario.Presentacion
                 lblProductos.Text =
                     cmdProductos.ExecuteScalar().ToString();
 
-                SqlCommand cmdClientes =
+                // =====================================
+                // BODEGAS
+                // =====================================
+
+                SqlCommand cmdBodegas =
                     new SqlCommand(
-                        "SELECT COUNT(*) FROM Clientes",
+                        "SELECT COUNT(*) FROM Bodegas",
                         conexion);
 
                 lblClientes.Text =
-                    cmdClientes.ExecuteScalar().ToString();
+                    cmdBodegas.ExecuteScalar().ToString();
 
-                SqlCommand cmdVentas =
+                // =====================================
+                // MOVIMIENTOS
+                // =====================================
+
+                SqlCommand cmdMovimientos =
                     new SqlCommand(
-                        "SELECT COUNT(*) FROM Ventas",
+                        "SELECT COUNT(*) FROM MovimientosInventario",
                         conexion);
 
                 lblVentas.Text =
-                    cmdVentas.ExecuteScalar().ToString();
+                    cmdMovimientos.ExecuteScalar().ToString();
+
+                // =====================================
+                // ULTIMO LOGIN
+                // =====================================
 
                 SqlCommand cmdLogin =
                     new SqlCommand(

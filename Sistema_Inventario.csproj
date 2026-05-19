@@ -54,11 +54,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Datos\Conexion.cs" />
+    <Compile Include="Datos\DBodegas.cs" />
+    <Compile Include="Datos\DKardex.cs" />
+    <Compile Include="Datos\DMovimientosInventario.cs" />
+    <Compile Include="Datos\DProveedores.cs" />
+    <Compile Include="Datos\DStockBodega.cs" />
+    <Compile Include="Datos\DTransferencias.cs" />
     <Compile Include="FrmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmLogin.Designer.cs">
       <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Logica\LBodegas.cs" />
+    <Compile Include="Logica\LKardex.cs" />
+    <Compile Include="Logica\LMovimientosInventario.cs" />
+    <Compile Include="Logica\LProveedores.cs" />
+    <Compile Include="Logica\LStockBodega.cs" />
+    <Compile Include="Logica\LTransferencias.cs" />
+    <Compile Include="Presentacion\FrmAjustesInventario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmAjustesInventario.Designer.cs">
+      <DependentUpon>FrmAjustesInventario.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentacion\FrmBackup.cs">
       <SubType>Form</SubType>
@@ -66,11 +84,29 @@
     <Compile Include="Presentacion\FrmBackup.Designer.cs">
       <DependentUpon>FrmBackup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentacion\FrmBitacora.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmBitacora.Designer.cs">
+      <DependentUpon>FrmBitacora.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmBodegas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmBodegas.Designer.cs">
+      <DependentUpon>FrmBodegas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\FrmClientes.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Presentacion\FrmClientes.Designer.cs">
       <DependentUpon>FrmClientes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmCompras.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmCompras.Designer.cs">
+      <DependentUpon>FrmCompras.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentacion\FrmDashboard.cs">
       <SubType>Form</SubType>
@@ -84,17 +120,59 @@
     <Compile Include="Presentacion\FrmInicio.Designer.cs">
       <DependentUpon>FrmInicio.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentacion\FrmKardex.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmKardex.Designer.cs">
+      <DependentUpon>FrmKardex.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\FrmLogs.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Presentacion\FrmLogs.Designer.cs">
       <DependentUpon>FrmLogs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentacion\FrmMovimientosInventario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmMovimientosInventario.Designer.cs">
+      <DependentUpon>FrmMovimientosInventario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\FrmProductos.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Presentacion\FrmProductos.Designer.cs">
       <DependentUpon>FrmProductos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmProveedores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmProveedores.Designer.cs">
+      <DependentUpon>FrmProveedores.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmRoles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmRoles.Designer.cs">
+      <DependentUpon>FrmRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmStockBodega.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmStockBodega.Designer.cs">
+      <DependentUpon>FrmStockBodega.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmTransferencias.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmTransferencias.Designer.cs">
+      <DependentUpon>FrmTransferencias.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmUsuarios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmUsuarios.Designer.cs">
+      <DependentUpon>FrmUsuarios.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentacion\FrmVentas.cs">
       <SubType>Form</SubType>
@@ -153,7 +231,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Logica\" />
     <Folder Include="SQL\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

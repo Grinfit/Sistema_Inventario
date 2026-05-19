@@ -9,7 +9,7 @@ namespace Sistema_Inventario.Presentacion
     {
         private Panel sidebar;
 
-    private Panel topbar;
+        private Panel topbar;
 
         private Panel panelContenedor;
 
@@ -35,6 +35,10 @@ namespace Sistema_Inventario.Presentacion
                 new FrmInicio());
         }
 
+        // =========================================
+        // SIDEBAR
+        // =========================================
+
         private void CrearSidebar()
         {
             sidebar = new Panel();
@@ -42,7 +46,7 @@ namespace Sistema_Inventario.Presentacion
             sidebar.Dock =
                 DockStyle.Left;
 
-            sidebar.Width = 240;
+            sidebar.Width = 260;
 
             sidebar.BackColor =
                 Color.FromArgb(
@@ -51,6 +55,10 @@ namespace Sistema_Inventario.Presentacion
                     58);
 
             this.Controls.Add(sidebar);
+
+            // =====================================
+            // BTN MENU
+            // =====================================
 
             Button btnMenu =
                 new Button();
@@ -92,13 +100,27 @@ namespace Sistema_Inventario.Presentacion
 
             int top = 100;
 
+            // =====================================
+            // DASHBOARD
+            // =====================================
+
             AgregarBoton(
                 "Dashboard",
                 IconChar.ChartPie,
                 btnDashboard_Click,
                 top);
 
-            top += 60;
+            top += 80;
+
+            // =====================================
+            // CATALOGOS
+            // =====================================
+
+            AgregarTituloMenu(
+                "CATÁLOGOS",
+                top);
+
+            top += 35;
 
             AgregarBoton(
                 "Productos",
@@ -109,25 +131,92 @@ namespace Sistema_Inventario.Presentacion
             top += 60;
 
             AgregarBoton(
-                "Clientes",
-                IconChar.Users,
-                btnClientes_Click,
+                "Bodegas",
+                IconChar.Warehouse,
+                btnBodegas_Click,
                 top);
 
             top += 60;
 
             AgregarBoton(
-                "Ventas",
-                IconChar.CashRegister,
-                btnVentas_Click,
+                "Proveedores",
+                IconChar.TruckField,
+                btnProveedores_Click,
+                top);
+
+            top += 80;
+
+            // =====================================
+            // INVENTARIO
+            // =====================================
+
+            AgregarTituloMenu(
+                "INVENTARIO",
+                top);
+
+            top += 35;
+
+            AgregarBoton(
+                "Movimientos",
+                IconChar.RightLeft,
+                btnMovimientos_Click,
                 top);
 
             top += 60;
 
             AgregarBoton(
-                "Backup",
-                IconChar.Database,
-                btnBackup_Click,
+                "Kardex",
+                IconChar.ClipboardList,
+                btnKardex_Click,
+                top);
+
+            top += 60;
+            AgregarBoton(
+    "Stock",
+    IconChar.BoxesStacked,
+    btnStock_Click,
+    top);
+
+            top += 60;
+
+            AgregarBoton(
+                "Transferencias",
+                IconChar.ArrowsLeftRight,
+                btnTransferencias_Click,
+                top);
+
+            top += 60;
+
+            AgregarBoton(
+                "Ajustes",
+                IconChar.ScrewdriverWrench,
+                btnAjustes_Click,
+                top);
+
+            top += 80;
+
+            // =====================================
+            // SEGURIDAD
+            // =====================================
+
+            AgregarTituloMenu(
+                "SEGURIDAD",
+                top);
+
+            top += 35;
+
+            AgregarBoton(
+                "Usuarios",
+                IconChar.UserGear,
+                btnUsuarios_Click,
+                top);
+
+            top += 60;
+
+            AgregarBoton(
+                "Roles",
+                IconChar.UserShield,
+                btnRoles_Click,
                 top);
 
             top += 60;
@@ -138,6 +227,24 @@ namespace Sistema_Inventario.Presentacion
                 btnLogs_Click,
                 top);
 
+            top += 80;
+
+            // =====================================
+            // SISTEMA
+            // =====================================
+
+            AgregarTituloMenu(
+                "SISTEMA",
+                top);
+
+            top += 35;
+
+            AgregarBoton(
+                "Backup",
+                IconChar.Database,
+                btnBackup_Click,
+                top);
+
             top += 60;
 
             AgregarBoton(
@@ -146,6 +253,43 @@ namespace Sistema_Inventario.Presentacion
                 btnSalir_Click,
                 top);
         }
+
+        // =========================================
+        // TITULOS MENU
+        // =========================================
+
+        private void AgregarTituloMenu(
+            string texto,
+            int top)
+        {
+            Label lbl =
+                new Label();
+
+            lbl.Text = texto;
+
+            lbl.ForeColor =
+                Color.FromArgb(
+                    148,
+                    163,
+                    184);
+
+            lbl.Font =
+                new Font(
+                    "Segoe UI",
+                    9F,
+                    FontStyle.Bold);
+
+            lbl.AutoSize = true;
+
+            lbl.Location =
+                new Point(20, top);
+
+            sidebar.Controls.Add(lbl);
+        }
+
+        // =========================================
+        // BOTONES MENU
+        // =========================================
 
         private void AgregarBoton(
             string texto,
@@ -202,7 +346,7 @@ namespace Sistema_Inventario.Presentacion
             boton.Cursor =
                 Cursors.Hand;
 
-            boton.Width = 240;
+            boton.Width = 260;
 
             boton.Height = 55;
 
@@ -234,6 +378,10 @@ namespace Sistema_Inventario.Presentacion
 
             sidebar.Controls.Add(boton);
         }
+
+        // =========================================
+        // TOPBAR
+        // =========================================
 
         private void CrearTopbar()
         {
@@ -282,7 +430,7 @@ namespace Sistema_Inventario.Presentacion
                 new Label();
 
             lblSubtitulo.Text =
-                "Panel Administrativo";
+                "Sistema de Control de Inventario";
 
             lblSubtitulo.Font =
                 new Font(
@@ -326,6 +474,10 @@ namespace Sistema_Inventario.Presentacion
                 lblFecha);
         }
 
+        // =========================================
+        // PANEL CONTENEDOR
+        // =========================================
+
         private void CrearPanelContenedor()
         {
             panelContenedor =
@@ -348,6 +500,10 @@ namespace Sistema_Inventario.Presentacion
 
             panelContenedor.BringToFront();
         }
+
+        // =========================================
+        // MENU HAMBURGUESA
+        // =========================================
 
         private void BtnMenu_Click(
             object sender,
@@ -375,6 +531,13 @@ namespace Sistema_Inventario.Presentacion
 
                         btn.IconSize = 30;
                     }
+
+                    if (
+                        control
+                        is Label)
+                    {
+                        control.Visible = false;
+                    }
                 }
 
                 menuExpandido = false;
@@ -383,13 +546,17 @@ namespace Sistema_Inventario.Presentacion
             {
                 sidebar.Controls.Clear();
 
-                sidebar.Width = 240;
+                sidebar.Width = 260;
 
                 CrearSidebar();
 
                 menuExpandido = true;
             }
         }
+
+        // =========================================
+        // ABRIR FORMULARIOS
+        // =========================================
 
         private void AbrirFormulario(
             Form formulario)
@@ -410,6 +577,10 @@ namespace Sistema_Inventario.Presentacion
             formulario.Show();
         }
 
+        // =========================================
+        // EVENTOS MENU
+        // =========================================
+
         private void btnDashboard_Click(
             object sender,
             EventArgs e)
@@ -426,20 +597,76 @@ namespace Sistema_Inventario.Presentacion
                 new FrmProductos());
         }
 
-        private void btnClientes_Click(
+        private void btnBodegas_Click(
             object sender,
             EventArgs e)
         {
             AbrirFormulario(
-                new FrmClientes());
+                new FrmBodegas());
         }
 
-        private void btnVentas_Click(
+        private void btnProveedores_Click(
             object sender,
             EventArgs e)
         {
             AbrirFormulario(
-                new FrmVentas());
+                new FrmProveedores());
+        }
+
+        private void btnMovimientos_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(
+                new FrmMovimientosInventario());
+        }
+
+        private void btnKardex_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(
+                new FrmKardex());
+        }
+
+        private void btnStock_Click(
+    object sender,
+    EventArgs e)
+        {
+            AbrirFormulario(
+                new FrmStockBodega());
+        }
+
+        private void btnTransferencias_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(
+                new FrmTransferencias());
+        }
+
+        private void btnAjustes_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(
+                new FrmAjustesInventario());
+        }
+
+        private void btnUsuarios_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(
+                new FrmUsuarios());
+        }
+
+        private void btnRoles_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(
+                new FrmRoles());
         }
 
         private void btnBackup_Click(
@@ -477,6 +704,12 @@ namespace Sistema_Inventario.Presentacion
                 Application.Exit();
             }
         }
-    }
 
+        private void FrmDashboard_Load(
+            object sender,
+            EventArgs e)
+        {
+
+        }
+    }
 }
