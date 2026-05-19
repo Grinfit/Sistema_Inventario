@@ -31,9 +31,90 @@ namespace Sistema_Inventario.Presentacion
 
             AplicarPermisos();
 
+            ReorganizarMenu();
+
             AbrirFormulario(new FrmInicio());
         }
+        private void ReorganizarMenu()
+        {
+            int top = 90;
 
+            foreach (Control control in panelMenu.Controls)
+            {
+                // NO mover botón hamburguesa
+                if (control == btnMenu)
+                    continue;
+
+                // =====================================
+                // LABELS
+                // =====================================
+
+                if (control is Label lbl)
+                {
+                    bool mostrarTitulo = false;
+
+                    string texto = lbl.Text;
+
+                    // ==========================
+                    // VALIDAR SECCIONES
+                    // ==========================
+
+                    if (texto == "CATÁLOGOS")
+                    {
+                        mostrarTitulo =
+                            panelMenu.Controls["btnDashboard"].Visible ||
+                            panelMenu.Controls["btnProductos"].Visible ||
+                            panelMenu.Controls["btnBodegas"].Visible ||
+                            panelMenu.Controls["btnProveedores"].Visible;
+                    }
+
+                    else if (texto == "INVENTARIO")
+                    {
+                        mostrarTitulo =
+                            panelMenu.Controls["btnMovimientos"].Visible ||
+                            panelMenu.Controls["btnKardex"].Visible ||
+                            panelMenu.Controls["btnStock"].Visible ||
+                            panelMenu.Controls["btnTransferencias"].Visible;
+                    }
+
+                    else if (texto == "SEGURIDAD")
+                    {
+                        mostrarTitulo =
+                            panelMenu.Controls["btnUsuarios"].Visible ||
+                            panelMenu.Controls["btnRoles"].Visible ||
+                            panelMenu.Controls["btnLogs"].Visible;
+                    }
+
+                    else if (texto == "SISTEMA")
+                    {
+                        mostrarTitulo =
+                            panelMenu.Controls["btnBackup"].Visible ||
+                            panelMenu.Controls["btnAjustes"].Visible;
+                    }
+
+                    lbl.Visible = mostrarTitulo;
+
+                    if (mostrarTitulo)
+                    {
+                        lbl.Top = top;
+                        top += 40;
+                    }
+                }
+
+                // =====================================
+                // BOTONES
+                // =====================================
+
+                if (control is IconButton btn &&
+                    btn.Visible &&
+                    btn != btnMenu)
+                {
+                    btn.Top = top;
+
+                    top += 55;
+                }
+            }
+        }
         // =========================================
         // CONFIGURAR FORM
         // =========================================
@@ -274,13 +355,22 @@ namespace Sistema_Inventario.Presentacion
         // =========================================
 
         private IconButton AgregarBoton(
-            string texto,
-            IconChar icono,
-            EventHandler evento,
-            int top)
+     string texto,
+     IconChar icono,
+     EventHandler evento,
+     int top)
         {
             IconButton btn =
                 new IconButton();
+
+            // =====================================
+            // NAME FIJO
+            // =====================================
+
+            btn.Name =
+                "btn" + texto.Replace(" ", "");
+
+            btn.Tag = texto;
 
             btn.Text = texto;
 
@@ -424,8 +514,8 @@ namespace Sistema_Inventario.Presentacion
         // =========================================
 
         private void BtnMenu_Click(
-            object sender,
-            EventArgs e)
+    object sender,
+    EventArgs e)
         {
             if (menuExpandido)
             {
@@ -434,6 +524,11 @@ namespace Sistema_Inventario.Presentacion
                 foreach (Control control
                     in panelMenu.Controls)
                 {
+                    if (control is Label lbl)
+                    {
+                        lbl.Visible = false;
+                    }
+
                     if (control is IconButton btn &&
                         btn != btnMenu)
                     {
@@ -443,11 +538,14 @@ namespace Sistema_Inventario.Presentacion
                             new Padding(0);
 
                         btn.IconSize = 28;
-                    }
 
-                    if (control is Label lbl)
-                    {
-                        lbl.Visible = false;
+                        btn.Width = 70;
+
+                        btn.TextAlign =
+                            ContentAlignment.MiddleCenter;
+
+                        btn.ImageAlign =
+                            ContentAlignment.MiddleCenter;
                     }
                 }
             }
@@ -455,25 +553,30 @@ namespace Sistema_Inventario.Presentacion
             {
                 panelMenu.Width = 250;
 
+                RestaurarTexto();
+
                 foreach (Control control
                     in panelMenu.Controls)
                 {
-                    if (control is Label lbl)
-                    {
-                        lbl.Visible = true;
-                    }
-
                     if (control is IconButton btn &&
                         btn != btnMenu)
                     {
+                        btn.Width = 240;
+
                         btn.Padding =
                             new Padding(15, 0, 0, 0);
 
                         btn.IconSize = 24;
+
+                        btn.TextAlign =
+                            ContentAlignment.MiddleLeft;
+
+                        btn.ImageAlign =
+                            ContentAlignment.MiddleLeft;
                     }
                 }
 
-                RestaurarTexto();
+                ReorganizarMenu();
             }
 
             menuExpandido =
@@ -547,6 +650,86 @@ namespace Sistema_Inventario.Presentacion
 
         private void AplicarPermisos()
         {
+            foreach (Control control in panelMenu.Controls)
+            {
+                if (control is IconButton btn)
+                {
+                    switch (btn.Name)
+                    {
+                        case "btnDashboard":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_DASHBOARD");
+                            break;
+
+                        case "btnProductos":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_PRODUCTOS");
+                            break;
+
+                        case "btnBodegas":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_BODEGAS");
+                            break;
+
+                        case "btnProveedores":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_PROVEEDORES");
+                            break;
+
+                        case "btnMovimientos":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_MOVIMIENTOS");
+                            break;
+
+                        case "btnKardex":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_KARDEX");
+                            break;
+
+                        case "btnStock":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_STOCK");
+                            break;
+
+                        case "btnTransferencias":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_TRANSFERENCIAS");
+                            break;
+
+                        case "btnUsuarios":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_USUARIOS");
+                            break;
+
+                        case "btnRoles":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_ROLES");
+                            break;
+
+                        case "btnLogs":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_LOGS");
+                            break;
+
+                        case "btnBackup":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_BACKUP");
+                            break;
+                    }
+                }
+            }
         }
 
         // =========================================
