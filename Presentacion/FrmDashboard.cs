@@ -1,23 +1,19 @@
 ﻿using FontAwesome.Sharp;
+using Sistema_Inventario.Utilidades;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Sistema_Inventario.Presentacion
 {
     public partial class FrmDashboard : Form
     {
-        private Panel sidebar;
-
-        private Panel topbar;
-
+        private Panel panelMenu;
         private Panel panelContenedor;
+        private Panel panelTop;
 
-        private Panel panelMenuScroll;
-
-        private Label lblTitulo;
-
-        private Label lblFecha;
+        private IconButton btnMenu;
 
         private bool menuExpandido = true;
 
@@ -25,146 +21,112 @@ namespace Sistema_Inventario.Presentacion
         {
             InitializeComponent();
 
-            CrearSidebar();
+            ConfigurarFormulario();
 
-            CrearTopbar();
+            CrearMenu();
 
-            CrearPanelContenedor();
+            CrearTop();
 
-            AbrirFormulario(
-                new FrmInicio());
+            CrearContenedor();
+
+            AplicarPermisos();
+
+            AbrirFormulario(new FrmInicio());
         }
 
         // =========================================
-        // SIDEBAR
+        // CONFIGURAR FORM
         // =========================================
 
-        private void CrearSidebar()
+        private void ConfigurarFormulario()
         {
-            sidebar = new Panel();
-            new Padding(0, 5, 0, 0);
+            this.Text = "Sistema Inventario";
 
-            sidebar.Dock =
-                DockStyle.Left;
+            this.WindowState =
+                FormWindowState.Maximized;
 
-            sidebar.Width = 260;
+            this.FormBorderStyle =
+                FormBorderStyle.None;
 
-            sidebar.BackColor =
-                Color.FromArgb(
-                    11,
-                    31,
-                    58);
+            this.BackColor =
+                Color.FromArgb(245, 247, 250);
+        }
 
-            this.Controls.Add(sidebar);
+        // =========================================
+        // CREAR MENU
+        // =========================================
 
-            // =====================================
-            // PANEL SCROLL MENU
-            // =====================================
+        private void CrearMenu()
+        {
+            panelMenu = new Panel();
 
-            panelMenuScroll =
-                new Panel();
+            panelMenu.Dock = DockStyle.Left;
 
-            panelMenuScroll.Dock =
-                DockStyle.Fill;
+            panelMenu.Width = 250;
 
-            panelMenuScroll.AutoScroll =
-                true;
-            panelMenuScroll.HorizontalScroll.Enabled =
-                false;
+            panelMenu.BackColor =
+                Color.FromArgb(7, 31, 61);
 
-            panelMenuScroll.HorizontalScroll.Visible =
-                false;
+            panelMenu.AutoScroll = true;
 
-            panelMenuScroll.HorizontalScroll.Maximum =
-                0;
+            panelMenu.HorizontalScroll.Enabled = false;
+            panelMenu.HorizontalScroll.Visible = false;
 
-            panelMenuScroll.AutoScrollMinSize =
-                new Size(0, 0);
+            this.Controls.Add(panelMenu);
 
-            panelMenuScroll.BackColor =
-                Color.FromArgb(
-                    11,
-                    31,
-                    58);
+            // =========================================
+            // BOTON MENU
+            // =========================================
 
-            sidebar.Controls.Add(
-                panelMenuScroll);
+            btnMenu = new IconButton();
 
-            // =====================================
-            // BTN MENU
-            // =====================================
+            btnMenu.IconChar = IconChar.Bars;
 
-            Button btnMenu =
-                new Button();
+            btnMenu.IconColor = Color.White;
 
-            btnMenu.Text = "☰";
+            btnMenu.IconSize = 30;
 
-            btnMenu.Font =
-                new Font(
-                    "Segoe UI",
-                    20F,
-                    FontStyle.Bold);
-
-            btnMenu.ForeColor =
-                Color.White;
-
-            btnMenu.BackColor =
-                Color.FromArgb(
-                    18,
-                    45,
-                    78);
-
-            btnMenu.FlatStyle =
-                FlatStyle.Flat;
+            btnMenu.FlatStyle = FlatStyle.Flat;
 
             btnMenu.FlatAppearance.BorderSize = 0;
 
+            btnMenu.BackColor =
+                Color.FromArgb(14, 45, 84);
+
             btnMenu.Size =
-                new Size(46, 46);
+                new Size(55, 55);
 
             btnMenu.Location =
-                btnMenu.Location =
-                new Point(12, 15);
+                new Point(10, 10);
 
             btnMenu.Cursor =
                 Cursors.Hand;
 
             btnMenu.Click += BtnMenu_Click;
 
-            sidebar.Controls.Add(btnMenu);
+            panelMenu.Controls.Add(btnMenu);
 
-            sidebar.Controls.SetChildIndex(
-                btnMenu,
-                0);
+            int top = 90;
 
-            int top = 110;
+            // =========================================
+            // TITULOS Y BOTONES
+            // =========================================
 
-            // =====================================
-            // DASHBOARD
-            // =====================================
+            AgregarTitulo("CATÁLOGOS", top);
+            top += 45;
 
             AgregarBoton(
                 "Dashboard",
                 IconChar.ChartPie,
-                btnDashboard_Click,
+                BtnDashboard_Click,
                 top);
 
-            top += 80;
-
-            // =====================================
-            // CATALOGOS
-            // =====================================
-
-            AgregarTituloMenu(
-                "CATÁLOGOS",
-                top);
-
-            top += 35;
+            top += 60;
 
             AgregarBoton(
                 "Productos",
                 IconChar.BoxOpen,
-                btnProductos_Click,
+                BtnProductos_Click,
                 top);
 
             top += 60;
@@ -172,33 +134,26 @@ namespace Sistema_Inventario.Presentacion
             AgregarBoton(
                 "Bodegas",
                 IconChar.Warehouse,
-                btnBodegas_Click,
+                BtnBodegas_Click,
                 top);
 
             top += 60;
 
             AgregarBoton(
                 "Proveedores",
-                IconChar.TruckField,
-                btnProveedores_Click,
+                IconChar.Truck,
+                BtnProveedores_Click,
                 top);
 
             top += 80;
 
-            // =====================================
-            // INVENTARIO
-            // =====================================
-
-            AgregarTituloMenu(
-                "INVENTARIO",
-                top);
-
-            top += 35;
+            AgregarTitulo("INVENTARIO", top);
+            top += 45;
 
             AgregarBoton(
                 "Movimientos",
                 IconChar.RightLeft,
-                btnMovimientos_Click,
+                BtnMovimientos_Click,
                 top);
 
             top += 60;
@@ -206,7 +161,7 @@ namespace Sistema_Inventario.Presentacion
             AgregarBoton(
                 "Kardex",
                 IconChar.ClipboardList,
-                btnKardex_Click,
+                BtnKardex_Click,
                 top);
 
             top += 60;
@@ -214,7 +169,7 @@ namespace Sistema_Inventario.Presentacion
             AgregarBoton(
                 "Stock",
                 IconChar.BoxesStacked,
-                btnStock_Click,
+                BtnStock_Click,
                 top);
 
             top += 60;
@@ -222,33 +177,18 @@ namespace Sistema_Inventario.Presentacion
             AgregarBoton(
                 "Transferencias",
                 IconChar.ArrowsLeftRight,
-                btnTransferencias_Click,
-                top);
-
-            top += 60;
-
-            AgregarBoton(
-                "Ajustes",
-                IconChar.ScrewdriverWrench,
-                btnAjustes_Click,
+                BtnTransferencias_Click,
                 top);
 
             top += 80;
 
-            // =====================================
-            // SEGURIDAD
-            // =====================================
-
-            AgregarTituloMenu(
-                "SEGURIDAD",
-                top);
-
-            top += 35;
+            AgregarTitulo("SEGURIDAD", top);
+            top += 45;
 
             AgregarBoton(
                 "Usuarios",
-                IconChar.UserGear,
-                btnUsuarios_Click,
+                IconChar.Users,
+                BtnUsuarios_Click,
                 top);
 
             top += 60;
@@ -256,7 +196,7 @@ namespace Sistema_Inventario.Presentacion
             AgregarBoton(
                 "Roles",
                 IconChar.UserShield,
-                btnRoles_Click,
+                BtnRoles_Click,
                 top);
 
             top += 60;
@@ -264,214 +204,178 @@ namespace Sistema_Inventario.Presentacion
             AgregarBoton(
                 "Logs",
                 IconChar.FileLines,
-                btnLogs_Click,
+                BtnLogs_Click,
                 top);
 
             top += 80;
 
-            // =====================================
-            // SISTEMA
-            // =====================================
-
-            AgregarTituloMenu(
-                "SISTEMA",
-                top);
-
-            top += 35;
+            AgregarTitulo("SISTEMA", top);
+            top += 45;
 
             AgregarBoton(
                 "Backup",
                 IconChar.Database,
-                btnBackup_Click,
+                BtnBackup_Click,
                 top);
 
             top += 60;
 
             AgregarBoton(
-                "Salir",
-                IconChar.RightFromBracket,
-                btnSalir_Click,
+                "Ajustes",
+                IconChar.ScrewdriverWrench,
+                BtnAjustes_Click,
                 top);
+
+            top += 60;
+
+            IconButton btnSalir =
+                AgregarBoton(
+                    "Cerrar Sesión",
+                    IconChar.RightFromBracket,
+                    BtnSalir_Click,
+                    top);
+
+            btnSalir.BackColor =
+                Color.FromArgb(180, 45, 45);
         }
 
         // =========================================
-        // TITULOS MENU
+        // AGREGAR TITULO
         // =========================================
 
-        private void AgregarTituloMenu(
+        private void AgregarTitulo(
             string texto,
             int top)
         {
-            Label lbl =
-                new Label();
+            Label lbl = new Label();
 
             lbl.Text = texto;
 
             lbl.ForeColor =
-                Color.FromArgb(
-                    148,
-                    163,
-                    184);
+                Color.FromArgb(180, 190, 205);
 
             lbl.Font =
                 new Font(
                     "Segoe UI",
-                    9F,
+                    10,
                     FontStyle.Bold);
 
             lbl.AutoSize = true;
 
-            lbl.Location =
-                new Point(15, top);
+            lbl.Left = 15;
 
-            panelMenuScroll.Controls.Add(lbl);
+            lbl.Top = top;
+
+            panelMenu.Controls.Add(lbl);
         }
 
         // =========================================
-        // BOTONES MENU
+        // AGREGAR BOTON
         // =========================================
 
-        private void AgregarBoton(
+        private IconButton AgregarBoton(
             string texto,
             IconChar icono,
             EventHandler evento,
             int top)
         {
-            IconButton boton =
+            IconButton btn =
                 new IconButton();
 
-            boton.Text = texto;
+            btn.Text = texto;
 
-            boton.IconChar = icono;
+            btn.IconChar = icono;
 
-            boton.IconColor =
-                Color.White;
+            btn.IconColor = Color.White;
 
-            boton.IconFont =
-                IconFont.Auto;
+            btn.IconSize = 24;
 
-            boton.IconSize = 28;
-
-            boton.ForeColor =
-                Color.White;
-
-            boton.TextAlign =
-                ContentAlignment.MiddleLeft;
-
-            boton.ImageAlign =
-                ContentAlignment.MiddleLeft;
-
-            boton.TextImageRelation =
+            btn.TextImageRelation =
                 TextImageRelation.ImageBeforeText;
 
-            boton.Padding =
-                new Padding(20, 0, 0, 0);
+            btn.ImageAlign =
+                ContentAlignment.MiddleLeft;
 
-            boton.FlatStyle =
-                FlatStyle.Flat;
+            btn.TextAlign =
+                ContentAlignment.MiddleLeft;
 
-            boton.FlatAppearance.BorderSize = 0;
+            btn.Padding =
+                new Padding(15, 0, 0, 0);
 
-            boton.BackColor =
-                Color.FromArgb(
-                    11,
-                    31,
-                    58);
+            btn.ForeColor = Color.White;
 
-            boton.Font =
+            btn.Font =
                 new Font(
                     "Segoe UI",
-                    11F);
+                    11);
 
-            boton.Cursor =
+            btn.FlatStyle =
+                FlatStyle.Flat;
+
+            btn.FlatAppearance.BorderSize = 0;
+
+            btn.BackColor =
+                Color.FromArgb(7, 31, 61);
+
+            btn.Width = 240;
+
+            btn.Height = 50;
+
+            btn.Left = 0;
+
+            btn.Top = top;
+
+            btn.Cursor =
                 Cursors.Hand;
 
-            boton.Width = 245;
+            btn.Click += evento;
 
-            boton.Height = 55;
+            panelMenu.Controls.Add(btn);
 
-            boton.Top = top;
-
-            boton.Left = 0;
-
-            boton.MouseEnter +=
-                (s, e) =>
-                {
-                    boton.BackColor =
-                        Color.FromArgb(
-                            25,
-                            55,
-                            95);
-                };
-
-            boton.MouseLeave +=
-                (s, e) =>
-                {
-                    boton.BackColor =
-                        Color.FromArgb(
-                            11,
-                            31,
-                            58);
-                };
-
-            boton.Click += evento;
-
-            panelMenuScroll.Controls.Add(
-                boton);
+            return btn;
         }
 
         // =========================================
-        // TOPBAR
+        // TOP
         // =========================================
 
-        private void CrearTopbar()
+        private void CrearTop()
         {
-            topbar = new Panel();
+            panelTop = new Panel();
 
-            topbar.Dock =
-                DockStyle.Top;
+            panelTop.Dock = DockStyle.Top;
 
-            topbar.Height = 90;
+            panelTop.Height = 70;
 
-            topbar.BackColor =
-                Color.White;
+            panelTop.BackColor = Color.White;
 
-            this.Controls.Add(topbar);
+            this.Controls.Add(panelTop);
 
-            topbar.BringToFront();
+            panelTop.BringToFront();
 
-            lblTitulo =
+            Label lblSistema =
                 new Label();
 
-            lblTitulo.Text =
+            lblSistema.Text =
                 "Sistema Inventario";
 
-            lblTitulo.Font =
+            lblSistema.Font =
                 new Font(
                     "Segoe UI",
-                    24F,
+                    22,
                     FontStyle.Bold);
 
-            lblTitulo.ForeColor =
-                Color.FromArgb(
-                    11,
-                    31,
-                    58);
+            lblSistema.ForeColor =
+                Color.FromArgb(11, 31, 58);
 
-            lblTitulo.AutoSize =
-                true;
+            lblSistema.AutoSize = true;
 
-            lblTitulo.Location =
-                new Point(35, 20);
+            lblSistema.Location =
+                new Point(35, 15);
 
-            topbar.Controls.Add(
-                lblTitulo);
+            panelTop.Controls.Add(lblSistema);
 
-            // =====================================
-            // FECHA
-            // =====================================
-
-            lblFecha =
+            Label lblFecha =
                 new Label();
 
             lblFecha.Text =
@@ -481,44 +385,36 @@ namespace Sistema_Inventario.Presentacion
             lblFecha.Font =
                 new Font(
                     "Segoe UI",
-                    10F);
+                    11);
 
             lblFecha.ForeColor =
                 Color.Gray;
 
-            lblFecha.AutoSize =
-                true;
+            lblFecha.AutoSize = true;
 
             lblFecha.Location =
-                new Point(1050, 35);
+                new Point(900, 25);
 
-            topbar.Controls.Add(
-                lblFecha);
+            panelTop.Controls.Add(lblFecha);
         }
 
         // =========================================
         // PANEL CONTENEDOR
         // =========================================
 
-        private void CrearPanelContenedor()
+        private void CrearContenedor()
         {
-            panelContenedor =
-                new Panel();
+            panelContenedor = new Panel();
 
             panelContenedor.Dock =
                 DockStyle.Fill;
 
-            panelContenedor.Padding =
-                new Padding(20);
-
             panelContenedor.BackColor =
-                Color.FromArgb(
-                    245,
-                    247,
-                    250);
+                Color.FromArgb(245, 247, 250);
 
-            this.Controls.Add(
-                panelContenedor);
+            panelContenedor.AutoScroll = false;
+
+            this.Controls.Add(panelContenedor);
 
             panelContenedor.BringToFront();
         }
@@ -533,72 +429,63 @@ namespace Sistema_Inventario.Presentacion
         {
             if (menuExpandido)
             {
-                sidebar.Width = 80;
+                panelMenu.Width = 70;
 
-                foreach (
-                    Control control
-                    in panelMenuScroll.Controls)
+                foreach (Control control
+                    in panelMenu.Controls)
                 {
-                    if (control is IconButton)
+                    if (control is IconButton btn &&
+                        btn != btnMenu)
                     {
-                        IconButton btn =
-                            (IconButton)control;
-
                         btn.Text = "";
 
                         btn.Padding =
                             new Padding(0);
 
-                        btn.Width = 80;
+                        btn.IconSize = 28;
                     }
 
-                    if (control is Label)
+                    if (control is Label lbl)
                     {
-                        control.Visible = false;
+                        lbl.Visible = false;
                     }
                 }
-
-                menuExpandido = false;
             }
             else
             {
-                sidebar.Width = 260;
+                panelMenu.Width = 250;
 
-                foreach (
-                    Control control
-                    in panelMenuScroll.Controls)
+                foreach (Control control
+                    in panelMenu.Controls)
                 {
-                    if (control is IconButton)
+                    if (control is Label lbl)
                     {
-                        IconButton btn =
-                            (IconButton)control;
-
-                        btn.Width = 260;
-
-                        btn.Padding =
-                            new Padding(20, 0, 0, 0);
+                        lbl.Visible = true;
                     }
 
-                    if (control is Label)
+                    if (control is IconButton btn &&
+                        btn != btnMenu)
                     {
-                        control.Visible = true;
+                        btn.Padding =
+                            new Padding(15, 0, 0, 0);
+
+                        btn.IconSize = 24;
                     }
                 }
 
-                RestaurarTextosBotones();
-
-                menuExpandido = true;
+                RestaurarTexto();
             }
+
+            menuExpandido =
+                !menuExpandido;
         }
 
         // =========================================
-        // RESTAURAR TEXTOS
+        // RESTAURAR TEXTO
         // =========================================
 
-        private void RestaurarTextosBotones()
+        private void RestaurarTexto()
         {
-            int index = 0;
-
             string[] textos =
             {
                 "Dashboard",
@@ -609,27 +496,24 @@ namespace Sistema_Inventario.Presentacion
                 "Kardex",
                 "Stock",
                 "Transferencias",
-                "Ajustes",
                 "Usuarios",
                 "Roles",
                 "Logs",
                 "Backup",
-                "Salir"
+                "Ajustes",
+                "Cerrar Sesión"
             };
 
-            foreach (
-                Control control
-                in panelMenuScroll.Controls)
-            {
-                if (control is IconButton)
-                {
-                    if (index < textos.Length)
-                    {
-                        ((IconButton)control).Text =
-                            textos[index];
+            int index = 0;
 
-                        index++;
-                    }
+            foreach (Control control
+                in panelMenu.Controls)
+            {
+                if (control is IconButton btn &&
+                    btn != btnMenu)
+                {
+                    btn.Text = textos[index];
+                    index++;
                 }
             }
         }
@@ -639,61 +523,65 @@ namespace Sistema_Inventario.Presentacion
         // =========================================
 
         private void AbrirFormulario(
-            Form formulario)
+            Form frm)
         {
             panelContenedor.Controls.Clear();
 
-            formulario.TopLevel = false;
+            frm.TopLevel = false;
 
-            formulario.FormBorderStyle =
+            frm.FormBorderStyle =
                 FormBorderStyle.None;
 
-            formulario.Dock =
-                DockStyle.Fill;
+            frm.Dock = DockStyle.Fill;
 
-            panelContenedor.Controls.Add(
-                formulario);
+            frm.AutoScroll = true;
 
-            formulario.Show();
+            panelContenedor.Controls.Add(frm);
+
+            frm.Show();
         }
 
         // =========================================
-        // EVENTOS MENU
+        // PERMISOS
         // =========================================
 
-        private void btnDashboard_Click(
+        private void AplicarPermisos()
+        {
+        }
+
+        // =========================================
+        // EVENTOS
+        // =========================================
+
+        private void BtnDashboard_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmInicio());
+            AbrirFormulario(new FrmInicio());
         }
 
-        private void btnProductos_Click(
+        private void BtnProductos_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmProductos());
+            AbrirFormulario(new FrmProductos());
         }
 
-        private void btnBodegas_Click(
+        private void BtnBodegas_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmBodegas());
+            AbrirFormulario(new FrmBodegas());
         }
 
-        private void btnProveedores_Click(
+        private void BtnProveedores_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmProveedores());
+            AbrirFormulario(new FrmProveedores());
         }
 
-        private void btnMovimientos_Click(
+        private void BtnMovimientos_Click(
             object sender,
             EventArgs e)
         {
@@ -701,23 +589,21 @@ namespace Sistema_Inventario.Presentacion
                 new FrmMovimientosInventario());
         }
 
-        private void btnKardex_Click(
+        private void BtnKardex_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmKardex());
+            AbrirFormulario(new FrmKardex());
         }
 
-        private void btnStock_Click(
+        private void BtnStock_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmStockBodega());
+            AbrirFormulario(new FrmStockBodega());
         }
 
-        private void btnTransferencias_Click(
+        private void BtnTransferencias_Click(
             object sender,
             EventArgs e)
         {
@@ -725,71 +611,63 @@ namespace Sistema_Inventario.Presentacion
                 new FrmTransferencias());
         }
 
-        private void btnAjustes_Click(
+        private void BtnUsuarios_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmAjustesInventario());
+            AbrirFormulario(new FrmUsuarios());
         }
 
-        private void btnUsuarios_Click(
+        private void BtnRoles_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmUsuarios());
+            AbrirFormulario(new FrmRoles());
         }
 
-        private void btnRoles_Click(
+        private void BtnLogs_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmRoles());
+            AbrirFormulario(new FrmLogs());
         }
 
-        private void btnBackup_Click(
+        private void BtnBackup_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmBackup());
+            MessageBox.Show(
+                "Módulo Backup");
         }
 
-        private void btnLogs_Click(
+        private void BtnAjustes_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmLogs());
+            MessageBox.Show(
+                "Módulo Ajustes");
         }
 
-        private void btnSalir_Click(
+        private void BtnSalir_Click(
             object sender,
             EventArgs e)
         {
-            DialogResult resultado;
-
-            resultado =
+            DialogResult resultado =
                 MessageBox.Show(
-                    "¿Desea salir del sistema?",
-                    "Salir",
+                    "¿Desea cerrar sesión?",
+                    "Cerrar sesión",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
 
-            if (resultado ==
-                DialogResult.Yes)
+            if (resultado == DialogResult.Yes)
             {
-                Application.Exit();
+                FrmLogin login =
+                    new FrmLogin();
+
+                login.Show();
+
+                this.Close();
             }
-        }
-
-        private void FrmDashboard_Load(
-            object sender,
-            EventArgs e)
-        {
-
         }
     }
 }

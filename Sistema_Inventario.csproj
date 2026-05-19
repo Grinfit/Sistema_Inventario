@@ -222,6 +222,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilidades\ExportarExcel.cs" />
     <Compile Include="Utilidades\Logger.cs" />
+    <Compile Include="Utilidades\SesionUsuario.cs" />
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>

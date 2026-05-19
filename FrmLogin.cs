@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sistema_Inventario.Datos;
 using Sistema_Inventario.Presentacion;
 using Sistema_Inventario.Utilidades;
-using FontAwesome.Sharp;
 
 namespace Sistema_Inventario
 {
@@ -26,32 +18,103 @@ namespace Sistema_Inventario
             InitializeComponent();
         }
 
+        // =========================================
+        // LOGIN
+        // =========================================
+
         private void btnIngresar_Click(
             object sender,
             EventArgs e)
         {
             try
             {
-                SqlCommand cmd = new SqlCommand(
-                    "sp_Login",
-                    cn.AbrirConexion());
+                if (txtUsuario.Text.Trim() == "")
+                {
+                    MessageBox.Show(
+                        "Ingrese el usuario",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
 
-                cmd.CommandType =
-                    CommandType.StoredProcedure;
+                    txtUsuario.Focus();
+
+                    return;
+                }
+
+                if (txtClave.Text.Trim() == "")
+                {
+                    MessageBox.Show(
+                        "Ingrese la contraseña",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    txtClave.Focus();
+
+                    return;
+                }
+
+                SqlConnection conexion =
+                    cn.AbrirConexion();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"SELECT
+                            U.IdUsuario,
+                            U.Usuario,
+                            U.IdRol,
+                            R.Nombre AS Rol
+                        FROM Usuarios U
+                        INNER JOIN Roles R
+                            ON U.IdRol = R.IdRol
+                        WHERE
+                            U.Usuario = @Usuario
+                            AND U.Clave = @Clave
+                            AND U.Estado = 1",
+                        conexion);
 
                 cmd.Parameters.AddWithValue(
                     "@Usuario",
-                    txtUsuario.Text);
+                    txtUsuario.Text.Trim());
 
                 cmd.Parameters.AddWithValue(
                     "@Clave",
-                    txtClave.Text);
+                    txtClave.Text.Trim());
 
-                SqlDataReader dr = cmd.ExecuteReader();
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
 
                 if (dr.Read())
                 {
+                    // =====================================
+                    // SESIÓN
+                    // =====================================
+
+                    SesionUsuario.IdUsuario =
+                        Convert.ToInt32(
+                            dr["IdUsuario"]);
+
+                    SesionUsuario.Usuario =
+                        dr["Usuario"].ToString();
+
+                    SesionUsuario.IdRol =
+                        Convert.ToInt32(
+                            dr["IdRol"]);
+
+                    SesionUsuario.Rol =
+                        dr["Rol"].ToString();
+
                     dr.Close();
+
+                    // =====================================
+                    // PERMISOS
+                    // =====================================
+
+                    CargarPermisos();
+
+                    // =====================================
+                    // LOG
+                    // =====================================
 
                     log.RegistrarLog(
                         "LOGIN",
@@ -86,7 +149,8 @@ namespace Sistema_Inventario
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message);
 
                 log.RegistrarLog(
                     "ERROR LOGIN",
@@ -95,11 +159,70 @@ namespace Sistema_Inventario
             }
         }
 
+        // =========================================
+        // CARGAR PERMISOS
+        // =========================================
+
+        private void CargarPermisos()
+        {
+            try
+            {
+                SesionUsuario.Permisos.Clear();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"SELECT P.Nombre
+                        FROM RolesPermisos RP
+                        INNER JOIN Permisos P
+                            ON RP.IdPermiso = P.IdPermiso
+                        WHERE RP.IdRol = @IdRol",
+                        cn.AbrirConexion());
+
+                cmd.Parameters.AddWithValue(
+                    "@IdRol",
+                    SesionUsuario.IdRol);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    SesionUsuario.Permisos.Add(
+                        dr["Nombre"].ToString());
+                }
+
+                dr.Close();
+
+                cn.CerrarConexion();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message);
+            }
+        }
+
+        // =========================================
+        // MOSTRAR CONTRASEÑA
+        // =========================================
+
+        private void chkMostrarClave_CheckedChanged(
+            object sender,
+            EventArgs e)
+        {
+            txtClave.UseSystemPasswordChar =
+                !chkMostrarClave.Checked;
+        }
+
+        // =========================================
+        // LOAD
+        // =========================================
+
         private void FrmLogin_Load(
             object sender,
             EventArgs e)
         {
-
+            txtClave.UseSystemPasswordChar = true;
         }
     }
 }
