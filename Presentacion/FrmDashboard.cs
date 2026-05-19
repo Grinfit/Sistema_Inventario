@@ -1,23 +1,19 @@
 ﻿using FontAwesome.Sharp;
+using Sistema_Inventario.Utilidades;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Sistema_Inventario.Presentacion
 {
     public partial class FrmDashboard : Form
     {
-        private Panel sidebar;
-
-    private Panel topbar;
-
+        private Panel panelMenu;
         private Panel panelContenedor;
+        private Panel panelTop;
 
-        private Label lblTitulo;
-
-        private Label lblSubtitulo;
-
-        private Label lblFecha;
+        private IconButton btnMenu;
 
         private bool menuExpandido = true;
 
@@ -25,77 +21,185 @@ namespace Sistema_Inventario.Presentacion
         {
             InitializeComponent();
 
-            CrearSidebar();
+            ConfigurarFormulario();
 
-            CrearTopbar();
+            CrearMenu();
 
-            CrearPanelContenedor();
+            CrearTop();
 
-            AbrirFormulario(
-                new FrmInicio());
+            CrearContenedor();
+
+            AplicarPermisos();
+
+            ReorganizarMenu();
+
+            AbrirFormulario(new FrmInicio());
+        }
+        private void ReorganizarMenu()
+        {
+            int top = 90;
+
+            foreach (Control control in panelMenu.Controls)
+            {
+                // NO mover botón hamburguesa
+                if (control == btnMenu)
+                    continue;
+
+                // =====================================
+                // LABELS
+                // =====================================
+
+                if (control is Label lbl)
+                {
+                    bool mostrarTitulo = false;
+
+                    string texto = lbl.Text;
+
+                    // ==========================
+                    // VALIDAR SECCIONES
+                    // ==========================
+
+                    if (texto == "CATÁLOGOS")
+                    {
+                        mostrarTitulo =
+                            panelMenu.Controls["btnDashboard"].Visible ||
+                            panelMenu.Controls["btnProductos"].Visible ||
+                            panelMenu.Controls["btnBodegas"].Visible ||
+                            panelMenu.Controls["btnProveedores"].Visible;
+                    }
+
+                    else if (texto == "INVENTARIO")
+                    {
+                        mostrarTitulo =
+                            panelMenu.Controls["btnMovimientos"].Visible ||
+                            panelMenu.Controls["btnKardex"].Visible ||
+                            panelMenu.Controls["btnStock"].Visible ||
+                            panelMenu.Controls["btnTransferencias"].Visible;
+                    }
+
+                    else if (texto == "SEGURIDAD")
+                    {
+                        mostrarTitulo =
+                            panelMenu.Controls["btnUsuarios"].Visible ||
+                            panelMenu.Controls["btnRoles"].Visible ||
+                            panelMenu.Controls["btnLogs"].Visible;
+                    }
+
+                    else if (texto == "SISTEMA")
+                    {
+                        mostrarTitulo =
+                            panelMenu.Controls["btnBackup"].Visible ||
+                            panelMenu.Controls["btnAjustes"].Visible;
+                    }
+
+                    lbl.Visible = mostrarTitulo;
+
+                    if (mostrarTitulo)
+                    {
+                        lbl.Top = top;
+                        top += 40;
+                    }
+                }
+
+                // =====================================
+                // BOTONES
+                // =====================================
+
+                if (control is IconButton btn &&
+                    btn.Visible &&
+                    btn != btnMenu)
+                {
+                    btn.Top = top;
+
+                    top += 55;
+                }
+            }
+        }
+        // =========================================
+        // CONFIGURAR FORM
+        // =========================================
+
+        private void ConfigurarFormulario()
+        {
+            this.Text = "Sistema Inventario";
+
+            this.WindowState =
+                FormWindowState.Maximized;
+
+            this.FormBorderStyle =
+                FormBorderStyle.None;
+
+            this.BackColor =
+                Color.FromArgb(245, 247, 250);
         }
 
-        private void CrearSidebar()
+        // =========================================
+        // CREAR MENU
+        // =========================================
+
+        private void CrearMenu()
         {
-            sidebar = new Panel();
+            panelMenu = new Panel();
 
-            sidebar.Dock =
-                DockStyle.Left;
+            panelMenu.Dock = DockStyle.Left;
 
-            sidebar.Width = 240;
+            panelMenu.Width = 250;
 
-            sidebar.BackColor =
-                Color.FromArgb(
-                    11,
-                    31,
-                    58);
+            panelMenu.BackColor =
+                Color.FromArgb(7, 31, 61);
 
-            this.Controls.Add(sidebar);
+            panelMenu.AutoScroll = true;
 
-            Button btnMenu =
-                new Button();
+            panelMenu.HorizontalScroll.Enabled = false;
+            panelMenu.HorizontalScroll.Visible = false;
 
-            btnMenu.Text = "☰";
+            this.Controls.Add(panelMenu);
 
-            btnMenu.Font =
-                new Font(
-                    "Segoe UI",
-                    20F,
-                    FontStyle.Bold);
+            // =========================================
+            // BOTON MENU
+            // =========================================
 
-            btnMenu.ForeColor =
-                Color.White;
+            btnMenu = new IconButton();
 
-            btnMenu.BackColor =
-                Color.FromArgb(
-                    18,
-                    45,
-                    78);
+            btnMenu.IconChar = IconChar.Bars;
 
-            btnMenu.FlatStyle =
-                FlatStyle.Flat;
+            btnMenu.IconColor = Color.White;
+
+            btnMenu.IconSize = 30;
+
+            btnMenu.FlatStyle = FlatStyle.Flat;
 
             btnMenu.FlatAppearance.BorderSize = 0;
+
+            btnMenu.BackColor =
+                Color.FromArgb(14, 45, 84);
 
             btnMenu.Size =
                 new Size(55, 55);
 
             btnMenu.Location =
-                new Point(15, 15);
+                new Point(10, 10);
 
             btnMenu.Cursor =
                 Cursors.Hand;
 
             btnMenu.Click += BtnMenu_Click;
 
-            sidebar.Controls.Add(btnMenu);
+            panelMenu.Controls.Add(btnMenu);
 
-            int top = 100;
+            int top = 90;
+
+            // =========================================
+            // TITULOS Y BOTONES
+            // =========================================
+
+            AgregarTitulo("CATÁLOGOS", top);
+            top += 45;
 
             AgregarBoton(
                 "Dashboard",
                 IconChar.ChartPie,
-                btnDashboard_Click,
+                BtnDashboard_Click,
                 top);
 
             top += 60;
@@ -103,31 +207,77 @@ namespace Sistema_Inventario.Presentacion
             AgregarBoton(
                 "Productos",
                 IconChar.BoxOpen,
-                btnProductos_Click,
+                BtnProductos_Click,
                 top);
 
             top += 60;
 
             AgregarBoton(
-                "Clientes",
+                "Bodegas",
+                IconChar.Warehouse,
+                BtnBodegas_Click,
+                top);
+
+            top += 60;
+
+            AgregarBoton(
+                "Proveedores",
+                IconChar.Truck,
+                BtnProveedores_Click,
+                top);
+
+            top += 80;
+
+            AgregarTitulo("INVENTARIO", top);
+            top += 45;
+
+            AgregarBoton(
+                "Movimientos",
+                IconChar.RightLeft,
+                BtnMovimientos_Click,
+                top);
+
+            top += 60;
+
+            AgregarBoton(
+                "Kardex",
+                IconChar.ClipboardList,
+                BtnKardex_Click,
+                top);
+
+            top += 60;
+
+            AgregarBoton(
+                "Stock",
+                IconChar.BoxesStacked,
+                BtnStock_Click,
+                top);
+
+            top += 60;
+
+            AgregarBoton(
+                "Transferencias",
+                IconChar.ArrowsLeftRight,
+                BtnTransferencias_Click,
+                top);
+
+            top += 80;
+
+            AgregarTitulo("SEGURIDAD", top);
+            top += 45;
+
+            AgregarBoton(
+                "Usuarios",
                 IconChar.Users,
-                btnClientes_Click,
+                BtnUsuarios_Click,
                 top);
 
             top += 60;
 
             AgregarBoton(
-                "Ventas",
-                IconChar.CashRegister,
-                btnVentas_Click,
-                top);
-
-            top += 60;
-
-            AgregarBoton(
-                "Backup",
-                IconChar.Database,
-                btnBackup_Click,
+                "Roles",
+                IconChar.UserShield,
+                BtnRoles_Click,
                 top);
 
             top += 60;
@@ -135,173 +285,187 @@ namespace Sistema_Inventario.Presentacion
             AgregarBoton(
                 "Logs",
                 IconChar.FileLines,
-                btnLogs_Click,
+                BtnLogs_Click,
+                top);
+
+            top += 80;
+
+            AgregarTitulo("SISTEMA", top);
+            top += 45;
+
+            AgregarBoton(
+                "Backup",
+                IconChar.Database,
+                BtnBackup_Click,
                 top);
 
             top += 60;
 
             AgregarBoton(
-                "Salir",
-                IconChar.RightFromBracket,
-                btnSalir_Click,
+                "Ajustes",
+                IconChar.ScrewdriverWrench,
+                BtnAjustes_Click,
                 top);
+
+            top += 60;
+
+            IconButton btnSalir =
+                AgregarBoton(
+                    "Cerrar Sesión",
+                    IconChar.RightFromBracket,
+                    BtnSalir_Click,
+                    top);
+
+            btnSalir.BackColor =
+                Color.FromArgb(180, 45, 45);
         }
 
-        private void AgregarBoton(
+        // =========================================
+        // AGREGAR TITULO
+        // =========================================
+
+        private void AgregarTitulo(
             string texto,
-            IconChar icono,
-            EventHandler evento,
             int top)
         {
-            IconButton boton =
-                new IconButton();
+            Label lbl = new Label();
 
-            boton.Text = texto;
+            lbl.Text = texto;
 
-            boton.IconChar = icono;
+            lbl.ForeColor =
+                Color.FromArgb(180, 190, 205);
 
-            boton.IconColor =
-                Color.White;
-
-            boton.IconFont =
-                IconFont.Auto;
-
-            boton.IconSize = 28;
-
-            boton.ForeColor =
-                Color.White;
-
-            boton.TextAlign =
-                ContentAlignment.MiddleLeft;
-
-            boton.ImageAlign =
-                ContentAlignment.MiddleLeft;
-
-            boton.TextImageRelation =
-                TextImageRelation.ImageBeforeText;
-
-            boton.Padding =
-                new Padding(20, 0, 0, 0);
-
-            boton.FlatStyle =
-                FlatStyle.Flat;
-
-            boton.FlatAppearance.BorderSize = 0;
-
-            boton.BackColor =
-                Color.FromArgb(
-                    11,
-                    31,
-                    58);
-
-            boton.Font =
+            lbl.Font =
                 new Font(
                     "Segoe UI",
-                    11F);
-
-            boton.Cursor =
-                Cursors.Hand;
-
-            boton.Width = 240;
-
-            boton.Height = 55;
-
-            boton.Top = top;
-
-            boton.Left = 0;
-
-            boton.MouseEnter +=
-                (s, e) =>
-                {
-                    boton.BackColor =
-                        Color.FromArgb(
-                            25,
-                            55,
-                            95);
-                };
-
-            boton.MouseLeave +=
-                (s, e) =>
-                {
-                    boton.BackColor =
-                        Color.FromArgb(
-                            11,
-                            31,
-                            58);
-                };
-
-            boton.Click += evento;
-
-            sidebar.Controls.Add(boton);
-        }
-
-        private void CrearTopbar()
-        {
-            topbar = new Panel();
-
-            topbar.Dock =
-                DockStyle.Top;
-
-            topbar.Height = 90;
-
-            topbar.BackColor =
-                Color.White;
-
-            this.Controls.Add(topbar);
-
-            topbar.BringToFront();
-
-            lblTitulo =
-                new Label();
-
-            lblTitulo.Text =
-                "Sistema Inventario";
-
-            lblTitulo.Font =
-                new Font(
-                    "Segoe UI",
-                    22F,
+                    10,
                     FontStyle.Bold);
 
-            lblTitulo.ForeColor =
-                Color.FromArgb(
-                    11,
-                    31,
-                    58);
+            lbl.AutoSize = true;
 
-            lblTitulo.AutoSize =
-                true;
+            lbl.Left = 15;
 
-            lblTitulo.Location =
-                new Point(35, 15);
+            lbl.Top = top;
 
-            topbar.Controls.Add(
-                lblTitulo);
+            panelMenu.Controls.Add(lbl);
+        }
 
-            lblSubtitulo =
-                new Label();
+        // =========================================
+        // AGREGAR BOTON
+        // =========================================
 
-            lblSubtitulo.Text =
-                "Panel Administrativo";
+        private IconButton AgregarBoton(
+     string texto,
+     IconChar icono,
+     EventHandler evento,
+     int top)
+        {
+            IconButton btn =
+                new IconButton();
 
-            lblSubtitulo.Font =
+            // =====================================
+            // NAME FIJO
+            // =====================================
+
+            btn.Name =
+                "btn" + texto.Replace(" ", "");
+
+            btn.Tag = texto;
+
+            btn.Text = texto;
+
+            btn.IconChar = icono;
+
+            btn.IconColor = Color.White;
+
+            btn.IconSize = 24;
+
+            btn.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            btn.ImageAlign =
+                ContentAlignment.MiddleLeft;
+
+            btn.TextAlign =
+                ContentAlignment.MiddleLeft;
+
+            btn.Padding =
+                new Padding(15, 0, 0, 0);
+
+            btn.ForeColor = Color.White;
+
+            btn.Font =
                 new Font(
                     "Segoe UI",
-                    10F);
+                    11);
 
-            lblSubtitulo.ForeColor =
-                Color.Gray;
+            btn.FlatStyle =
+                FlatStyle.Flat;
 
-            lblSubtitulo.AutoSize =
-                true;
+            btn.FlatAppearance.BorderSize = 0;
 
-            lblSubtitulo.Location =
-                new Point(38, 55);
+            btn.BackColor =
+                Color.FromArgb(7, 31, 61);
 
-            topbar.Controls.Add(
-                lblSubtitulo);
+            btn.Width = 240;
 
-            lblFecha =
+            btn.Height = 50;
+
+            btn.Left = 0;
+
+            btn.Top = top;
+
+            btn.Cursor =
+                Cursors.Hand;
+
+            btn.Click += evento;
+
+            panelMenu.Controls.Add(btn);
+
+            return btn;
+        }
+
+        // =========================================
+        // TOP
+        // =========================================
+
+        private void CrearTop()
+        {
+            panelTop = new Panel();
+
+            panelTop.Dock = DockStyle.Top;
+
+            panelTop.Height = 70;
+
+            panelTop.BackColor = Color.White;
+
+            this.Controls.Add(panelTop);
+
+            panelTop.BringToFront();
+
+            Label lblSistema =
+                new Label();
+
+            lblSistema.Text =
+                "Sistema Inventario";
+
+            lblSistema.Font =
+                new Font(
+                    "Segoe UI",
+                    22,
+                    FontStyle.Bold);
+
+            lblSistema.ForeColor =
+                Color.FromArgb(11, 31, 58);
+
+            lblSistema.AutoSize = true;
+
+            lblSistema.Location =
+                new Point(35, 15);
+
+            panelTop.Controls.Add(lblSistema);
+
+            Label lblFecha =
                 new Label();
 
             lblFecha.Text =
@@ -311,172 +475,382 @@ namespace Sistema_Inventario.Presentacion
             lblFecha.Font =
                 new Font(
                     "Segoe UI",
-                    10F);
+                    11);
 
             lblFecha.ForeColor =
                 Color.Gray;
 
-            lblFecha.AutoSize =
-                true;
+            lblFecha.AutoSize = true;
 
             lblFecha.Location =
-                new Point(1050, 35);
+                new Point(900, 25);
 
-            topbar.Controls.Add(
-                lblFecha);
+            panelTop.Controls.Add(lblFecha);
         }
 
-        private void CrearPanelContenedor()
+        // =========================================
+        // PANEL CONTENEDOR
+        // =========================================
+
+        private void CrearContenedor()
         {
-            panelContenedor =
-                new Panel();
+            panelContenedor = new Panel();
 
             panelContenedor.Dock =
                 DockStyle.Fill;
 
-            panelContenedor.Padding =
-                new Padding(20);
-
             panelContenedor.BackColor =
-                Color.FromArgb(
-                    245,
-                    247,
-                    250);
+                Color.FromArgb(245, 247, 250);
 
-            this.Controls.Add(
-                panelContenedor);
+            panelContenedor.AutoScroll = false;
+
+            this.Controls.Add(panelContenedor);
 
             panelContenedor.BringToFront();
         }
 
+        // =========================================
+        // MENU HAMBURGUESA
+        // =========================================
+
         private void BtnMenu_Click(
-            object sender,
-            EventArgs e)
+    object sender,
+    EventArgs e)
         {
             if (menuExpandido)
             {
-                sidebar.Width = 70;
+                panelMenu.Width = 70;
 
-                foreach (
-                    Control control
-                    in sidebar.Controls)
+                foreach (Control control
+                    in panelMenu.Controls)
                 {
-                    if (
-                        control
-                        is IconButton)
+                    if (control is Label lbl)
                     {
-                        IconButton btn =
-                            (IconButton)control;
+                        lbl.Visible = false;
+                    }
 
+                    if (control is IconButton btn &&
+                        btn != btnMenu)
+                    {
                         btn.Text = "";
 
                         btn.Padding =
                             new Padding(0);
 
-                        btn.IconSize = 30;
+                        btn.IconSize = 28;
+
+                        btn.Width = 70;
+
+                        btn.TextAlign =
+                            ContentAlignment.MiddleCenter;
+
+                        btn.ImageAlign =
+                            ContentAlignment.MiddleCenter;
                     }
                 }
-
-                menuExpandido = false;
             }
             else
             {
-                sidebar.Controls.Clear();
+                panelMenu.Width = 250;
 
-                sidebar.Width = 240;
+                RestaurarTexto();
 
-                CrearSidebar();
+                foreach (Control control
+                    in panelMenu.Controls)
+                {
+                    if (control is IconButton btn &&
+                        btn != btnMenu)
+                    {
+                        btn.Width = 240;
 
-                menuExpandido = true;
+                        btn.Padding =
+                            new Padding(15, 0, 0, 0);
+
+                        btn.IconSize = 24;
+
+                        btn.TextAlign =
+                            ContentAlignment.MiddleLeft;
+
+                        btn.ImageAlign =
+                            ContentAlignment.MiddleLeft;
+                    }
+                }
+
+                ReorganizarMenu();
+            }
+
+            menuExpandido =
+                !menuExpandido;
+        }
+
+        // =========================================
+        // RESTAURAR TEXTO
+        // =========================================
+
+        private void RestaurarTexto()
+        {
+            string[] textos =
+            {
+                "Dashboard",
+                "Productos",
+                "Bodegas",
+                "Proveedores",
+                "Movimientos",
+                "Kardex",
+                "Stock",
+                "Transferencias",
+                "Usuarios",
+                "Roles",
+                "Logs",
+                "Backup",
+                "Ajustes",
+                "Cerrar Sesión"
+            };
+
+            int index = 0;
+
+            foreach (Control control
+                in panelMenu.Controls)
+            {
+                if (control is IconButton btn &&
+                    btn != btnMenu)
+                {
+                    btn.Text = textos[index];
+                    index++;
+                }
             }
         }
 
+        // =========================================
+        // ABRIR FORMULARIOS
+        // =========================================
+
         private void AbrirFormulario(
-            Form formulario)
+            Form frm)
         {
             panelContenedor.Controls.Clear();
 
-            formulario.TopLevel = false;
+            frm.TopLevel = false;
 
-            formulario.FormBorderStyle =
+            frm.FormBorderStyle =
                 FormBorderStyle.None;
 
-            formulario.Dock =
-                DockStyle.Fill;
+            frm.Dock = DockStyle.Fill;
 
-            panelContenedor.Controls.Add(
-                formulario);
+            frm.AutoScroll = true;
 
-            formulario.Show();
+            panelContenedor.Controls.Add(frm);
+
+            frm.Show();
         }
 
-        private void btnDashboard_Click(
+        // =========================================
+        // PERMISOS
+        // =========================================
+
+        private void AplicarPermisos()
+        {
+            foreach (Control control in panelMenu.Controls)
+            {
+                if (control is IconButton btn)
+                {
+                    switch (btn.Name)
+                    {
+                        case "btnDashboard":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_DASHBOARD");
+                            break;
+
+                        case "btnProductos":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_PRODUCTOS");
+                            break;
+
+                        case "btnBodegas":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_BODEGAS");
+                            break;
+
+                        case "btnProveedores":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_PROVEEDORES");
+                            break;
+
+                        case "btnMovimientos":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_MOVIMIENTOS");
+                            break;
+
+                        case "btnKardex":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_KARDEX");
+                            break;
+
+                        case "btnStock":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_STOCK");
+                            break;
+
+                        case "btnTransferencias":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_TRANSFERENCIAS");
+                            break;
+
+                        case "btnUsuarios":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_USUARIOS");
+                            break;
+
+                        case "btnRoles":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_ROLES");
+                            break;
+
+                        case "btnLogs":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_LOGS");
+                            break;
+
+                        case "btnBackup":
+                            btn.Visible =
+                                SesionUsuario.Permisos
+                                .Contains("VER_BACKUP");
+                            break;
+                    }
+                }
+            }
+        }
+
+        // =========================================
+        // EVENTOS
+        // =========================================
+
+        private void BtnDashboard_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(new FrmInicio());
+        }
+
+        private void BtnProductos_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(new FrmProductos());
+        }
+
+        private void BtnBodegas_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(new FrmBodegas());
+        }
+
+        private void BtnProveedores_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(new FrmProveedores());
+        }
+
+        private void BtnMovimientos_Click(
             object sender,
             EventArgs e)
         {
             AbrirFormulario(
-                new FrmInicio());
+                new FrmMovimientosInventario());
         }
 
-        private void btnProductos_Click(
+        private void BtnKardex_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(new FrmKardex());
+        }
+
+        private void BtnStock_Click(
+            object sender,
+            EventArgs e)
+        {
+            AbrirFormulario(new FrmStockBodega());
+        }
+
+        private void BtnTransferencias_Click(
             object sender,
             EventArgs e)
         {
             AbrirFormulario(
-                new FrmProductos());
+                new FrmTransferencias());
         }
 
-        private void btnClientes_Click(
+        private void BtnUsuarios_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmClientes());
+            AbrirFormulario(new FrmUsuarios());
         }
 
-        private void btnVentas_Click(
+        private void BtnRoles_Click(
             object sender,
             EventArgs e)
         {
-            AbrirFormulario(
-                new FrmVentas());
+            AbrirFormulario(new FrmRoles());
         }
 
-        private void btnBackup_Click(
+        private void BtnLogs_Click(
             object sender,
             EventArgs e)
+        {
+            AbrirFormulario(new FrmLogs());
+        }
+
+        private void BtnBackup_Click(
+    object sender,
+    EventArgs e)
         {
             AbrirFormulario(
                 new FrmBackup());
         }
 
-        private void btnLogs_Click(
-            object sender,
-            EventArgs e)
+        private void BtnAjustes_Click(
+    object sender,
+    EventArgs e)
         {
             AbrirFormulario(
-                new FrmLogs());
+                new FrmAjustes());
         }
 
-        private void btnSalir_Click(
+        private void BtnSalir_Click(
             object sender,
             EventArgs e)
         {
-            DialogResult resultado;
-
-            resultado =
+            DialogResult resultado =
                 MessageBox.Show(
-                    "¿Desea salir del sistema?",
-                    "Salir",
+                    "¿Desea cerrar sesión?",
+                    "Cerrar sesión",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
 
-            if (resultado ==
-                DialogResult.Yes)
+            if (resultado == DialogResult.Yes)
             {
-                Application.Exit();
+                FrmLogin login =
+                    new FrmLogin();
+
+                login.Show();
+
+                this.Close();
             }
         }
     }
-
 }

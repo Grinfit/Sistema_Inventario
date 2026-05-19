@@ -4,7 +4,7 @@ using FontAwesome.Sharp;
 
 namespace Sistema_Inventario.Presentacion
 {
-    partial class FrmProductos
+    partial class FrmBodegas
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -22,50 +22,41 @@ namespace Sistema_Inventario.Presentacion
 
         private void InitializeComponent()
         {
-            // =====================================================
-            // ESTILOS DATAGRIDVIEW
-            // =====================================================
-
             DataGridViewCellStyle headerStyle =
                 new DataGridViewCellStyle();
 
             DataGridViewCellStyle rowsStyle =
                 new DataGridViewCellStyle();
 
-            // =====================================================
+            // =========================================
             // CONTROLES
-            // =====================================================
+            // =========================================
 
             this.lblTitulo = new Label();
 
             this.label1 = new Label();
             this.label2 = new Label();
             this.label3 = new Label();
-            this.label4 = new Label();
-            this.label5 = new Label();
 
             this.txtNombre = new TextBox();
-            this.txtCategoria = new TextBox();
-            this.txtPrecio = new TextBox();
-            this.txtStock = new TextBox();
+            this.txtDireccion = new TextBox();
             this.txtBuscar = new TextBox();
 
             this.btnNuevo = new IconButton();
             this.btnGuardar = new IconButton();
             this.btnEditar = new IconButton();
             this.btnEliminar = new IconButton();
-            this.btnExportar =new IconButton();
             this.btnBuscar = new IconButton();
 
-            this.dgvProductos = new DataGridView();
+            this.dgvBodegas = new DataGridView();
 
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBodegas)).BeginInit();
 
             this.SuspendLayout();
 
-            // =====================================================
+            // =========================================
             // FORMULARIO
-            // =====================================================
+            // =========================================
 
             this.ClientSize =
                 new Size(1350, 860);
@@ -77,17 +68,17 @@ namespace Sistema_Inventario.Presentacion
                 FormBorderStyle.None;
 
             this.Name =
-                "FrmProductos";
+                "FrmBodegas";
 
             this.Text =
-                "FrmProductos";
+                "FrmBodegas";
 
             this.Load +=
-                new System.EventHandler(this.FrmProductos_Load);
+                new System.EventHandler(this.FrmBodegas_Load);
 
-            // =====================================================
+            // =========================================
             // TITULO
-            // =====================================================
+            // =========================================
 
             this.lblTitulo.AutoSize = true;
 
@@ -104,29 +95,29 @@ namespace Sistema_Inventario.Presentacion
                 new Point(50, 35);
 
             this.lblTitulo.Text =
-                "Gestión de Productos";
+                "Gestión de Bodegas";
 
-            // =====================================================
+            // =========================================
             // LABEL BUSCAR
-            // =====================================================
+            // =========================================
 
-            this.label5.AutoSize = true;
+            this.label3.AutoSize = true;
 
-            this.label5.Font =
+            this.label3.Font =
                 new Font(
                     "Segoe UI Semibold",
                     12F,
                     FontStyle.Bold);
 
-            this.label5.Location =
+            this.label3.Location =
                 new Point(60, 115);
 
-            this.label5.Text =
-                "Buscar Producto";
+            this.label3.Text =
+                "Buscar Bodega";
 
-            // =====================================================
+            // =========================================
             // TXT BUSCAR
-            // =====================================================
+            // =========================================
 
             this.txtBuscar.Font =
                 new Font(
@@ -142,9 +133,9 @@ namespace Sistema_Inventario.Presentacion
             this.txtBuscar.BorderStyle =
                 BorderStyle.FixedSingle;
 
-            // =====================================================
+            // =========================================
             // BTN BUSCAR
-            // =====================================================
+            // =========================================
 
             this.btnBuscar.BackColor =
                 Color.FromArgb(10, 35, 66);
@@ -192,13 +183,12 @@ namespace Sistema_Inventario.Presentacion
             this.btnBuscar.Click +=
                 new System.EventHandler(this.btnBuscar_Click);
 
-            // =====================================================
+            // =========================================
             // LABEL NOMBRE
-            // =====================================================
+            // =========================================
 
             this.label1.AutoSize = true;
 
-            // Fuente más grande
             this.label1.Font =
                 new Font(
                     "Segoe UI Semibold",
@@ -206,14 +196,14 @@ namespace Sistema_Inventario.Presentacion
                     FontStyle.Bold);
 
             this.label1.Location =
-                new Point(60, 220);
+                new Point(60, 230);
 
             this.label1.Text =
                 "Nombre";
 
-            // =====================================================
+            // =========================================
             // TXT NOMBRE
-            // =====================================================
+            // =========================================
 
             this.txtNombre.Font =
                 new Font(
@@ -221,7 +211,7 @@ namespace Sistema_Inventario.Presentacion
                     12F);
 
             this.txtNombre.Location =
-                new Point(60, 255);
+                new Point(60, 265);
 
             this.txtNombre.Size =
                 new Size(360, 38);
@@ -229,9 +219,9 @@ namespace Sistema_Inventario.Presentacion
             this.txtNombre.BorderStyle =
                 BorderStyle.FixedSingle;
 
-            // =====================================================
-            // LABEL CATEGORIA
-            // =====================================================
+            // =========================================
+            // LABEL DIRECCION
+            // =========================================
 
             this.label2.AutoSize = true;
 
@@ -242,104 +232,32 @@ namespace Sistema_Inventario.Presentacion
                     FontStyle.Bold);
 
             this.label2.Location =
-                new Point(60, 320);
+                new Point(60, 340);
 
             this.label2.Text =
-                "Categoría";
+                "Dirección";
 
-            // =====================================================
-            // TXT CATEGORIA
-            // =====================================================
+            // =========================================
+            // TXT DIRECCION
+            // =========================================
 
-            this.txtCategoria.Font =
+            this.txtDireccion.Font =
                 new Font(
                     "Segoe UI",
                     12F);
 
-            this.txtCategoria.Location =
-                new Point(60, 355);
+            this.txtDireccion.Location =
+                new Point(60, 375);
 
-            this.txtCategoria.Size =
-                new Size(360, 38);
+            this.txtDireccion.Size =
+                new Size(640, 38);
 
-            this.txtCategoria.BorderStyle =
+            this.txtDireccion.BorderStyle =
                 BorderStyle.FixedSingle;
 
-            // =====================================================
-            // LABEL PRECIO
-            // =====================================================
-
-            this.label3.AutoSize = true;
-
-            this.label3.Font =
-                new Font(
-                    "Segoe UI Semibold",
-                    13F,
-                    FontStyle.Bold);
-
-            this.label3.Location =
-                new Point(520, 220);
-
-            this.label3.Text =
-                "Precio";
-
-            // =====================================================
-            // TXT PRECIO
-            // =====================================================
-
-            this.txtPrecio.Font =
-                new Font(
-                    "Segoe UI",
-                    12F);
-
-            this.txtPrecio.Location =
-                new Point(520, 255);
-
-            this.txtPrecio.Size =
-                new Size(180, 38);
-
-            this.txtPrecio.BorderStyle =
-                BorderStyle.FixedSingle;
-
-            // =====================================================
-            // LABEL STOCK
-            // =====================================================
-
-            this.label4.AutoSize = true;
-
-            this.label4.Font =
-                new Font(
-                    "Segoe UI Semibold",
-                    13F,
-                    FontStyle.Bold);
-
-            this.label4.Location =
-                new Point(520, 320);
-
-            this.label4.Text =
-                "Stock";
-
-            // =====================================================
-            // TXT STOCK
-            // =====================================================
-
-            this.txtStock.Font =
-                new Font(
-                    "Segoe UI",
-                    12F);
-
-            this.txtStock.Location =
-                new Point(520, 355);
-
-            this.txtStock.Size =
-                new Size(180, 38);
-
-            this.txtStock.BorderStyle =
-                BorderStyle.FixedSingle;
-
-            // =====================================================
+            // =========================================
             // BTN NUEVO
-            // =====================================================
+            // =========================================
 
             this.btnNuevo.BackColor =
                 Color.FromArgb(52, 152, 219);
@@ -379,14 +297,14 @@ namespace Sistema_Inventario.Presentacion
                 new Size(170, 58);
 
             this.btnNuevo.Location =
-                new Point(60, 450);
+                new Point(60, 470);
 
             this.btnNuevo.Cursor =
                 Cursors.Hand;
 
-            // =====================================================
+            // =========================================
             // BTN GUARDAR
-            // =====================================================
+            // =========================================
 
             this.btnGuardar.BackColor =
                 Color.FromArgb(46, 204, 113);
@@ -426,14 +344,14 @@ namespace Sistema_Inventario.Presentacion
                 new Size(170, 58);
 
             this.btnGuardar.Location =
-                new Point(260, 450);
+                new Point(260, 470);
 
             this.btnGuardar.Cursor =
                 Cursors.Hand;
 
-            // =====================================================
+            // =========================================
             // BTN EDITAR
-            // =====================================================
+            // =========================================
 
             this.btnEditar.BackColor =
                 Color.FromArgb(241, 196, 15);
@@ -473,14 +391,14 @@ namespace Sistema_Inventario.Presentacion
                 new Size(170, 58);
 
             this.btnEditar.Location =
-                new Point(460, 450);
+                new Point(460, 470);
 
             this.btnEditar.Cursor =
                 Cursors.Hand;
 
-            // =====================================================
+            // =========================================
             // BTN ELIMINAR
-            // =====================================================
+            // =========================================
 
             this.btnEliminar.BackColor =
                 Color.FromArgb(231, 76, 60);
@@ -520,105 +438,58 @@ namespace Sistema_Inventario.Presentacion
                 new Size(170, 58);
 
             this.btnEliminar.Location =
-                new Point(660, 450);
+                new Point(660, 470);
 
             this.btnEliminar.Cursor =
                 Cursors.Hand;
 
-            // =====================================================
-            // BTN EXPORTAR
-            // =====================================================
-
-            this.btnExportar.BackColor =
-                Color.FromArgb(39, 174, 96);
-
-            this.btnExportar.FlatStyle =
-                FlatStyle.Flat;
-
-            this.btnExportar.FlatAppearance.BorderSize = 0;
-
-            this.btnExportar.ForeColor =
-                Color.White;
-
-            this.btnExportar.Font =
-                new Font(
-                    "Segoe UI Semibold",
-                    10F,
-                    FontStyle.Bold);
-
-            this.btnExportar.IconChar =
-                IconChar.FileExcel;
-
-            this.btnExportar.IconColor =
-                Color.White;
-
-            this.btnExportar.IconFont =
-                IconFont.Auto;
-
-            this.btnExportar.IconSize = 28;
-
-            this.btnExportar.Text =
-                " Exportar Excel";
-
-            this.btnExportar.TextImageRelation =
-                TextImageRelation.ImageBeforeText;
-
-            this.btnExportar.Size =
-                new Size(190, 58);
-
-            this.btnExportar.Location =
-                new Point(860, 450);
-
-            this.btnExportar.Cursor =
-                Cursors.Hand;
-
-            // =====================================================
+            // =========================================
             // DATAGRIDVIEW
-            // =====================================================
+            // =========================================
 
-            this.dgvProductos.AllowUserToAddRows = false;
+            this.dgvBodegas.AllowUserToAddRows = false;
 
-            this.dgvProductos.AllowUserToDeleteRows = false;
+            this.dgvBodegas.AllowUserToDeleteRows = false;
 
-            this.dgvProductos.AutoSizeColumnsMode =
+            this.dgvBodegas.AutoSizeColumnsMode =
                 DataGridViewAutoSizeColumnsMode.Fill;
 
-            this.dgvProductos.BackgroundColor =
+            this.dgvBodegas.BackgroundColor =
                 Color.White;
 
-            this.dgvProductos.BorderStyle =
+            this.dgvBodegas.BorderStyle =
                 BorderStyle.None;
 
-            this.dgvProductos.CellBorderStyle =
+            this.dgvBodegas.CellBorderStyle =
                 DataGridViewCellBorderStyle.SingleHorizontal;
 
-            this.dgvProductos.Location =
+            this.dgvBodegas.Location =
                 new Point(60, 585);
 
-            this.dgvProductos.Size =
+            this.dgvBodegas.Size =
                 new Size(1500, 400);
 
-            this.dgvProductos.ReadOnly = true;
+            this.dgvBodegas.ReadOnly = true;
 
-            this.dgvProductos.RowHeadersVisible = false;
+            this.dgvBodegas.RowHeadersVisible = false;
 
-            this.dgvProductos.SelectionMode =
+            this.dgvBodegas.SelectionMode =
                 DataGridViewSelectionMode.FullRowSelect;
 
-            this.dgvProductos.MultiSelect = false;
+            this.dgvBodegas.MultiSelect = false;
 
-            this.dgvProductos.EnableHeadersVisualStyles = false;
+            this.dgvBodegas.EnableHeadersVisualStyles = false;
 
-            this.dgvProductos.ColumnHeadersHeight = 45;
+            this.dgvBodegas.ColumnHeadersHeight = 45;
 
-            this.dgvProductos.ColumnHeadersHeightSizeMode =
+            this.dgvBodegas.ColumnHeadersHeightSizeMode =
                 DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
-            this.dgvProductos.RowTemplate.Height = 42;
+            this.dgvBodegas.RowTemplate.Height = 42;
 
-            // =====================================================
+            // =========================================
             // HEADER STYLE
-            // =====================================================
+            // =========================================
 
             headerStyle.BackColor =
                 Color.FromArgb(10, 35, 66);
@@ -632,12 +503,12 @@ namespace Sistema_Inventario.Presentacion
                     11F,
                     FontStyle.Bold);
 
-            this.dgvProductos.ColumnHeadersDefaultCellStyle =
+            this.dgvBodegas.ColumnHeadersDefaultCellStyle =
                 headerStyle;
 
-            // =====================================================
+            // =========================================
             // ROW STYLE
-            // =====================================================
+            // =========================================
 
             rowsStyle.Font =
                 new Font(
@@ -650,25 +521,25 @@ namespace Sistema_Inventario.Presentacion
             rowsStyle.SelectionForeColor =
                 Color.White;
 
-            this.dgvProductos.RowsDefaultCellStyle =
+            this.dgvBodegas.RowsDefaultCellStyle =
                 rowsStyle;
 
-            this.dgvProductos.AlternatingRowsDefaultCellStyle.BackColor =
+            this.dgvBodegas.AlternatingRowsDefaultCellStyle.BackColor =
                 Color.FromArgb(245, 247, 250);
 
-            this.dgvProductos.DefaultCellStyle.Padding =
+            this.dgvBodegas.DefaultCellStyle.Padding =
                 new Padding(5);
 
-            this.dgvProductos.GridColor =
+            this.dgvBodegas.GridColor =
                 Color.FromArgb(225, 225, 225);
 
-            this.dgvProductos.CellClick +=
+            this.dgvBodegas.CellClick +=
                 new DataGridViewCellEventHandler(
-                    this.dgvProductos_CellClick);
+                    this.dgvBodegas_CellClick);
 
-            // =====================================================
+            // =========================================
             // EVENTOS BOTONES
-            // =====================================================
+            // =========================================
 
             this.btnNuevo.Click +=
                 new System.EventHandler(this.btnNuevo_Click);
@@ -682,25 +553,18 @@ namespace Sistema_Inventario.Presentacion
             this.btnEliminar.Click +=
                 new System.EventHandler(this.btnEliminar_Click);
 
-            this.btnExportar.Click +=
-                new System.EventHandler(this.btnExportar_Click);
-
-            // =====================================================
+            // =========================================
             // CONTROLES
-            // =====================================================
+            // =========================================
 
             this.Controls.Add(this.lblTitulo);
 
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label5);
 
             this.Controls.Add(this.txtNombre);
-            this.Controls.Add(this.txtCategoria);
-            this.Controls.Add(this.txtPrecio);
-            this.Controls.Add(this.txtStock);
+            this.Controls.Add(this.txtDireccion);
             this.Controls.Add(this.txtBuscar);
 
             this.Controls.Add(this.btnBuscar);
@@ -709,10 +573,10 @@ namespace Sistema_Inventario.Presentacion
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.btnEditar);
             this.Controls.Add(this.btnEliminar);
-            this.Controls.Add(this.btnExportar);
-            this.Controls.Add(this.dgvProductos);
 
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).EndInit();
+            this.Controls.Add(this.dgvBodegas);
+
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBodegas)).EndInit();
 
             this.ResumeLayout(false);
 
@@ -726,22 +590,17 @@ namespace Sistema_Inventario.Presentacion
         private Label label1;
         private Label label2;
         private Label label3;
-        private Label label4;
-        private Label label5;
 
         private TextBox txtNombre;
-        private TextBox txtCategoria;
-        private TextBox txtPrecio;
-        private TextBox txtStock;
+        private TextBox txtDireccion;
         private TextBox txtBuscar;
 
         private IconButton btnNuevo;
         private IconButton btnGuardar;
         private IconButton btnEditar;
         private IconButton btnEliminar;
-        private IconButton btnExportar;
         private IconButton btnBuscar;
 
-        private DataGridView dgvProductos;
+        private DataGridView dgvBodegas;
     }
 }
