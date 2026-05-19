@@ -110,6 +110,12 @@
     <Compile Include="Logica\LProveedores.cs" />
     <Compile Include="Logica\LStockBodega.cs" />
     <Compile Include="Logica\LTransferencias.cs" />
+    <Compile Include="Presentacion\FrmAjustes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmAjustes.Designer.cs">
+      <DependentUpon>FrmAjustes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\FrmAjustesInventario.cs">
       <SubType>Form</SubType>
     </Compile>

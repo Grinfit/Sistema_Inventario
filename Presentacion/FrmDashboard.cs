@@ -816,19 +816,19 @@ namespace Sistema_Inventario.Presentacion
         }
 
         private void BtnBackup_Click(
-            object sender,
-            EventArgs e)
+    object sender,
+    EventArgs e)
         {
-            MessageBox.Show(
-                "Módulo Backup");
+            AbrirFormulario(
+                new FrmBackup());
         }
 
         private void BtnAjustes_Click(
-            object sender,
-            EventArgs e)
+    object sender,
+    EventArgs e)
         {
-            MessageBox.Show(
-                "Módulo Ajustes");
+            AbrirFormulario(
+                new FrmAjustes());
         }
 
         private void BtnSalir_Click(
