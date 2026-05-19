@@ -13,9 +13,9 @@ namespace Sistema_Inventario.Presentacion
 
         private Panel panelContenedor;
 
-        private Label lblTitulo;
+        private Panel panelMenuScroll;
 
-        private Label lblSubtitulo;
+        private Label lblTitulo;
 
         private Label lblFecha;
 
@@ -42,6 +42,7 @@ namespace Sistema_Inventario.Presentacion
         private void CrearSidebar()
         {
             sidebar = new Panel();
+            new Padding(0, 5, 0, 0);
 
             sidebar.Dock =
                 DockStyle.Left;
@@ -55,6 +56,39 @@ namespace Sistema_Inventario.Presentacion
                     58);
 
             this.Controls.Add(sidebar);
+
+            // =====================================
+            // PANEL SCROLL MENU
+            // =====================================
+
+            panelMenuScroll =
+                new Panel();
+
+            panelMenuScroll.Dock =
+                DockStyle.Fill;
+
+            panelMenuScroll.AutoScroll =
+                true;
+            panelMenuScroll.HorizontalScroll.Enabled =
+                false;
+
+            panelMenuScroll.HorizontalScroll.Visible =
+                false;
+
+            panelMenuScroll.HorizontalScroll.Maximum =
+                0;
+
+            panelMenuScroll.AutoScrollMinSize =
+                new Size(0, 0);
+
+            panelMenuScroll.BackColor =
+                Color.FromArgb(
+                    11,
+                    31,
+                    58);
+
+            sidebar.Controls.Add(
+                panelMenuScroll);
 
             // =====================================
             // BTN MENU
@@ -86,10 +120,11 @@ namespace Sistema_Inventario.Presentacion
             btnMenu.FlatAppearance.BorderSize = 0;
 
             btnMenu.Size =
-                new Size(55, 55);
+                new Size(46, 46);
 
             btnMenu.Location =
-                new Point(15, 15);
+                btnMenu.Location =
+                new Point(12, 15);
 
             btnMenu.Cursor =
                 Cursors.Hand;
@@ -98,7 +133,11 @@ namespace Sistema_Inventario.Presentacion
 
             sidebar.Controls.Add(btnMenu);
 
-            int top = 100;
+            sidebar.Controls.SetChildIndex(
+                btnMenu,
+                0);
+
+            int top = 110;
 
             // =====================================
             // DASHBOARD
@@ -171,11 +210,12 @@ namespace Sistema_Inventario.Presentacion
                 top);
 
             top += 60;
+
             AgregarBoton(
-    "Stock",
-    IconChar.BoxesStacked,
-    btnStock_Click,
-    top);
+                "Stock",
+                IconChar.BoxesStacked,
+                btnStock_Click,
+                top);
 
             top += 60;
 
@@ -282,9 +322,9 @@ namespace Sistema_Inventario.Presentacion
             lbl.AutoSize = true;
 
             lbl.Location =
-                new Point(20, top);
+                new Point(15, top);
 
-            sidebar.Controls.Add(lbl);
+            panelMenuScroll.Controls.Add(lbl);
         }
 
         // =========================================
@@ -346,7 +386,7 @@ namespace Sistema_Inventario.Presentacion
             boton.Cursor =
                 Cursors.Hand;
 
-            boton.Width = 260;
+            boton.Width = 245;
 
             boton.Height = 55;
 
@@ -376,7 +416,8 @@ namespace Sistema_Inventario.Presentacion
 
             boton.Click += evento;
 
-            sidebar.Controls.Add(boton);
+            panelMenuScroll.Controls.Add(
+                boton);
         }
 
         // =========================================
@@ -408,7 +449,7 @@ namespace Sistema_Inventario.Presentacion
             lblTitulo.Font =
                 new Font(
                     "Segoe UI",
-                    22F,
+                    24F,
                     FontStyle.Bold);
 
             lblTitulo.ForeColor =
@@ -421,33 +462,14 @@ namespace Sistema_Inventario.Presentacion
                 true;
 
             lblTitulo.Location =
-                new Point(35, 15);
+                new Point(35, 20);
 
             topbar.Controls.Add(
                 lblTitulo);
 
-            lblSubtitulo =
-                new Label();
-
-            lblSubtitulo.Text =
-                "Sistema de Control de Inventario";
-
-            lblSubtitulo.Font =
-                new Font(
-                    "Segoe UI",
-                    10F);
-
-            lblSubtitulo.ForeColor =
-                Color.Gray;
-
-            lblSubtitulo.AutoSize =
-                true;
-
-            lblSubtitulo.Location =
-                new Point(38, 55);
-
-            topbar.Controls.Add(
-                lblSubtitulo);
+            // =====================================
+            // FECHA
+            // =====================================
 
             lblFecha =
                 new Label();
@@ -511,15 +533,13 @@ namespace Sistema_Inventario.Presentacion
         {
             if (menuExpandido)
             {
-                sidebar.Width = 70;
+                sidebar.Width = 80;
 
                 foreach (
                     Control control
-                    in sidebar.Controls)
+                    in panelMenuScroll.Controls)
                 {
-                    if (
-                        control
-                        is IconButton)
+                    if (control is IconButton)
                     {
                         IconButton btn =
                             (IconButton)control;
@@ -529,12 +549,10 @@ namespace Sistema_Inventario.Presentacion
                         btn.Padding =
                             new Padding(0);
 
-                        btn.IconSize = 30;
+                        btn.Width = 80;
                     }
 
-                    if (
-                        control
-                        is Label)
+                    if (control is Label)
                     {
                         control.Visible = false;
                     }
@@ -544,13 +562,75 @@ namespace Sistema_Inventario.Presentacion
             }
             else
             {
-                sidebar.Controls.Clear();
-
                 sidebar.Width = 260;
 
-                CrearSidebar();
+                foreach (
+                    Control control
+                    in panelMenuScroll.Controls)
+                {
+                    if (control is IconButton)
+                    {
+                        IconButton btn =
+                            (IconButton)control;
+
+                        btn.Width = 260;
+
+                        btn.Padding =
+                            new Padding(20, 0, 0, 0);
+                    }
+
+                    if (control is Label)
+                    {
+                        control.Visible = true;
+                    }
+                }
+
+                RestaurarTextosBotones();
 
                 menuExpandido = true;
+            }
+        }
+
+        // =========================================
+        // RESTAURAR TEXTOS
+        // =========================================
+
+        private void RestaurarTextosBotones()
+        {
+            int index = 0;
+
+            string[] textos =
+            {
+                "Dashboard",
+                "Productos",
+                "Bodegas",
+                "Proveedores",
+                "Movimientos",
+                "Kardex",
+                "Stock",
+                "Transferencias",
+                "Ajustes",
+                "Usuarios",
+                "Roles",
+                "Logs",
+                "Backup",
+                "Salir"
+            };
+
+            foreach (
+                Control control
+                in panelMenuScroll.Controls)
+            {
+                if (control is IconButton)
+                {
+                    if (index < textos.Length)
+                    {
+                        ((IconButton)control).Text =
+                            textos[index];
+
+                        index++;
+                    }
+                }
             }
         }
 
@@ -630,8 +710,8 @@ namespace Sistema_Inventario.Presentacion
         }
 
         private void btnStock_Click(
-    object sender,
-    EventArgs e)
+            object sender,
+            EventArgs e)
         {
             AbrirFormulario(
                 new FrmStockBodega());

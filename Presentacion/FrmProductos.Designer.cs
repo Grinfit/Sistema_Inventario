@@ -54,6 +54,7 @@ namespace Sistema_Inventario.Presentacion
             this.btnGuardar = new IconButton();
             this.btnEditar = new IconButton();
             this.btnEliminar = new IconButton();
+            this.btnExportar =new IconButton();
             this.btnBuscar = new IconButton();
 
             this.dgvProductos = new DataGridView();
@@ -525,6 +526,53 @@ namespace Sistema_Inventario.Presentacion
                 Cursors.Hand;
 
             // =====================================================
+            // BTN EXPORTAR
+            // =====================================================
+
+            this.btnExportar.BackColor =
+                Color.FromArgb(39, 174, 96);
+
+            this.btnExportar.FlatStyle =
+                FlatStyle.Flat;
+
+            this.btnExportar.FlatAppearance.BorderSize = 0;
+
+            this.btnExportar.ForeColor =
+                Color.White;
+
+            this.btnExportar.Font =
+                new Font(
+                    "Segoe UI Semibold",
+                    10F,
+                    FontStyle.Bold);
+
+            this.btnExportar.IconChar =
+                IconChar.FileExcel;
+
+            this.btnExportar.IconColor =
+                Color.White;
+
+            this.btnExportar.IconFont =
+                IconFont.Auto;
+
+            this.btnExportar.IconSize = 28;
+
+            this.btnExportar.Text =
+                " Exportar Excel";
+
+            this.btnExportar.TextImageRelation =
+                TextImageRelation.ImageBeforeText;
+
+            this.btnExportar.Size =
+                new Size(190, 58);
+
+            this.btnExportar.Location =
+                new Point(860, 450);
+
+            this.btnExportar.Cursor =
+                Cursors.Hand;
+
+            // =====================================================
             // DATAGRIDVIEW
             // =====================================================
 
@@ -634,6 +682,9 @@ namespace Sistema_Inventario.Presentacion
             this.btnEliminar.Click +=
                 new System.EventHandler(this.btnEliminar_Click);
 
+            this.btnExportar.Click +=
+                new System.EventHandler(this.btnExportar_Click);
+
             // =====================================================
             // CONTROLES
             // =====================================================
@@ -658,7 +709,7 @@ namespace Sistema_Inventario.Presentacion
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.btnEditar);
             this.Controls.Add(this.btnEliminar);
-
+            this.Controls.Add(this.btnExportar);
             this.Controls.Add(this.dgvProductos);
 
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).EndInit();
@@ -688,6 +739,7 @@ namespace Sistema_Inventario.Presentacion
         private IconButton btnGuardar;
         private IconButton btnEditar;
         private IconButton btnEliminar;
+        private IconButton btnExportar;
         private IconButton btnBuscar;
 
         private DataGridView dgvProductos;

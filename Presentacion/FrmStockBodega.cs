@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
@@ -87,6 +88,14 @@ namespace Sistema_Inventario.Presentacion
                 lStock.MostrarStockBajo();
 
             PintarStockBajo();
+        }
+        private void btnExportar_Click(
+    object sender,
+    EventArgs e)
+        {
+            ExportarExcel.Exportar(
+                dgvStock,
+                "Reporte_Stock");
         }
     }
 }

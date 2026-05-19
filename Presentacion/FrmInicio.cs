@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 using Sistema_Inventario.Datos;
 
@@ -10,9 +11,12 @@ namespace Sistema_Inventario.Presentacion
 {
     public partial class FrmInicio : Form
     {
-        Conexion cn = new Conexion();
+        Conexion cn =
+            new Conexion();
 
         private DataGridView dgvActividad;
+
+        private Chart chartMovimientos;
 
         public FrmInicio()
         {
@@ -28,7 +32,13 @@ namespace Sistema_Inventario.Presentacion
             CargarIndicadores();
 
             CargarActividad();
+
+            CargarGraficaMovimientos();
         }
+
+        // =====================================
+        // DASHBOARD
+        // =====================================
 
         private void ConstruirDashboard()
         {
@@ -37,19 +47,27 @@ namespace Sistema_Inventario.Presentacion
 
             this.AutoScroll = true;
 
+            // =====================================
+            // PANEL CONTENEDOR
+            // =====================================
+
             Panel contenedor =
                 new Panel();
 
-            contenedor.Dock =
-                DockStyle.Fill;
+            contenedor.Location =
+                new Point(0, 0);
 
-            contenedor.Padding =
-                new Padding(25);
+            contenedor.Size =
+                new Size(1500, 1400);
 
             contenedor.BackColor =
                 Color.FromArgb(243, 244, 246);
 
             this.Controls.Add(contenedor);
+
+            // =====================================
+            // TITULO
+            // =====================================
 
             Label titulo =
                 new Label();
@@ -60,7 +78,7 @@ namespace Sistema_Inventario.Presentacion
             titulo.Font =
                 new Font(
                     "Segoe UI",
-                    24,
+                    30,
                     FontStyle.Bold);
 
             titulo.ForeColor =
@@ -69,75 +87,87 @@ namespace Sistema_Inventario.Presentacion
             titulo.AutoSize = true;
 
             titulo.Location =
-                new Point(15, 15);
+                new Point(20, 20);
 
             contenedor.Controls.Add(titulo);
+
+            // =====================================
+            // CARDS KPI
+            // =====================================
 
             FlowLayoutPanel cards =
                 new FlowLayoutPanel();
 
             cards.Location =
-                new Point(10, 80);
+                new Point(10, 110);
 
-            cards.Width =
-                this.Width - 60;
-
-            cards.Height = 180;
+            cards.Size =
+                new Size(1320, 180);
 
             cards.BackColor =
                 Color.Transparent;
 
-            cards.WrapContents = false;
-
-            cards.AutoScroll = false;
+            cards.WrapContents =
+                false;
 
             contenedor.Controls.Add(cards);
 
             panelClientes =
                 CrearCard(
                     "Bodegas",
-                    out lblClientes);
+                    out lblClientes,
+                    Color.FromArgb(52, 152, 219));
 
             panelProductos =
                 CrearCard(
                     "Productos",
-                    out lblProductos);
+                    out lblProductos,
+                    Color.FromArgb(46, 204, 113));
 
             panelVentas =
                 CrearCard(
-                    "Movimientos",
-                    out lblVentas);
+                    "Stock Bajo",
+                    out lblVentas,
+                    Color.FromArgb(231, 76, 60));
 
             panelLogin =
                 CrearCard(
-                    "Último Login",
-                    out lblLogin);
+                    "Transferencias Hoy",
+                    out lblLogin,
+                    Color.FromArgb(155, 89, 182));
 
             cards.Controls.Add(panelClientes);
+
             cards.Controls.Add(panelProductos);
+
             cards.Controls.Add(panelVentas);
+
             cards.Controls.Add(panelLogin);
+
+            // =====================================
+            // PANEL ACTIVIDAD
+            // =====================================
 
             Panel panelTabla =
                 new Panel();
 
             panelTabla.Location =
-                new Point(10, 280);
+                new Point(10, 330);
 
-            panelTabla.Anchor =
-                AnchorStyles.Top |
-                AnchorStyles.Left |
-                AnchorStyles.Right;
-
-            panelTabla.Width =
-                this.Width - 60;
-
-            panelTabla.Height = 430;
+            panelTabla.Size =
+                new Size(1320, 420);
 
             panelTabla.BackColor =
                 Color.White;
 
+            panelTabla.BorderStyle =
+                BorderStyle.FixedSingle;
+
             contenedor.Controls.Add(panelTabla);
+
+            // =====================================
+            // TITULO ACTIVIDAD
+            // =====================================
 
             Label lblActividad =
                 new Label();
@@ -148,7 +178,7 @@ namespace Sistema_Inventario.Presentacion
             lblActividad.Font =
                 new Font(
                     "Segoe UI",
-                    16,
+                    18,
                     FontStyle.Bold);
 
             lblActividad.ForeColor =
@@ -161,22 +191,18 @@ namespace Sistema_Inventario.Presentacion
 
             panelTabla.Controls.Add(lblActividad);
 
+            // =====================================
+            // GRID
+            // =====================================
+
             dgvActividad =
                 new DataGridView();
 
             dgvActividad.Location =
-                new Point(20, 70);
+                new Point(20, 80);
 
-            dgvActividad.Anchor =
-                AnchorStyles.Top |
-                AnchorStyles.Left |
-                AnchorStyles.Right |
-                AnchorStyles.Bottom;
-
-            dgvActividad.Width =
-                panelTabla.Width - 40;
-
-            dgvActividad.Height = 330;
+            dgvActividad.Size =
+                new Size(1270, 300);
 
             dgvActividad.BackgroundColor =
                 Color.White;
@@ -190,7 +216,8 @@ namespace Sistema_Inventario.Presentacion
             dgvActividad.AllowUserToDeleteRows =
                 false;
 
-            dgvActividad.ReadOnly = true;
+            dgvActividad.ReadOnly =
+                true;
 
             dgvActividad.RowHeadersVisible =
                 false;
@@ -201,13 +228,14 @@ namespace Sistema_Inventario.Presentacion
             dgvActividad.SelectionMode =
                 DataGridViewSelectionMode.FullRowSelect;
 
-            dgvActividad.ColumnHeadersHeight = 40;
+            dgvActividad.ColumnHeadersHeight =
+                45;
 
             dgvActividad.EnableHeadersVisualStyles =
                 false;
 
             dgvActividad.ColumnHeadersDefaultCellStyle.BackColor =
-                Color.FromArgb(37, 99, 235);
+                Color.FromArgb(10, 35, 66);
 
             dgvActividad.ColumnHeadersDefaultCellStyle.ForeColor =
                 Color.White;
@@ -215,7 +243,7 @@ namespace Sistema_Inventario.Presentacion
             dgvActividad.ColumnHeadersDefaultCellStyle.Font =
                 new Font(
                     "Segoe UI",
-                    10,
+                    11,
                     FontStyle.Bold);
 
             dgvActividad.DefaultCellStyle.Font =
@@ -229,24 +257,144 @@ namespace Sistema_Inventario.Presentacion
             dgvActividad.DefaultCellStyle.SelectionForeColor =
                 Color.Black;
 
+            dgvActividad.AlternatingRowsDefaultCellStyle.BackColor =
+                Color.FromArgb(245, 247, 250);
+
             panelTabla.Controls.Add(dgvActividad);
+
+            // =====================================
+            // PANEL GRAFICA
+            // =====================================
+
+            Panel panelGrafica =
+                new Panel();
+
+            panelGrafica.Location =
+                new Point(10, 790);
+
+            panelGrafica.Size =
+                new Size(1320, 420);
+
+            panelGrafica.BackColor =
+                Color.White;
+
+            panelGrafica.BorderStyle =
+                BorderStyle.FixedSingle;
+
+            contenedor.Controls.Add(panelGrafica);
+
+            // =====================================
+            // TITULO GRAFICA
+            // =====================================
+
+            Label lblGrafica =
+                new Label();
+
+            lblGrafica.Text =
+                "Movimientos últimos 7 días";
+
+            lblGrafica.Font =
+                new Font(
+                    "Segoe UI",
+                    18,
+                    FontStyle.Bold);
+
+            lblGrafica.ForeColor =
+                Color.FromArgb(17, 24, 39);
+
+            lblGrafica.AutoSize =
+                true;
+
+            lblGrafica.Location =
+                new Point(20, 20);
+
+            panelGrafica.Controls.Add(lblGrafica);
+
+            // =====================================
+            // CHART
+            // =====================================
+
+            chartMovimientos =
+                new Chart();
+
+            chartMovimientos.Location =
+                new Point(20, 70);
+
+            chartMovimientos.Size =
+                new Size(1250, 300);
+
+            ChartArea area =
+                new ChartArea();
+
+            area.BackColor =
+                Color.White;
+
+            area.AxisX.MajorGrid.Enabled =
+                false;
+
+            area.AxisY.MajorGrid.LineColor =
+                Color.Gainsboro;
+
+            chartMovimientos.ChartAreas.Add(area);
+
+            Series serie =
+                new Series();
+
+            serie.ChartType =
+                SeriesChartType.Column;
+
+            serie.Color =
+                Color.FromArgb(52, 152, 219);
+
+            serie.Font =
+                new Font(
+                    "Segoe UI",
+                    10,
+                    FontStyle.Bold);
+
+            chartMovimientos.Series.Add(serie);
+
+            panelGrafica.Controls.Add(
+                chartMovimientos);
         }
+
+        // =====================================
+        // CREAR CARD
+        // =====================================
 
         private Panel CrearCard(
             string titulo,
-            out Label lblValor)
+            out Label lblValor,
+            Color color)
         {
             Panel panel =
                 new Panel();
 
             panel.Size =
-                new Size(240, 140);
+                new Size(280, 150);
 
             panel.Margin =
                 new Padding(15);
 
             panel.BackColor =
                 Color.White;
+
+            panel.BorderStyle =
+                BorderStyle.FixedSingle;
+
+            Panel barra =
+                new Panel();
+
+            barra.Dock =
+                DockStyle.Top;
+
+            barra.Height =
+                8;
+
+            barra.BackColor =
+                color;
+
+            panel.Controls.Add(barra);
 
             Label lblTitulo =
                 new Label();
@@ -257,42 +405,49 @@ namespace Sistema_Inventario.Presentacion
             lblTitulo.Font =
                 new Font(
                     "Segoe UI",
-                    16,
+                    15,
                     FontStyle.Bold);
 
             lblTitulo.ForeColor =
                 Color.FromArgb(100, 116, 139);
 
-            lblTitulo.AutoSize = true;
+            lblTitulo.AutoSize =
+                true;
 
             lblTitulo.Location =
-                new Point(25, 20);
+                new Point(25, 30);
 
             panel.Controls.Add(lblTitulo);
 
             lblValor =
                 new Label();
 
-            lblValor.Text = "0";
+            lblValor.Text =
+                "0";
 
             lblValor.Font =
                 new Font(
                     "Segoe UI",
-                    30,
+                    36,
                     FontStyle.Bold);
 
             lblValor.ForeColor =
-                Color.FromArgb(37, 99, 235);
+                color;
 
-            lblValor.AutoSize = true;
+            lblValor.AutoSize =
+                true;
 
             lblValor.Location =
-                new Point(35, 60);
+                new Point(30, 65);
 
             panel.Controls.Add(lblValor);
 
             return panel;
         }
+
+        // =====================================
+        // KPI
+        // =====================================
 
         private void CargarIndicadores()
         {
@@ -300,10 +455,6 @@ namespace Sistema_Inventario.Presentacion
             {
                 SqlConnection conexion =
                     cn.AbrirConexion();
-
-                // =====================================
-                // PRODUCTOS
-                // =====================================
 
                 SqlCommand cmdProductos =
                     new SqlCommand(
@@ -313,10 +464,6 @@ namespace Sistema_Inventario.Presentacion
                 lblProductos.Text =
                     cmdProductos.ExecuteScalar().ToString();
 
-                // =====================================
-                // BODEGAS
-                // =====================================
-
                 SqlCommand cmdBodegas =
                     new SqlCommand(
                         "SELECT COUNT(*) FROM Bodegas",
@@ -325,43 +472,39 @@ namespace Sistema_Inventario.Presentacion
                 lblClientes.Text =
                     cmdBodegas.ExecuteScalar().ToString();
 
-                // =====================================
-                // MOVIMIENTOS
-                // =====================================
-
-                SqlCommand cmdMovimientos =
+                SqlCommand cmdStockBajo =
                     new SqlCommand(
-                        "SELECT COUNT(*) FROM MovimientosInventario",
+                        @"SELECT COUNT(*)
+                        FROM StockBodega
+                        WHERE StockActual <= 5",
                         conexion);
 
                 lblVentas.Text =
-                    cmdMovimientos.ExecuteScalar().ToString();
+                    cmdStockBajo.ExecuteScalar().ToString();
 
-                // =====================================
-                // ULTIMO LOGIN
-                // =====================================
-
-                SqlCommand cmdLogin =
+                SqlCommand cmdTransferencias =
                     new SqlCommand(
-                        "SELECT TOP 1 Usuario FROM LogsSistema ORDER BY Fecha DESC",
+                        @"SELECT COUNT(*)
+                        FROM TransferenciasBodega
+                        WHERE CAST(Fecha AS DATE)
+                        = CAST(GETDATE() AS DATE)",
                         conexion);
 
-                object login =
-                    cmdLogin.ExecuteScalar();
-
-                if (login != null)
-                {
-                    lblLogin.Text =
-                        login.ToString();
-                }
+                lblLogin.Text =
+                    cmdTransferencias.ExecuteScalar().ToString();
 
                 cn.CerrarConexion();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message);
             }
         }
+
+        // =====================================
+        // ACTIVIDAD
+        // =====================================
 
         private void CargarActividad()
         {
@@ -372,7 +515,7 @@ namespace Sistema_Inventario.Presentacion
 
                 SqlDataAdapter da =
                     new SqlDataAdapter(
-                        @"SELECT TOP 10
+                        @"SELECT TOP 15
                         Usuario,
                         Fecha,
                         Descripcion
@@ -385,13 +528,64 @@ namespace Sistema_Inventario.Presentacion
 
                 da.Fill(dt);
 
-                dgvActividad.DataSource = dt;
+                dgvActividad.DataSource =
+                    dt;
 
                 cn.CerrarConexion();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.Message);
+            }
+        }
+
+        // =====================================
+        // GRAFICA
+        // =====================================
+
+        private void CargarGraficaMovimientos()
+        {
+            try
+            {
+                SqlConnection conexion =
+                    cn.AbrirConexion();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"SELECT
+                            CAST(Fecha AS DATE) AS Dia,
+                            COUNT(*) AS Total
+                        FROM MovimientosInventario
+                        WHERE Fecha >= DATEADD(DAY, -7, GETDATE())
+                        GROUP BY CAST(Fecha AS DATE)
+                        ORDER BY Dia",
+                        conexion);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                chartMovimientos.Series[0]
+                    .Points.Clear();
+
+                while (dr.Read())
+                {
+                    chartMovimientos.Series[0]
+                        .Points.AddXY(
+                        Convert.ToDateTime(
+                            dr["Dia"])
+                            .ToString("dd/MM"),
+                        dr["Total"]);
+                }
+
+                dr.Close();
+
+                cn.CerrarConexion();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message);
             }
         }
     }

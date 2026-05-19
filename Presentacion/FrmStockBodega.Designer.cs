@@ -39,6 +39,9 @@ namespace Sistema_Inventario.Presentacion
             this.btnStockBajo =
                 new IconButton();
 
+            this.btnExportar =
+                new IconButton();
+
             this.dgvStock =
                 new DataGridView();
 
@@ -110,7 +113,12 @@ namespace Sistema_Inventario.Presentacion
                 IconChar.TriangleExclamation,
                 Color.FromArgb(231, 76, 60),
                 290);
-
+            ConfigurarBoton(
+    btnExportar,
+    " Exportar Excel",
+    IconChar.FileExcel,
+    Color.FromArgb(39, 174, 96),
+    520);
             // =====================================
             // GRID
             // =====================================
@@ -190,6 +198,9 @@ namespace Sistema_Inventario.Presentacion
                 new System.EventHandler(
                     this.btnStockBajo_Click);
 
+            btnExportar.Click +=
+    new System.EventHandler(
+        this.btnExportar_Click);
             // =====================================
             // CONTROLES
             // =====================================
@@ -199,6 +210,8 @@ namespace Sistema_Inventario.Presentacion
             this.Controls.Add(btnRecargar);
 
             this.Controls.Add(btnStockBajo);
+
+            this.Controls.Add(btnExportar);
 
             this.Controls.Add(dgvStock);
 
@@ -273,6 +286,8 @@ namespace Sistema_Inventario.Presentacion
         private IconButton btnRecargar;
 
         private IconButton btnStockBajo;
+
+        private IconButton btnExportar;
 
         private DataGridView dgvStock;
     }

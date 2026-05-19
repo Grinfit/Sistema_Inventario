@@ -44,6 +44,8 @@ namespace Sistema_Inventario.Presentacion
 
             this.btnRecargar =
                 new IconButton();
+            this.btnExportar =
+    new IconButton();
 
             this.dgvKardex =
                 new DataGridView();
@@ -152,7 +154,12 @@ namespace Sistema_Inventario.Presentacion
                 IconChar.Rotate,
                 Color.FromArgb(46, 204, 113),
                 730);
-
+            ConfigurarBoton(
+    btnExportar,
+    " Exportar Excel",
+    IconChar.FileExcel,
+    Color.FromArgb(39, 174, 96),
+    950);
             // =====================================
             // GRID
             // =====================================
@@ -231,7 +238,9 @@ namespace Sistema_Inventario.Presentacion
             btnRecargar.Click +=
                 new System.EventHandler(
                     this.btnRecargar_Click);
-
+            btnExportar.Click +=
+    new System.EventHandler(
+        this.btnExportar_Click);
             // =====================================
             // CONTROLES
             // =====================================
@@ -245,6 +254,8 @@ namespace Sistema_Inventario.Presentacion
             this.Controls.Add(btnBuscar);
 
             this.Controls.Add(btnRecargar);
+
+            this.Controls.Add(btnExportar);
 
             this.Controls.Add(dgvKardex);
 
@@ -323,6 +334,8 @@ namespace Sistema_Inventario.Presentacion
         private IconButton btnBuscar;
 
         private IconButton btnRecargar;
+
+        private IconButton btnExportar;
 
         private DataGridView dgvKardex;
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Sistema_Inventario.Utilidades;
 using Sistema_Inventario.Datos;
 using Sistema_Inventario.Logica;
 
@@ -77,6 +78,14 @@ namespace Sistema_Inventario.Presentacion
             EventArgs e)
         {
             MostrarKardex();
+        }
+        private void btnExportar_Click(
+    object sender,
+    EventArgs e)
+        {
+            ExportarExcel.Exportar(
+                dgvKardex,
+                "Reporte_Kardex");
         }
     }
 }

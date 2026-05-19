@@ -47,7 +47,7 @@ namespace Sistema_Inventario.Presentacion
 
             this.btnNuevo = new IconButton();
             this.btnTransferir = new IconButton();
-
+            this.btnExportar = new IconButton();
             this.dgvTransferencias = new DataGridView();
 
             ((System.ComponentModel.ISupportInitialize)
@@ -240,7 +240,12 @@ namespace Sistema_Inventario.Presentacion
                 IconChar.RightLeft,
                 Color.FromArgb(46, 204, 113),
                 280);
-
+            ConfigurarBoton(
+    btnExportar,
+    " Exportar Excel",
+    IconChar.FileExcel,
+    Color.FromArgb(39, 174, 96),
+    500);
             // =====================================
             // GRID
             // =====================================
@@ -319,7 +324,9 @@ namespace Sistema_Inventario.Presentacion
             btnTransferir.Click +=
                 new System.EventHandler(
                     this.btnTransferir_Click);
-
+            btnExportar.Click +=
+    new System.EventHandler(
+        this.btnExportar_Click);
             // =====================================
             // CONTROLES
             // =====================================
@@ -341,7 +348,7 @@ namespace Sistema_Inventario.Presentacion
 
             this.Controls.Add(btnNuevo);
             this.Controls.Add(btnTransferir);
-
+            this.Controls.Add(btnExportar);
             this.Controls.Add(dgvTransferencias);
 
             ((System.ComponentModel.ISupportInitialize)
@@ -427,7 +434,7 @@ namespace Sistema_Inventario.Presentacion
 
         private IconButton btnNuevo;
         private IconButton btnTransferir;
-
+        private IconButton btnExportar;
         private DataGridView dgvTransferencias;
     }
 }

@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using Sistema_Inventario.Utilidades;
 using FontAwesome.Sharp;
 using Sistema_Inventario.Datos;
 using Sistema_Inventario.Utilidades;
@@ -429,6 +430,14 @@ namespace Sistema_Inventario.Presentacion
             MostrarProductos();
 
             IdProducto = 0;
+        }
+        private void btnExportar_Click(
+    object sender,
+    EventArgs e)
+        {
+            ExportarExcel.Exportar(
+                dgvProductos,
+                "Reporte_Productos");
         }
     }
 
