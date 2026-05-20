@@ -1,15 +1,15 @@
-﻿using FontAwesome.Sharp;
-using Sistema_Inventario.Datos;
-using Sistema_Inventario.Logica;
-using Sistema_Inventario.Utilidades;
-
-using System;
+﻿using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using FontAwesome.Sharp;
+using Sistema_Inventario.Datos;
+using Sistema_Inventario.Logica;
+using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
@@ -59,16 +59,16 @@ namespace Sistema_Inventario.Presentacion
         // =====================================================
 
         private void FrmBackup_Load(
-            object sender,
-            EventArgs e)
+     object sender,
+     EventArgs e)
         {
             cbTipoBackup.SelectedIndex = 0;
 
             MostrarHistorial();
 
-            CargarUltimoBackup();
-
             ConfigurarDataGrid();
+
+            CargarUltimoBackup();
         }
 
         // =====================================================
@@ -77,107 +77,139 @@ namespace Sistema_Inventario.Presentacion
 
         private void ConfigurarDataGrid()
         {
-            dgvBackupHistorial.BorderStyle =
-                BorderStyle.None;
+            try
+            {
+                dgvBackupHistorial.BorderStyle =
+                    BorderStyle.None;
 
-            dgvBackupHistorial.BackgroundColor =
-                Color.White;
+                dgvBackupHistorial.BackgroundColor =
+                    Color.White;
 
-            dgvBackupHistorial.AutoSizeColumnsMode =
-                DataGridViewAutoSizeColumnsMode.Fill;
+                dgvBackupHistorial.AutoSizeColumnsMode =
+                    DataGridViewAutoSizeColumnsMode.Fill;
 
-            dgvBackupHistorial.AutoSizeRowsMode =
-                DataGridViewAutoSizeRowsMode.AllCells;
+                dgvBackupHistorial.RowHeadersVisible =
+                    false;
 
-            dgvBackupHistorial.RowHeadersVisible =
-                false;
+                dgvBackupHistorial.AllowUserToAddRows =
+                    false;
 
-            dgvBackupHistorial.AllowUserToAddRows =
-                false;
+                dgvBackupHistorial.AllowUserToResizeRows =
+                    false;
 
-            dgvBackupHistorial.AllowUserToResizeRows =
-                false;
+                dgvBackupHistorial.SelectionMode =
+                    DataGridViewSelectionMode.FullRowSelect;
 
-            dgvBackupHistorial.SelectionMode =
-                DataGridViewSelectionMode.FullRowSelect;
+                dgvBackupHistorial.MultiSelect =
+                    false;
 
-            dgvBackupHistorial.MultiSelect =
-                false;
+                dgvBackupHistorial.ReadOnly =
+                    true;
 
-            dgvBackupHistorial.ReadOnly =
-                true;
+                dgvBackupHistorial.EnableHeadersVisualStyles =
+                    false;
 
-            dgvBackupHistorial.EnableHeadersVisualStyles =
-                false;
+                dgvBackupHistorial.ColumnHeadersDefaultCellStyle.BackColor =
+                    Color.FromArgb(15, 35, 65);
 
-            dgvBackupHistorial.ScrollBars =
-                ScrollBars.Vertical;
+                dgvBackupHistorial.ColumnHeadersDefaultCellStyle.ForeColor =
+                    Color.White;
 
-            // ============================================
-            // HEADER
-            // ============================================
+                dgvBackupHistorial.ColumnHeadersDefaultCellStyle.Font =
+                    new Font(
+                        "Segoe UI",
+                        10,
+                        FontStyle.Bold);
 
-            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.BackColor =
-                Color.FromArgb(15, 35, 65);
+                dgvBackupHistorial.ColumnHeadersHeight =
+                    40;
 
-            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.ForeColor =
-                Color.White;
+                dgvBackupHistorial.DefaultCellStyle.Font =
+                    new Font(
+                        "Segoe UI",
+                        9);
 
-            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    10,
-                    FontStyle.Bold);
+                dgvBackupHistorial.RowTemplate.Height =
+                    35;
 
-            dgvBackupHistorial.ColumnHeadersHeight =
-                40;
+                dgvBackupHistorial.AlternatingRowsDefaultCellStyle.BackColor =
+                    Color.FromArgb(240, 240, 240);
 
-            // ============================================
-            // FILAS
-            // ============================================
+                // =====================================
+                // VALIDAR COLUMNAS
+                // =====================================
 
-            dgvBackupHistorial.DefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    9);
+                if (dgvBackupHistorial.Columns.Count > 0)
+                {
+                    if (dgvBackupHistorial.Columns.Contains("IdBackup"))
+                    {
+                        dgvBackupHistorial.Columns["IdBackup"].Visible =
+                            false;
+                    }
 
-            dgvBackupHistorial.RowTemplate.Height =
-                35;
+                    if (dgvBackupHistorial.Columns.Contains("RutaArchivo"))
+                    {
+                        dgvBackupHistorial.Columns["RutaArchivo"].Visible =
+                            false;
+                    }
 
-            dgvBackupHistorial.AlternatingRowsDefaultCellStyle.BackColor =
-                Color.FromArgb(240, 240, 240);
+                    if (dgvBackupHistorial.Columns.Contains("FechaBackup"))
+                    {
+                        dgvBackupHistorial.Columns["FechaBackup"].HeaderText =
+                            "Fecha Backup";
+                    }
 
-            // ============================================
-            // AJUSTE COLUMNAS
-            // ============================================
+                    if (dgvBackupHistorial.Columns.Contains("TipoBackup"))
+                    {
+                        dgvBackupHistorial.Columns["TipoBackup"].HeaderText =
+                            "Tipo Backup";
+                    }
 
-            dgvBackupHistorial.Columns["FechaBackup"].FillWeight =
-                18;
+                    if (dgvBackupHistorial.Columns.Contains("UsuarioSistema"))
+                    {
+                        dgvBackupHistorial.Columns["UsuarioSistema"].HeaderText =
+                            "Usuario";
+                    }
 
-            dgvBackupHistorial.Columns["TipoBackup"].FillWeight =
-                14;
+                    if (dgvBackupHistorial.Columns.Contains("EstadoBackup"))
+                    {
+                        dgvBackupHistorial.Columns["EstadoBackup"].HeaderText =
+                            "Estado";
+                    }
 
-            dgvBackupHistorial.Columns["UsuarioSistema"].FillWeight =
-                16;
+                    if (dgvBackupHistorial.Columns.Contains("TamanoMB"))
+                    {
+                        dgvBackupHistorial.Columns["TamanoMB"].HeaderText =
+                            "Tamaño MB";
+                    }
 
-            dgvBackupHistorial.Columns["RutaArchivo"].Visible =
-                false;
-                //28;
+                    if (dgvBackupHistorial.Columns.Contains("Encriptado"))
+                    {
+                        dgvBackupHistorial.Columns["Encriptado"].HeaderText =
+                            "AES256";
+                    }
 
-            dgvBackupHistorial.Columns["EstadoBackup"].FillWeight =
-                14;
+                    if (dgvBackupHistorial.Columns.Contains("Verificado"))
+                    {
+                        dgvBackupHistorial.Columns["Verificado"].HeaderText =
+                            "Verificado";
+                    }
 
-            dgvBackupHistorial.Columns["TamanoMB"].FillWeight =
-                10;
-
-            dgvBackupHistorial.Columns["Encriptado"].FillWeight =
-                8;
-
-            dgvBackupHistorial.Columns["Verificado"].FillWeight =
-                8;
-
-            dgvBackupHistorial.Columns["Observaciones"].FillWeight =
-                20;
+                    if (dgvBackupHistorial.Columns.Contains("Observaciones"))
+                    {
+                        dgvBackupHistorial.Columns["Observaciones"].HeaderText =
+                            "Observaciones";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error Grid",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
 
@@ -202,14 +234,50 @@ namespace Sistema_Inventario.Presentacion
 
                 da.Fill(dt);
 
+                dgvBackupHistorial.DataSource = null;
+
                 dgvBackupHistorial.DataSource = dt;
+
+                cn.CerrarConexion();
+
+                // =====================================
+                // CONFIGURAR DESPUES DEL DATABIND
+                // =====================================
 
                 if (dgvBackupHistorial.Columns.Count > 0)
                 {
-                    dgvBackupHistorial.Columns["IdBackup"].Visible = false;
+                    dgvBackupHistorial.Columns["IdBackup"].Visible =
+                        false;
+
+                    dgvBackupHistorial.Columns["RutaArchivo"].Visible =
+                        false;
+
+                    dgvBackupHistorial.Columns["FechaBackup"].HeaderText =
+                        "Fecha Backup";
+
+                    dgvBackupHistorial.Columns["TipoBackup"].HeaderText =
+                        "Tipo Backup";
+
+                    dgvBackupHistorial.Columns["UsuarioSistema"].HeaderText =
+                        "Usuario";
+
+                    dgvBackupHistorial.Columns["EstadoBackup"].HeaderText =
+                        "Estado";
+
+                    dgvBackupHistorial.Columns["TamanoMB"].HeaderText =
+                        "Tamaño MB";
+
+                    dgvBackupHistorial.Columns["Encriptado"].HeaderText =
+                        "AES256";
+
+                    dgvBackupHistorial.Columns["Verificado"].HeaderText =
+                        "Verificado";
+
+                    dgvBackupHistorial.Columns["Observaciones"].HeaderText =
+                        "Observaciones";
                 }
 
-                cn.CerrarConexion();
+                dgvBackupHistorial.Refresh();
             }
             catch (Exception ex)
             {
@@ -789,6 +857,196 @@ EXITOSO");
                     }
                 }
             }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            panel1.Controls.Clear();
+
+            // =====================================
+            // LABEL DISPONIBLE
+            // =====================================
+
+            Label lblEspacioDisponible =
+                new Label();
+
+            lblEspacioDisponible.Text =
+                "Disponible: 0 GB";
+
+            lblEspacioDisponible.Font =
+                new Font(
+                    "Segoe UI",
+                    11,
+                    FontStyle.Bold);
+
+            lblEspacioDisponible.ForeColor =
+                Color.Green;
+
+            lblEspacioDisponible.AutoSize =
+                true;
+
+            lblEspacioDisponible.Location =
+                new Point(15, 10);
+
+            panel1.Controls.Add(
+                lblEspacioDisponible);
+
+            // =====================================
+            // LABEL USADO
+            // =====================================
+
+            Label lblEspacioUsado =
+                new Label();
+
+            lblEspacioUsado.Text =
+                "Usado: 0 GB";
+
+            lblEspacioUsado.Font =
+                new Font(
+                    "Segoe UI",
+                    9);
+
+            lblEspacioUsado.ForeColor =
+                Color.Gray;
+
+            lblEspacioUsado.AutoSize =
+                true;
+
+            lblEspacioUsado.Location =
+                new Point(15, 40);
+
+            panel1.Controls.Add(
+                lblEspacioUsado);
+
+            // =====================================
+            // LABEL BACKUPS
+            // =====================================
+
+            Label lblBackups =
+                new Label();
+
+            try
+            {
+                Conexion cn =
+                    new Conexion();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "SELECT COUNT(*) FROM BackupHistorial",
+                        cn.AbrirConexion());
+
+                int total =
+                    Convert.ToInt32(
+                        cmd.ExecuteScalar());
+
+                lblBackups.Text =
+                    $"Backups: {total}";
+
+                cn.CerrarConexion();
+            }
+            catch
+            {
+                lblBackups.Text =
+                    "Backups: 0";
+            }
+
+            lblBackups.Font =
+                new Font(
+                    "Segoe UI",
+                    9);
+
+            lblBackups.AutoSize =
+                true;
+
+            lblBackups.Location =
+                new Point(180, 40);
+
+            panel1.Controls.Add(
+                lblBackups);
+
+            // =====================================
+            // LABEL ESTADO
+            // =====================================
+
+            Label lblEstado =
+                new Label();
+
+            lblEstado.Text =
+                "ACTIVO";
+
+            lblEstado.Font =
+                new Font(
+                    "Segoe UI",
+                    11,
+                    FontStyle.Bold);
+
+            lblEstado.ForeColor =
+                Color.Green;
+
+            lblEstado.AutoSize =
+                true;
+
+            lblEstado.Location =
+                new Point(300, 10);
+
+            panel1.Controls.Add(
+                lblEstado);
+
+            // =====================================
+            // PROGRESSBAR
+            // =====================================
+
+            ProgressBar progressDisco =
+                new ProgressBar();
+
+            progressDisco.Size =
+                new Size(110, 12);
+
+            progressDisco.Location =
+                new Point(300, 45);
+
+            progressDisco.Maximum = 100;
+
+            panel1.Controls.Add(
+                progressDisco);
+
+            // =====================================
+            // DISCO
+            // =====================================
+
+            DriveInfo drive =
+                DriveInfo.GetDrives()
+                .FirstOrDefault(
+                    d => d.IsReady &&
+                    d.Name == @"C:\");
+
+            if (drive != null)
+            {
+                double totalGB =
+                    drive.TotalSize /
+                    1024.0 / 1024.0 / 1024.0;
+
+                double libreGB =
+                    drive.AvailableFreeSpace /
+                    1024.0 / 1024.0 / 1024.0;
+
+                double usadoGB =
+                    totalGB - libreGB;
+
+                int porcentaje =
+                    Convert.ToInt32(
+                        (usadoGB / totalGB) * 100);
+
+                lblEspacioDisponible.Text =
+                    $"Disponible: {libreGB:N2} GB";
+
+                lblEspacioUsado.Text =
+                    $"Usado: {usadoGB:N2} GB";
+
+                progressDisco.Value =
+                    porcentaje;
+            }
+
         }
     }
 }

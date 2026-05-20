@@ -544,6 +544,84 @@ namespace Sistema_Inventario.Presentacion
                     ex.Message);
             }
         }
+        private void DgvRoles_SelectionChanged(
+    object sender,
+    EventArgs e)
+        {
+            try
+            {
+                if (dgvRoles.CurrentRow == null)
+                    return;
+
+                foreach (int i
+                    in clbPermisos.CheckedIndices)
+                {
+                    clbPermisos.SetItemChecked(
+                        i,
+                        false);
+                }
+
+                DataGridViewRow fila =
+                    dgvRoles.CurrentRow;
+
+                idRol =
+                    Convert.ToInt32(
+                        fila.Cells["IdRol"].Value);
+
+                txtNombre.Text =
+                    fila.Cells["Nombre"].Value.ToString();
+
+                chkEstado.Checked =
+                    Convert.ToBoolean(
+                        fila.Cells["Estado"].Value);
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"SELECT IdPermiso
+                FROM RolesPermisos
+                WHERE IdRol = @IdRol",
+                        cn.AbrirConexion());
+
+                cmd.Parameters.AddWithValue(
+                    "@IdRol",
+                    idRol);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    int idPermiso =
+                        Convert.ToInt32(
+                            dr["IdPermiso"]);
+
+                    for (int i = 0;
+                        i < clbPermisos.Items.Count;
+                        i++)
+                    {
+                        ItemPermiso item =
+                            (ItemPermiso)
+                            clbPermisos.Items[i];
+
+                        if (item.IdPermiso ==
+                            idPermiso)
+                        {
+                            clbPermisos.SetItemChecked(
+                                i,
+                                true);
+                        }
+                    }
+                }
+
+                dr.Close();
+
+                cn.CerrarConexion();
+            }
+            catch
+            {
+
+            }
+        }
 
         // =========================================
         // LIMPIAR

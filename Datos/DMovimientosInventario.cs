@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-
 using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Datos
@@ -15,7 +14,7 @@ namespace Sistema_Inventario.Datos
             new Logger();
 
         // =====================================
-        // COMBOS
+        // PRODUCTOS
         // =====================================
 
         public DataTable MostrarProductos()
@@ -35,6 +34,10 @@ namespace Sistema_Inventario.Datos
             return tabla;
         }
 
+        // =====================================
+        // BODEGAS
+        // =====================================
+
         public DataTable MostrarBodegas()
         {
             DataTable tabla =
@@ -51,6 +54,10 @@ namespace Sistema_Inventario.Datos
 
             return tabla;
         }
+
+        // =====================================
+        // TIPOS MOVIMIENTO
+        // =====================================
 
         public DataTable MostrarTiposMovimiento()
         {
@@ -91,13 +98,17 @@ namespace Sistema_Inventario.Datos
                         MI.UsuarioRegistro
                     FROM MovimientosInventario MI
                     INNER JOIN TiposMovimiento TM
-                        ON MI.IdTipoMovimiento = TM.IdTipoMovimiento
+                        ON MI.IdTipoMovimiento =
+                           TM.IdTipoMovimiento
                     INNER JOIN DetalleMovimientoInventario DMI
-                        ON MI.IdMovimiento = DMI.IdMovimiento
+                        ON MI.IdMovimiento =
+                           DMI.IdMovimiento
                     INNER JOIN Productos P
-                        ON DMI.IdProducto = P.IdProducto
+                        ON DMI.IdProducto =
+                           P.IdProducto
                     INNER JOIN Bodegas B
-                        ON DMI.IdBodega = B.IdBodega
+                        ON DMI.IdBodega =
+                           B.IdBodega
                     ORDER BY MI.IdMovimiento DESC",
                     cn.AbrirConexion());
 
@@ -106,6 +117,46 @@ namespace Sistema_Inventario.Datos
             cn.CerrarConexion();
 
             return tabla;
+        }
+
+        // =====================================
+        // OBTENER STOCK ACTUAL
+        // =====================================
+
+        public decimal ObtenerStockActual(
+            int idProducto,
+            int idBodega)
+        {
+            decimal stock = 0;
+
+            SqlCommand cmd =
+                new SqlCommand(
+                    @"SELECT ISNULL(StockActual,0)
+                    FROM StockBodega
+                    WHERE IdProducto=@IdProducto
+                    AND IdBodega=@IdBodega",
+                    cn.AbrirConexion());
+
+            cmd.Parameters.AddWithValue(
+                "@IdProducto",
+                idProducto);
+
+            cmd.Parameters.AddWithValue(
+                "@IdBodega",
+                idBodega);
+
+            object resultado =
+                cmd.ExecuteScalar();
+
+            if (resultado != null)
+            {
+                stock =
+                    Convert.ToDecimal(resultado);
+            }
+
+            cn.CerrarConexion();
+
+            return stock;
         }
 
         // =====================================
@@ -129,43 +180,21 @@ namespace Sistema_Inventario.Datos
             try
             {
                 // =================================
-                // VALIDAR STOCK SI ES SALIDA
+                // VALIDAR STOCK EN SALIDAS
                 // =================================
 
                 if (idTipoMovimiento == 2)
                 {
-                    SqlCommand cmdValidar =
-                        new SqlCommand(
-                            @"SELECT ISNULL(StockActual,0)
-                            FROM StockBodega
-                            WHERE IdProducto=@IdProducto
-                            AND IdBodega=@IdBodega",
-                            conexion,
-                            transaccion);
+                    decimal stockActual =
+                        ObtenerStockActual(
+                            idProducto,
+                            idBodega);
 
-                    cmdValidar.Parameters.AddWithValue(
-                        "@IdProducto",
-                        idProducto);
-
-                    cmdValidar.Parameters.AddWithValue(
-                        "@IdBodega",
-                        idBodega);
-
-                    object resultado =
-                        cmdValidar.ExecuteScalar();
-
-                    decimal stockActual = 0;
-
-                    if (resultado != null)
-                    {
-                        stockActual =
-                            Convert.ToDecimal(resultado);
-                    }
-
-                    if (stockActual < cantidad)
+                    if (cantidad > stockActual)
                     {
                         throw new Exception(
-                            "No hay stock suficiente en la bodega.");
+                            $"Stock insuficiente.\n\n" +
+                            $"Stock actual: {stockActual}");
                     }
                 }
 
@@ -178,12 +207,14 @@ namespace Sistema_Inventario.Datos
                         @"INSERT INTO MovimientosInventario
                         (
                             IdTipoMovimiento,
+                            Fecha,
                             Observacion,
                             UsuarioRegistro
                         )
                         VALUES
                         (
                             @IdTipoMovimiento,
+                            GETDATE(),
                             @Observacion,
                             @UsuarioRegistro
                         );
@@ -251,38 +282,56 @@ namespace Sistema_Inventario.Datos
                 cmdDetalle.ExecuteNonQuery();
 
                 // =================================
-                // OPERACION STOCK
+                // DEFINIR OPERACION
                 // =================================
 
-                string operacion =
-                    (idTipoMovimiento == 1)
-                    ? "+"
-                    : "-";
+                string operacion = "+";
+
+                // SALIDA
+                if (idTipoMovimiento == 2)
+                {
+                    operacion = "-";
+                }
+
+                // AJUSTE
+                if (idTipoMovimiento == 3)
+                {
+                    operacion = "+";
+                }
+
+                // TRANSFERENCIA
+                if (idTipoMovimiento == 4)
+                {
+                    operacion = "+";
+                }
 
                 // =================================
-                // ACTUALIZAR PRODUCTOS
+                // ACTUALIZAR STOCK PRODUCTOS
                 // =================================
 
-                SqlCommand cmdStockProducto =
+                SqlCommand cmdProducto =
                     new SqlCommand(
                         $@"UPDATE Productos
-                        SET Stock = Stock {operacion} @Cantidad
+                        SET Stock =
+                        ISNULL(Stock,0)
+                        {operacion}
+                        @Cantidad
                         WHERE IdProducto=@IdProducto",
                         conexion,
                         transaccion);
 
-                cmdStockProducto.Parameters.AddWithValue(
+                cmdProducto.Parameters.AddWithValue(
                     "@Cantidad",
                     cantidad);
 
-                cmdStockProducto.Parameters.AddWithValue(
+                cmdProducto.Parameters.AddWithValue(
                     "@IdProducto",
                     idProducto);
 
-                cmdStockProducto.ExecuteNonQuery();
+                cmdProducto.ExecuteNonQuery();
 
                 // =================================
-                // VALIDAR STOCK BODEGA
+                // VALIDAR SI EXISTE STOCK BODEGA
                 // =================================
 
                 SqlCommand cmdExiste =
@@ -306,9 +355,13 @@ namespace Sistema_Inventario.Datos
                     Convert.ToInt32(
                         cmdExiste.ExecuteScalar());
 
+                // =================================
+                // INSERTAR STOCK BODEGA
+                // =================================
+
                 if (existe == 0)
                 {
-                    SqlCommand cmdInsertStock =
+                    SqlCommand cmdInsert =
                         new SqlCommand(
                             @"INSERT INTO StockBodega
                             (
@@ -325,58 +378,103 @@ namespace Sistema_Inventario.Datos
                             conexion,
                             transaccion);
 
-                    cmdInsertStock.Parameters.AddWithValue(
+                    decimal stockInicial = 0;
+
+                    if (idTipoMovimiento == 1)
+                    {
+                        stockInicial = cantidad;
+                    }
+
+                    if (idTipoMovimiento == 3)
+                    {
+                        stockInicial = cantidad;
+                    }
+
+                    if (idTipoMovimiento == 4)
+                    {
+                        stockInicial = cantidad;
+                    }
+
+                    cmdInsert.Parameters.AddWithValue(
                         "@IdProducto",
                         idProducto);
 
-                    cmdInsertStock.Parameters.AddWithValue(
+                    cmdInsert.Parameters.AddWithValue(
                         "@IdBodega",
                         idBodega);
 
-                    cmdInsertStock.Parameters.AddWithValue(
+                    cmdInsert.Parameters.AddWithValue(
                         "@StockActual",
-                        cantidad);
+                        stockInicial);
 
-                    cmdInsertStock.ExecuteNonQuery();
+                    cmdInsert.ExecuteNonQuery();
                 }
                 else
                 {
-                    SqlCommand cmdUpdateStock =
+                    // =============================
+                    // ACTUALIZAR STOCK BODEGA
+                    // =============================
+
+                    SqlCommand cmdUpdate =
                         new SqlCommand(
                             $@"UPDATE StockBodega
                             SET StockActual =
-                            StockActual {operacion} @Cantidad
+                            ISNULL(StockActual,0)
+                            {operacion}
+                            @Cantidad
                             WHERE IdProducto=@IdProducto
                             AND IdBodega=@IdBodega",
                             conexion,
                             transaccion);
 
-                    cmdUpdateStock.Parameters.AddWithValue(
+                    cmdUpdate.Parameters.AddWithValue(
                         "@Cantidad",
                         cantidad);
 
-                    cmdUpdateStock.Parameters.AddWithValue(
+                    cmdUpdate.Parameters.AddWithValue(
                         "@IdProducto",
                         idProducto);
 
-                    cmdUpdateStock.Parameters.AddWithValue(
+                    cmdUpdate.Parameters.AddWithValue(
                         "@IdBodega",
                         idBodega);
 
-                    cmdUpdateStock.ExecuteNonQuery();
+                    cmdUpdate.ExecuteNonQuery();
                 }
 
                 // =================================
                 // LOGS
                 // =================================
 
-                string tipoMovimiento =
-                    (idTipoMovimiento == 1)
-                    ? "INVENTARIO_ENTRADA"
-                    : "INVENTARIO_SALIDA";
+                string tipoMovimientoLog =
+                    "INVENTARIO";
+
+                if (idTipoMovimiento == 1)
+                {
+                    tipoMovimientoLog =
+                        "INVENTARIO_ENTRADA";
+                }
+
+                if (idTipoMovimiento == 2)
+                {
+                    tipoMovimientoLog =
+                        "INVENTARIO_SALIDA";
+                }
+
+                if (idTipoMovimiento == 3)
+                {
+                    tipoMovimientoLog =
+                        "INVENTARIO_AJUSTE";
+                }
+
+                if (idTipoMovimiento == 4)
+                {
+                    tipoMovimientoLog =
+                        "INVENTARIO_TRANSFERENCIA";
+                }
 
                 log.RegistrarLog(
-                    tipoMovimiento,
+                    tipoMovimientoLog,
                     usuario,
                     "Movimiento inventario | Producto ID: " +
                     idProducto +
@@ -384,6 +482,10 @@ namespace Sistema_Inventario.Datos
                     idBodega +
                     " | Cantidad: " +
                     cantidad);
+
+                // =================================
+                // COMMIT
+                // =================================
 
                 transaccion.Commit();
 
