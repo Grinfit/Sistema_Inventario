@@ -7,8 +7,16 @@ namespace Sistema_Inventario.Datos
     internal class Conexion
     {
         // CREACION DE LA CONEXION CON EL SERVIDOR SQL SERVER Y LA BASE DE DATOS INVENTARIO
+        //DESKTOP
+
+        //SqlConnection cn = new SqlConnection(
+        //   "Server=DESKTOP-PGNRJ9E\\SQLEXPRESS;Database=Inventario;Integrated Security=true");
+
+        //LAPTOP
+
         SqlConnection cn = new SqlConnection(
-    "Server=DESKTOP-PGNRJ9E\\SQLEXPRESS;Database=Inventario;Integrated Security=true");
+             "Server=HENRYOCHOA\\SQLEXPRESS;Database=Inventario;Integrated Security=true");
+
 
         // METODO PARA ABRIR LA CONEXION A LA BASE DE DATOS
         public SqlConnection AbrirConexion()
