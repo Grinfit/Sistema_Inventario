@@ -59,16 +59,16 @@ namespace Sistema_Inventario.Presentacion
         // =====================================================
 
         private void FrmBackup_Load(
-            object sender,
-            EventArgs e)
+     object sender,
+     EventArgs e)
         {
             cbTipoBackup.SelectedIndex = 0;
 
             MostrarHistorial();
 
-            CargarUltimoBackup();
-
             ConfigurarDataGrid();
+
+            CargarUltimoBackup();
         }
 
         // =====================================================
@@ -77,107 +77,139 @@ namespace Sistema_Inventario.Presentacion
 
         private void ConfigurarDataGrid()
         {
-            dgvBackupHistorial.BorderStyle =
-                BorderStyle.None;
+            try
+            {
+                dgvBackupHistorial.BorderStyle =
+                    BorderStyle.None;
 
-            dgvBackupHistorial.BackgroundColor =
-                Color.White;
+                dgvBackupHistorial.BackgroundColor =
+                    Color.White;
 
-            dgvBackupHistorial.AutoSizeColumnsMode =
-                DataGridViewAutoSizeColumnsMode.Fill;
+                dgvBackupHistorial.AutoSizeColumnsMode =
+                    DataGridViewAutoSizeColumnsMode.Fill;
 
-            dgvBackupHistorial.AutoSizeRowsMode =
-                DataGridViewAutoSizeRowsMode.AllCells;
+                dgvBackupHistorial.RowHeadersVisible =
+                    false;
 
-            dgvBackupHistorial.RowHeadersVisible =
-                false;
+                dgvBackupHistorial.AllowUserToAddRows =
+                    false;
 
-            dgvBackupHistorial.AllowUserToAddRows =
-                false;
+                dgvBackupHistorial.AllowUserToResizeRows =
+                    false;
 
-            dgvBackupHistorial.AllowUserToResizeRows =
-                false;
+                dgvBackupHistorial.SelectionMode =
+                    DataGridViewSelectionMode.FullRowSelect;
 
-            dgvBackupHistorial.SelectionMode =
-                DataGridViewSelectionMode.FullRowSelect;
+                dgvBackupHistorial.MultiSelect =
+                    false;
 
-            dgvBackupHistorial.MultiSelect =
-                false;
+                dgvBackupHistorial.ReadOnly =
+                    true;
 
-            dgvBackupHistorial.ReadOnly =
-                true;
+                dgvBackupHistorial.EnableHeadersVisualStyles =
+                    false;
 
-            dgvBackupHistorial.EnableHeadersVisualStyles =
-                false;
+                dgvBackupHistorial.ColumnHeadersDefaultCellStyle.BackColor =
+                    Color.FromArgb(15, 35, 65);
 
-            dgvBackupHistorial.ScrollBars =
-                ScrollBars.Vertical;
+                dgvBackupHistorial.ColumnHeadersDefaultCellStyle.ForeColor =
+                    Color.White;
 
-            // ============================================
-            // HEADER
-            // ============================================
+                dgvBackupHistorial.ColumnHeadersDefaultCellStyle.Font =
+                    new Font(
+                        "Segoe UI",
+                        10,
+                        FontStyle.Bold);
 
-            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.BackColor =
-                Color.FromArgb(15, 35, 65);
+                dgvBackupHistorial.ColumnHeadersHeight =
+                    40;
 
-            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.ForeColor =
-                Color.White;
+                dgvBackupHistorial.DefaultCellStyle.Font =
+                    new Font(
+                        "Segoe UI",
+                        9);
 
-            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    10,
-                    FontStyle.Bold);
+                dgvBackupHistorial.RowTemplate.Height =
+                    35;
 
-            dgvBackupHistorial.ColumnHeadersHeight =
-                40;
+                dgvBackupHistorial.AlternatingRowsDefaultCellStyle.BackColor =
+                    Color.FromArgb(240, 240, 240);
 
-            // ============================================
-            // FILAS
-            // ============================================
+                // =====================================
+                // VALIDAR COLUMNAS
+                // =====================================
 
-            dgvBackupHistorial.DefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    9);
+                if (dgvBackupHistorial.Columns.Count > 0)
+                {
+                    if (dgvBackupHistorial.Columns.Contains("IdBackup"))
+                    {
+                        dgvBackupHistorial.Columns["IdBackup"].Visible =
+                            false;
+                    }
 
-            dgvBackupHistorial.RowTemplate.Height =
-                35;
+                    if (dgvBackupHistorial.Columns.Contains("RutaArchivo"))
+                    {
+                        dgvBackupHistorial.Columns["RutaArchivo"].Visible =
+                            false;
+                    }
 
-            dgvBackupHistorial.AlternatingRowsDefaultCellStyle.BackColor =
-                Color.FromArgb(240, 240, 240);
+                    if (dgvBackupHistorial.Columns.Contains("FechaBackup"))
+                    {
+                        dgvBackupHistorial.Columns["FechaBackup"].HeaderText =
+                            "Fecha Backup";
+                    }
 
-            // ============================================
-            // AJUSTE COLUMNAS
-            // ============================================
+                    if (dgvBackupHistorial.Columns.Contains("TipoBackup"))
+                    {
+                        dgvBackupHistorial.Columns["TipoBackup"].HeaderText =
+                            "Tipo Backup";
+                    }
 
-            dgvBackupHistorial.Columns["FechaBackup"].FillWeight =
-                18;
+                    if (dgvBackupHistorial.Columns.Contains("UsuarioSistema"))
+                    {
+                        dgvBackupHistorial.Columns["UsuarioSistema"].HeaderText =
+                            "Usuario";
+                    }
 
-            dgvBackupHistorial.Columns["TipoBackup"].FillWeight =
-                14;
+                    if (dgvBackupHistorial.Columns.Contains("EstadoBackup"))
+                    {
+                        dgvBackupHistorial.Columns["EstadoBackup"].HeaderText =
+                            "Estado";
+                    }
 
-            dgvBackupHistorial.Columns["UsuarioSistema"].FillWeight =
-                16;
+                    if (dgvBackupHistorial.Columns.Contains("TamanoMB"))
+                    {
+                        dgvBackupHistorial.Columns["TamanoMB"].HeaderText =
+                            "Tamaño MB";
+                    }
 
-            dgvBackupHistorial.Columns["RutaArchivo"].Visible =
-                false;
-                //28;
+                    if (dgvBackupHistorial.Columns.Contains("Encriptado"))
+                    {
+                        dgvBackupHistorial.Columns["Encriptado"].HeaderText =
+                            "AES256";
+                    }
 
-            dgvBackupHistorial.Columns["EstadoBackup"].FillWeight =
-                14;
+                    if (dgvBackupHistorial.Columns.Contains("Verificado"))
+                    {
+                        dgvBackupHistorial.Columns["Verificado"].HeaderText =
+                            "Verificado";
+                    }
 
-            dgvBackupHistorial.Columns["TamanoMB"].FillWeight =
-                10;
-
-            dgvBackupHistorial.Columns["Encriptado"].FillWeight =
-                8;
-
-            dgvBackupHistorial.Columns["Verificado"].FillWeight =
-                8;
-
-            dgvBackupHistorial.Columns["Observaciones"].FillWeight =
-                20;
+                    if (dgvBackupHistorial.Columns.Contains("Observaciones"))
+                    {
+                        dgvBackupHistorial.Columns["Observaciones"].HeaderText =
+                            "Observaciones";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error Grid",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
 
@@ -202,14 +234,50 @@ namespace Sistema_Inventario.Presentacion
 
                 da.Fill(dt);
 
+                dgvBackupHistorial.DataSource = null;
+
                 dgvBackupHistorial.DataSource = dt;
+
+                cn.CerrarConexion();
+
+                // =====================================
+                // CONFIGURAR DESPUES DEL DATABIND
+                // =====================================
 
                 if (dgvBackupHistorial.Columns.Count > 0)
                 {
-                    dgvBackupHistorial.Columns["IdBackup"].Visible = false;
+                    dgvBackupHistorial.Columns["IdBackup"].Visible =
+                        false;
+
+                    dgvBackupHistorial.Columns["RutaArchivo"].Visible =
+                        false;
+
+                    dgvBackupHistorial.Columns["FechaBackup"].HeaderText =
+                        "Fecha Backup";
+
+                    dgvBackupHistorial.Columns["TipoBackup"].HeaderText =
+                        "Tipo Backup";
+
+                    dgvBackupHistorial.Columns["UsuarioSistema"].HeaderText =
+                        "Usuario";
+
+                    dgvBackupHistorial.Columns["EstadoBackup"].HeaderText =
+                        "Estado";
+
+                    dgvBackupHistorial.Columns["TamanoMB"].HeaderText =
+                        "Tamaño MB";
+
+                    dgvBackupHistorial.Columns["Encriptado"].HeaderText =
+                        "AES256";
+
+                    dgvBackupHistorial.Columns["Verificado"].HeaderText =
+                        "Verificado";
+
+                    dgvBackupHistorial.Columns["Observaciones"].HeaderText =
+                        "Observaciones";
                 }
 
-                cn.CerrarConexion();
+                dgvBackupHistorial.Refresh();
             }
             catch (Exception ex)
             {
