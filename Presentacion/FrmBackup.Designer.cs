@@ -33,6 +33,7 @@ namespace Sistema_Inventario.Presentacion
             this.lblRuta = new Label();
             this.lblTipo = new Label();
             this.lblUltimo = new Label();
+            this.lblEstado = new Label();
 
             this.txtRuta = new TextBox();
             this.txtUltimoBackup = new TextBox();
@@ -43,6 +44,7 @@ namespace Sistema_Inventario.Presentacion
             this.chkVerificar = new CheckBox();
             this.chkComprimir = new CheckBox();
             this.chkCorreo = new CheckBox();
+            this.chkEspejo = new CheckBox();
 
             this.btnRuta = new IconButton();
             this.btnBackup = new IconButton();
@@ -51,6 +53,8 @@ namespace Sistema_Inventario.Presentacion
             this.btnExportar = new IconButton();
 
             this.dgvBackupHistorial = new DataGridView();
+
+            this.toolTip1 = new ToolTip();
 
             ((System.ComponentModel.ISupportInitialize)(this.dgvBackupHistorial)).BeginInit();
 
@@ -61,7 +65,7 @@ namespace Sistema_Inventario.Presentacion
             // =====================================================
 
             this.ClientSize =
-                new Size(1350, 860);
+                new Size(1600, 900);
 
             this.BackColor =
                 Color.FromArgb(236, 240, 245);
@@ -130,7 +134,7 @@ namespace Sistema_Inventario.Presentacion
                 new Point(260, 115);
 
             this.txtRuta.Size =
-                new Size(600, 34);
+                new Size(650, 34);
 
             this.txtRuta.BorderStyle =
                 BorderStyle.FixedSingle;
@@ -177,7 +181,7 @@ namespace Sistema_Inventario.Presentacion
                 new Size(200, 50);
 
             this.btnRuta.Location =
-                new Point(900, 105);
+                new Point(950, 105);
 
             this.btnRuta.Cursor =
                 Cursors.Hand;
@@ -298,6 +302,23 @@ namespace Sistema_Inventario.Presentacion
                 "Enviar alerta correo";
 
             // =====================================================
+            // CHECKBOX ESPEJO
+            // =====================================================
+
+            this.chkEspejo.AutoSize = true;
+
+            this.chkEspejo.Font =
+                new Font(
+                    "Segoe UI",
+                    11F);
+
+            this.chkEspejo.Location =
+                new Point(1220, 280);
+
+            this.chkEspejo.Text =
+                "Backup espejo";
+
+            // =====================================================
             // LABEL ULTIMO BACKUP
             // =====================================================
 
@@ -328,13 +349,34 @@ namespace Sistema_Inventario.Presentacion
                 new Point(260, 355);
 
             this.txtUltimoBackup.Size =
-                new Size(600, 34);
+                new Size(500, 34);
 
             this.txtUltimoBackup.ReadOnly =
                 true;
 
             this.txtUltimoBackup.BorderStyle =
                 BorderStyle.FixedSingle;
+
+            // =====================================================
+            // LABEL ESTADO
+            // =====================================================
+
+            this.lblEstado.AutoSize = true;
+
+            this.lblEstado.Font =
+                new Font(
+                    "Segoe UI",
+                    12F,
+                    FontStyle.Bold);
+
+            this.lblEstado.ForeColor =
+                Color.Green;
+
+            this.lblEstado.Location =
+                new Point(850, 355);
+
+            this.lblEstado.Text =
+                "Estado: LISTO";
 
             // =====================================================
             // BTN BACKUP
@@ -554,7 +596,7 @@ namespace Sistema_Inventario.Presentacion
                 new Point(40, 560);
 
             this.dgvBackupHistorial.Size =
-                new Size(1530, 250);
+                new Size(1480, 280);
 
             this.dgvBackupHistorial.ReadOnly = true;
 
@@ -621,6 +663,30 @@ namespace Sistema_Inventario.Presentacion
                 Color.FromArgb(225, 225, 225);
 
             // =====================================================
+            // TOOLTIPS
+            // =====================================================
+
+            this.toolTip1.SetToolTip(
+                this.btnBackup,
+                "Generar backup seguro");
+
+            this.toolTip1.SetToolTip(
+                this.btnRestore,
+                "Restaurar backup");
+
+            this.toolTip1.SetToolTip(
+                this.chkEncriptar,
+                "AES-256");
+
+            this.toolTip1.SetToolTip(
+                this.chkComprimir,
+                "Comprimir ZIP");
+
+            this.toolTip1.SetToolTip(
+                this.chkEspejo,
+                "Crear copia espejo");
+
+            // =====================================================
             // CONTROLES
             // =====================================================
 
@@ -629,6 +695,7 @@ namespace Sistema_Inventario.Presentacion
             this.Controls.Add(this.lblRuta);
             this.Controls.Add(this.lblTipo);
             this.Controls.Add(this.lblUltimo);
+            this.Controls.Add(this.lblEstado);
 
             this.Controls.Add(this.txtRuta);
             this.Controls.Add(this.txtUltimoBackup);
@@ -639,6 +706,7 @@ namespace Sistema_Inventario.Presentacion
             this.Controls.Add(this.chkVerificar);
             this.Controls.Add(this.chkComprimir);
             this.Controls.Add(this.chkCorreo);
+            this.Controls.Add(this.chkEspejo);
 
             this.Controls.Add(this.btnRuta);
             this.Controls.Add(this.btnBackup);
@@ -662,6 +730,7 @@ namespace Sistema_Inventario.Presentacion
         private Label lblRuta;
         private Label lblTipo;
         private Label lblUltimo;
+        private Label lblEstado;
 
         private TextBox txtRuta;
         private TextBox txtUltimoBackup;
@@ -672,6 +741,7 @@ namespace Sistema_Inventario.Presentacion
         private CheckBox chkVerificar;
         private CheckBox chkComprimir;
         private CheckBox chkCorreo;
+        private CheckBox chkEspejo;
 
         private IconButton btnRuta;
         private IconButton btnBackup;
@@ -680,5 +750,7 @@ namespace Sistema_Inventario.Presentacion
         private IconButton btnExportar;
 
         private DataGridView dgvBackupHistorial;
+
+        private ToolTip toolTip1;
     }
 }

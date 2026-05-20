@@ -1,16 +1,14 @@
 ﻿using FontAwesome.Sharp;
 using Sistema_Inventario.Datos;
+using Sistema_Inventario.Logica;
 using Sistema_Inventario.Utilidades;
 
 using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
-using System.Net;
-using System.Net.Mail;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Sistema_Inventario.Presentacion
@@ -21,14 +19,35 @@ namespace Sistema_Inventario.Presentacion
 
         Logger log = new Logger();
 
-        string servidor =
-            @"HENRYOCHOA\SQLEXPRESS";
+        HashService hashService =
+            new HashService();
+
+        CompressionService compressionService =
+            new CompressionService();
+
+        EncryptionService encryptionService =
+            new EncryptionService();
+
+        DisasterRecoveryService disasterService =
+            new DisasterRecoveryService();
+
+        ValidationService validationService =
+            new ValidationService();
+
+        RestoreService restoreService =
+            new RestoreService();
+
+        EmailService emailService =
+            new EmailService();
 
         string baseDatos =
             "Inventario";
 
         string usuarioSistema =
             "Administrador";
+
+        string rutaEspejo =
+            @"C:\Backups_Espejo";
 
         public FrmBackup()
         {
@@ -49,28 +68,51 @@ namespace Sistema_Inventario.Presentacion
 
             CargarUltimoBackup();
 
-            // ============================================
-            // EFECTOS HOVER
-            // ============================================
-
-            btnRuta.FlatAppearance.MouseOverBackColor =
-                ControlPaint.Light(btnRuta.BackColor);
-
-            btnBackup.FlatAppearance.MouseOverBackColor =
-                ControlPaint.Light(btnBackup.BackColor);
-
-            btnRestore.FlatAppearance.MouseOverBackColor =
-                ControlPaint.Light(btnRestore.BackColor);
-
-            btnVerificar.FlatAppearance.MouseOverBackColor =
-                ControlPaint.Light(btnVerificar.BackColor);
-
-            btnExportar.FlatAppearance.MouseOverBackColor =
-                ControlPaint.Light(btnExportar.BackColor);
+            ConfigurarDataGrid();
         }
 
         // =====================================================
-        // MOSTRAR HISTORIAL
+        // DATAGRID
+        // =====================================================
+
+        private void ConfigurarDataGrid()
+        {
+            dgvBackupHistorial.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvBackupHistorial.RowHeadersVisible =
+                false;
+
+            dgvBackupHistorial.AllowUserToAddRows =
+                false;
+
+            dgvBackupHistorial.AllowUserToResizeRows =
+                false;
+
+            dgvBackupHistorial.SelectionMode =
+                DataGridViewSelectionMode.FullRowSelect;
+
+            dgvBackupHistorial.MultiSelect =
+                false;
+
+            dgvBackupHistorial.EnableHeadersVisualStyles =
+                false;
+
+            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.BackColor =
+                Color.FromArgb(15, 35, 65);
+
+            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.ForeColor =
+                Color.White;
+
+            dgvBackupHistorial.DefaultCellStyle.Font =
+                new Font("Segoe UI", 10);
+
+            dgvBackupHistorial.AlternatingRowsDefaultCellStyle.BackColor =
+                Color.FromArgb(240, 240, 240);
+        }
+
+        // =====================================================
+        // HISTORIAL
         // =====================================================
 
         private void MostrarHistorial()
@@ -96,12 +138,6 @@ namespace Sistema_Inventario.Presentacion
                 {
                     dgvBackupHistorial.Columns["IdBackup"].Visible = false;
                 }
-
-                dgvBackupHistorial.ColumnHeadersDefaultCellStyle.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
-
-                dgvBackupHistorial.DefaultCellStyle.Alignment =
-                    DataGridViewContentAlignment.MiddleLeft;
 
                 cn.CerrarConexion();
             }
@@ -149,7 +185,7 @@ namespace Sistema_Inventario.Presentacion
         }
 
         // =====================================================
-        // SELECCIONAR RUTA
+        // RUTA
         // =====================================================
 
         private void btnRuta_Click(
@@ -177,6 +213,12 @@ namespace Sistema_Inventario.Presentacion
         {
             try
             {
+                lblEstado.Text =
+                    "Estado: Generando Backup...";
+
+                lblEstado.ForeColor =
+                    Color.Orange;
+
                 if (txtRuta.Text.Trim() == "")
                 {
                     MessageBox.Show(
@@ -187,6 +229,35 @@ namespace Sistema_Inventario.Presentacion
 
                     return;
                 }
+
+                if (!validationService.ExisteRuta(
+                    txtRuta.Text))
+                {
+                    MessageBox.Show(
+                        "La ruta no existe",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+                if (!validationService
+                    .TienePermisosEscritura(
+                    txtRuta.Text))
+                {
+                    MessageBox.Show(
+                        "La ruta no tiene permisos",
+                        "Sistema",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+                string aesPassword =
+                    ConfigurationManager
+                    .AppSettings["AESPassword"];
 
                 string tipoBackup =
                     cbTipoBackup.Text;
@@ -206,7 +277,7 @@ namespace Sistema_Inventario.Presentacion
                 string query = "";
 
                 // ============================================
-                // FULL BACKUP
+                // FULL
                 // ============================================
 
                 if (tipoBackup ==
@@ -215,7 +286,7 @@ namespace Sistema_Inventario.Presentacion
                     query =
                         $@"BACKUP DATABASE [{baseDatos}]
                            TO DISK='{archivoBackup}'
-                           WITH INIT";
+                           WITH CHECKSUM, INIT";
                 }
 
                 // ============================================
@@ -228,7 +299,9 @@ namespace Sistema_Inventario.Presentacion
                     query =
                         $@"BACKUP DATABASE [{baseDatos}]
                            TO DISK='{archivoBackup}'
-                           WITH DIFFERENTIAL, INIT";
+                           WITH DIFFERENTIAL,
+                           CHECKSUM,
+                           INIT";
                 }
 
                 // ============================================
@@ -240,7 +313,8 @@ namespace Sistema_Inventario.Presentacion
                     query =
                         $@"BACKUP LOG [{baseDatos}]
                            TO DISK='{archivoBackup}'
-                           WITH INIT";
+                           WITH CHECKSUM,
+                           INIT";
                 }
 
                 SqlCommand cmd =
@@ -255,11 +329,64 @@ namespace Sistema_Inventario.Presentacion
                 cn.CerrarConexion();
 
                 // ============================================
-                // HASH SHA256
+                // ZIP
+                // ============================================
+
+                string zipFile =
+                    compressionService
+                    .ComprimirBackup(
+                        archivoBackup);
+
+                // ============================================
+                // AES256
+                // ============================================
+
+                string archivoFinal =
+                    zipFile;
+
+                if (chkEncriptar.Checked)
+                {
+                    archivoFinal =
+                        encryptionService
+                        .EncryptFile(
+                            zipFile,
+                            aesPassword);
+
+                    if (File.Exists(zipFile))
+                    {
+                        File.Delete(zipFile);
+                    }
+                }
+
+                // ============================================
+                // ELIMINAR BAK
+                // ============================================
+
+                if (File.Exists(archivoBackup))
+                {
+                    File.Delete(archivoBackup);
+                }
+
+                // ============================================
+                // HASH
                 // ============================================
 
                 string hash =
-                    GenerarSHA256(archivoBackup);
+                    hashService
+                    .GenerarSHA256(
+                        archivoFinal);
+
+                // ============================================
+                // BACKUP ESPEJO
+                // ============================================
+
+                if (chkEspejo.Checked)
+                {
+                    disasterService
+                        .CopiarBackupEspejo(
+                            archivoFinal,
+                            rutaEspejo);
+                }
 
                 // ============================================
                 // TAMAÑO
@@ -267,25 +394,14 @@ namespace Sistema_Inventario.Presentacion
 
                 FileInfo fi =
                     new FileInfo(
-                        archivoBackup);
+                        archivoFinal);
 
                 decimal tamanoMB =
                     Convert.ToDecimal(
                         fi.Length / 1024.0 / 1024.0);
 
                 // ============================================
-                // GUARDAR HISTORIAL
-                // ============================================
-
-                GuardarHistorial(
-                    tipoBackup,
-                    archivoBackup,
-                    "EXITOSO",
-                    tamanoMB,
-                    hash);
-
-                // ============================================
-                // VERIFICAR
+                // VERIFY
                 // ============================================
 
                 if (chkVerificar.Checked)
@@ -295,23 +411,63 @@ namespace Sistema_Inventario.Presentacion
                 }
 
                 // ============================================
-                // EMAIL
+                // HISTORIAL
                 // ============================================
 
-                if (chkCorreo.Checked)
-                {
-                    EnviarCorreoBackup(
-                        tipoBackup,
-                        archivoBackup);
-                }
+                GuardarHistorial(
+                    tipoBackup,
+                    archivoFinal,
+                    "EXITOSO",
+                    tamanoMB,
+                    hash);
 
                 log.RegistrarLog(
                     "BACKUP",
                     usuarioSistema,
-                    "Backup realizado correctamente");
+                    "Backup generado correctamente");
+
+                lblEstado.Text =
+                    "Estado: Backup Exitoso";
+
+                lblEstado.ForeColor =
+                    Color.Green;
+
+                // ============================================
+                // EMAIL EXITO
+                // ============================================
+
+                if (chkCorreo.Checked)
+                {
+                    emailService.EnviarAlerta(
+                        "[BACKUP EXITOSO] Sistema Inventario",
+                        $@"
+Se realizó correctamente un backup.
+
+Servidor: HENRYOCHOA\SQLEXPRESS
+
+Base de Datos: Inventario
+
+Tipo Backup:
+{tipoBackup}
+
+Fecha:
+{DateTime.Now}
+
+Usuario:
+{usuarioSistema}
+
+Ruta:
+{archivoFinal}
+
+Hash SHA256:
+{hash}
+
+Estado:
+EXITOSO");
+                }
 
                 MessageBox.Show(
-                    "Backup realizado correctamente",
+                    "Backup generado correctamente",
                     "Sistema",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -322,6 +478,12 @@ namespace Sistema_Inventario.Presentacion
             }
             catch (Exception ex)
             {
+                lblEstado.Text =
+                    "Estado: Error Backup";
+
+                lblEstado.ForeColor =
+                    Color.Red;
+
                 MessageBox.Show(
                     ex.Message,
                     "Error Backup",
@@ -331,12 +493,30 @@ namespace Sistema_Inventario.Presentacion
                 log.RegistrarLog(
                     "ERROR BACKUP",
                     usuarioSistema,
-                    ex.Message);
+                    ex.ToString());
+
+                // ============================================
+                // EMAIL ERROR
+                // ============================================
+
+                if (chkCorreo.Checked)
+                {
+                    try
+                    {
+                        emailService.EnviarAlerta(
+                            "[ERROR BACKUP] Sistema Inventario",
+                            ex.ToString());
+                    }
+                    catch
+                    {
+
+                    }
+                }
             }
         }
 
         // =====================================================
-        // VERIFICAR BACKUP
+        // VERIFY
         // =====================================================
 
         private void VerificarBackup(
@@ -361,36 +541,7 @@ namespace Sistema_Inventario.Presentacion
         }
 
         // =====================================================
-        // SHA256
-        // =====================================================
-
-        private string GenerarSHA256(
-            string archivo)
-        {
-            using (FileStream stream =
-                File.OpenRead(archivo))
-            {
-                SHA256 sha =
-                    SHA256.Create();
-
-                byte[] hash =
-                    sha.ComputeHash(stream);
-
-                StringBuilder sb =
-                    new StringBuilder();
-
-                foreach (byte b in hash)
-                {
-                    sb.Append(
-                        b.ToString("x2"));
-                }
-
-                return sb.ToString();
-            }
-        }
-
-        // =====================================================
-        // GUARDAR HISTORIAL
+        // HISTORIAL
         // =====================================================
 
         private void GuardarHistorial(
@@ -457,7 +608,7 @@ namespace Sistema_Inventario.Presentacion
         }
 
         // =====================================================
-        // RESTAURAR
+        // RESTORE
         // =====================================================
 
         private void btnRestore_Click(
@@ -466,213 +617,105 @@ namespace Sistema_Inventario.Presentacion
         {
             try
             {
-                string password =
-                    Prompt.ShowDialog(
-                        "wybgaejfjovdiuuf",
-                        "Seguridad");
-
-                if (password != "Admin123")
-                {
-                    MessageBox.Show(
-                        "Contraseña incorrecta",
-                        "Seguridad",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
-                    return;
-                }
-
                 OpenFileDialog open =
                     new OpenFileDialog();
 
                 open.Filter =
-                    "Backup Files|*.bak";
+                    "Encrypted Backup|*.enc";
 
                 if (open.ShowDialog() ==
                     DialogResult.OK)
                 {
-                    string ruta =
-                        open.FileName;
+                    lblEstado.Text =
+                        "Estado: Restaurando...";
 
-                    SqlConnection conexion =
-                        new SqlConnection(
-                            $@"Server={servidor};
-                               Database=master;
-                               User Id=sa;
-                               Password=Aswedfr36;
-                               TrustServerCertificate=True;");
+                    lblEstado.ForeColor =
+                        Color.Orange;
 
-                    conexion.Open();
+                    string aesPassword =
+                        ConfigurationManager
+                        .AppSettings["AESPassword"];
 
-                    string query =
-                        $@"
-                        ALTER DATABASE [{baseDatos}]
-                        SET SINGLE_USER
-                        WITH ROLLBACK IMMEDIATE;
+                    restoreService.RestaurarBackup(
+                        @".\SQLEXPRESS",
+                        "Inventario",
+                        open.FileName,
+                        aesPassword);
 
-                        RESTORE DATABASE [{baseDatos}]
-                        FROM DISK='{ruta}'
-                        WITH REPLACE;
+                    lblEstado.Text =
+                        "Estado: Restaurado";
 
-                        ALTER DATABASE [{baseDatos}]
-                        SET MULTI_USER;";
+                    lblEstado.ForeColor =
+                        Color.Green;
 
-                    SqlCommand cmd =
-                        new SqlCommand(
-                            query,
-                            conexion);
+                    // ============================================
+                    // EMAIL RESTORE EXITOSO
+                    // ============================================
 
-                    cmd.CommandTimeout = 0;
+                    if (chkCorreo.Checked)
+                    {
+                        emailService.EnviarAlerta(
+                            "[RESTORE EXITOSO] Sistema Inventario",
+                            $@"
+Restore realizado correctamente.
 
-                    cmd.ExecuteNonQuery();
+Base Datos:
+Inventario
 
-                    conexion.Close();
+Archivo:
+{open.FileName}
+
+Fecha:
+{DateTime.Now}
+
+Estado:
+EXITOSO");
+                    }
 
                     MessageBox.Show(
-                        "Base restaurada correctamente",
+                        "Backup restaurado correctamente",
                         "Sistema",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
-
-                    log.RegistrarLog(
-                        "RESTORE",
-                        usuarioSistema,
-                        "Base restaurada");
                 }
             }
             catch (Exception ex)
             {
+                lblEstado.Text =
+                    "Estado: Error Restore";
+
+                lblEstado.ForeColor =
+                    Color.Red;
+
                 MessageBox.Show(
                     ex.Message,
                     "Error Restore",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+
+                log.RegistrarLog(
+                    "ERROR RESTORE",
+                    usuarioSistema,
+                    ex.ToString());
+
+                // ============================================
+                // EMAIL ERROR RESTORE
+                // ============================================
+
+                if (chkCorreo.Checked)
+                {
+                    try
+                    {
+                        emailService.EnviarAlerta(
+                            "[ERROR RESTORE] Sistema Inventario",
+                            ex.ToString());
+                    }
+                    catch
+                    {
+
+                    }
+                }
             }
         }
-
-        // =====================================================
-        // CORREO
-        // =====================================================
-
-        private void EnviarCorreoBackup(
-            string tipoBackup,
-            string rutaArchivo)
-        {
-            try
-            {
-                string correo =
-                    "henry0020503@gmail.com";
-
-                string asunto =
-                    "[BACKUP EXITOSO] Sistema Inventario";
-
-                string mensaje =
-                    "Se realizó correctamente un backup.\n\n" +
-                    "Servidor: " + servidor + "\n" +
-                    "Base de Datos: " + baseDatos + "\n" +
-                    "Tipo Backup: " + tipoBackup + "\n" +
-                    "Fecha: " + DateTime.Now + "\n" +
-                    "Usuario: " + usuarioSistema + "\n" +
-                    "Ruta: " + rutaArchivo + "\n\n" +
-                    "Estado: EXITOSO";
-
-                MailMessage mail =
-                    new MailMessage();
-
-                mail.From =
-                    new MailAddress(
-                        "henry0020503@gmail.com");
-
-                mail.To.Add(correo);
-
-                mail.Subject =
-                    asunto;
-
-                mail.Body =
-                    mensaje;
-
-                SmtpClient smtp =
-                    new SmtpClient(
-                        "smtp.gmail.com");
-
-                smtp.Port = 587;
-
-                smtp.Credentials =
-                    new NetworkCredential(
-                        "henry0020503@gmail.com",
-                        "wybgaejfjovdiuuf");
-
-                smtp.EnableSsl = true;
-
-                smtp.Send(mail);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    ex.Message,
-                    "Error Correo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-    }
-}
-public static class Prompt
-{
-    public static string ShowDialog(
-        string text,
-        string caption)
-    {
-        Form prompt =
-            new Form();
-
-        prompt.Width = 400;
-        prompt.Height = 200;
-
-        prompt.Text = caption;
-
-        prompt.StartPosition =
-            FormStartPosition.CenterScreen;
-
-        Label lblText =
-            new Label()
-            {
-                Left = 30,
-                Top = 20,
-                Text = text,
-                Width = 320
-            };
-
-        TextBox txtPassword =
-            new TextBox()
-            {
-                Left = 30,
-                Top = 60,
-                Width = 320,
-                PasswordChar = '*'
-            };
-
-        Button btnOk =
-            new Button()
-            {
-                Text = "Aceptar",
-                Left = 130,
-                Width = 120,
-                Top = 100,
-                DialogResult = DialogResult.OK
-            };
-
-        prompt.Controls.Add(lblText);
-
-        prompt.Controls.Add(txtPassword);
-
-        prompt.Controls.Add(btnOk);
-
-        prompt.AcceptButton = btnOk;
-
-        return prompt.ShowDialog() ==
-            DialogResult.OK
-            ? txtPassword.Text
-            : "";
     }
 }
