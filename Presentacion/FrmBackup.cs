@@ -1,15 +1,15 @@
-﻿using FontAwesome.Sharp;
-using Sistema_Inventario.Datos;
-using Sistema_Inventario.Logica;
-using Sistema_Inventario.Utilidades;
-
-using System;
+﻿using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using FontAwesome.Sharp;
+using Sistema_Inventario.Datos;
+using Sistema_Inventario.Logica;
+using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
@@ -857,6 +857,196 @@ EXITOSO");
                     }
                 }
             }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            panel1.Controls.Clear();
+
+            // =====================================
+            // LABEL DISPONIBLE
+            // =====================================
+
+            Label lblEspacioDisponible =
+                new Label();
+
+            lblEspacioDisponible.Text =
+                "Disponible: 0 GB";
+
+            lblEspacioDisponible.Font =
+                new Font(
+                    "Segoe UI",
+                    11,
+                    FontStyle.Bold);
+
+            lblEspacioDisponible.ForeColor =
+                Color.Green;
+
+            lblEspacioDisponible.AutoSize =
+                true;
+
+            lblEspacioDisponible.Location =
+                new Point(15, 10);
+
+            panel1.Controls.Add(
+                lblEspacioDisponible);
+
+            // =====================================
+            // LABEL USADO
+            // =====================================
+
+            Label lblEspacioUsado =
+                new Label();
+
+            lblEspacioUsado.Text =
+                "Usado: 0 GB";
+
+            lblEspacioUsado.Font =
+                new Font(
+                    "Segoe UI",
+                    9);
+
+            lblEspacioUsado.ForeColor =
+                Color.Gray;
+
+            lblEspacioUsado.AutoSize =
+                true;
+
+            lblEspacioUsado.Location =
+                new Point(15, 40);
+
+            panel1.Controls.Add(
+                lblEspacioUsado);
+
+            // =====================================
+            // LABEL BACKUPS
+            // =====================================
+
+            Label lblBackups =
+                new Label();
+
+            try
+            {
+                Conexion cn =
+                    new Conexion();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        "SELECT COUNT(*) FROM BackupHistorial",
+                        cn.AbrirConexion());
+
+                int total =
+                    Convert.ToInt32(
+                        cmd.ExecuteScalar());
+
+                lblBackups.Text =
+                    $"Backups: {total}";
+
+                cn.CerrarConexion();
+            }
+            catch
+            {
+                lblBackups.Text =
+                    "Backups: 0";
+            }
+
+            lblBackups.Font =
+                new Font(
+                    "Segoe UI",
+                    9);
+
+            lblBackups.AutoSize =
+                true;
+
+            lblBackups.Location =
+                new Point(180, 40);
+
+            panel1.Controls.Add(
+                lblBackups);
+
+            // =====================================
+            // LABEL ESTADO
+            // =====================================
+
+            Label lblEstado =
+                new Label();
+
+            lblEstado.Text =
+                "ACTIVO";
+
+            lblEstado.Font =
+                new Font(
+                    "Segoe UI",
+                    11,
+                    FontStyle.Bold);
+
+            lblEstado.ForeColor =
+                Color.Green;
+
+            lblEstado.AutoSize =
+                true;
+
+            lblEstado.Location =
+                new Point(300, 10);
+
+            panel1.Controls.Add(
+                lblEstado);
+
+            // =====================================
+            // PROGRESSBAR
+            // =====================================
+
+            ProgressBar progressDisco =
+                new ProgressBar();
+
+            progressDisco.Size =
+                new Size(110, 12);
+
+            progressDisco.Location =
+                new Point(300, 45);
+
+            progressDisco.Maximum = 100;
+
+            panel1.Controls.Add(
+                progressDisco);
+
+            // =====================================
+            // DISCO
+            // =====================================
+
+            DriveInfo drive =
+                DriveInfo.GetDrives()
+                .FirstOrDefault(
+                    d => d.IsReady &&
+                    d.Name == @"C:\");
+
+            if (drive != null)
+            {
+                double totalGB =
+                    drive.TotalSize /
+                    1024.0 / 1024.0 / 1024.0;
+
+                double libreGB =
+                    drive.AvailableFreeSpace /
+                    1024.0 / 1024.0 / 1024.0;
+
+                double usadoGB =
+                    totalGB - libreGB;
+
+                int porcentaje =
+                    Convert.ToInt32(
+                        (usadoGB / totalGB) * 100);
+
+                lblEspacioDisponible.Text =
+                    $"Disponible: {libreGB:N2} GB";
+
+                lblEspacioUsado.Text =
+                    $"Usado: {usadoGB:N2} GB";
+
+                progressDisco.Value =
+                    porcentaje;
+            }
+
         }
     }
 }
