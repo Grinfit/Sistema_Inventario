@@ -596,7 +596,7 @@ namespace Sistema_Inventario.Presentacion
                 new Point(40, 560);
 
             this.dgvBackupHistorial.Size =
-                new Size(1480, 280);
+                new Size(1580, 500);
 
             this.dgvBackupHistorial.ReadOnly = true;
 
