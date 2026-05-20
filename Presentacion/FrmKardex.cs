@@ -1,4 +1,5 @@
-﻿using System;
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Sistema_Inventario.Utilidades;
@@ -7,40 +8,40 @@ using Sistema_Inventario.Logica;
 
 namespace Sistema_Inventario.Presentacion
 {
+    // FORMULARIO DEL KARDEX DEL SISTEMA
     public partial class FrmKardex : Form
     {
+        // OBJETO DE LA CAPA LOGICA KARDEX
         LKardex lKardex =
             new LKardex();
 
+        // CONSTRUCTOR DEL FORMULARIO
         public FrmKardex()
         {
             InitializeComponent();
 
+            // CONFIGURA EL GRID
             ConfigurarGrid();
         }
 
-        // =====================================
         // LOAD
-        // =====================================
 
         private void FrmKardex_Load(
             object sender,
             EventArgs e)
         {
+            // CARGA LOS PRODUCTOS
             CargarProductos();
 
+            // MUESTRA EL KARDEX
             MostrarKardex();
         }
 
-        // =====================================
         // CONFIGURAR GRID
-        // =====================================
 
         private void ConfigurarGrid()
         {
-            // ===============================
             // CONFIG GENERAL
-            // ===============================
 
             dgvKardex.EnableHeadersVisualStyles =
                 false;
@@ -75,9 +76,7 @@ namespace Sistema_Inventario.Presentacion
             dgvKardex.GridColor =
                 Color.LightGray;
 
-            // ===============================
             // HEADER
-            // ===============================
 
             dgvKardex.ColumnHeadersBorderStyle =
                 DataGridViewHeaderBorderStyle.None;
@@ -97,9 +96,7 @@ namespace Sistema_Inventario.Presentacion
             dgvKardex.ColumnHeadersHeight =
                 45;
 
-            // ===============================
             // FILAS
-            // ===============================
 
             dgvKardex.DefaultCellStyle.Font =
                 new Font(
@@ -122,27 +119,30 @@ namespace Sistema_Inventario.Presentacion
                 35;
         }
 
-        // =====================================
         // PRODUCTOS
-        // =====================================
 
         private void CargarProductos()
         {
             try
             {
+                // ASIGNA LOS PRODUCTOS AL COMBOBOX
                 cboProducto.DataSource =
                     lKardex.MostrarProductos();
 
+                // MUESTRA EL NOMBRE DEL PRODUCTO
                 cboProducto.DisplayMember =
                     "Nombre";
 
+                // ASIGNA EL ID DEL PRODUCTO
                 cboProducto.ValueMember =
                     "IdProducto";
 
+                // DEJA EL COMBOBOX VACIO
                 cboProducto.SelectedIndex = -1;
             }
             catch (Exception ex)
             {
+                // MUESTRA EL ERROR
                 MessageBox.Show(
                     ex.Message,
                     "Error",
@@ -151,21 +151,22 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-        // =====================================
         // MOSTRAR
-        // =====================================
 
         private void MostrarKardex()
         {
             try
             {
+                // MUESTRA LOS DATOS DEL KARDEX
                 dgvKardex.DataSource =
                     lKardex.MostrarKardex();
 
+                // FORMATEA LAS COLUMNAS
                 FormatearColumnas();
             }
             catch (Exception ex)
             {
+                // MUESTRA EL ERROR
                 MessageBox.Show(
                     ex.Message,
                     "Error",
@@ -174,15 +175,15 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-        // =====================================
         // FORMATEAR COLUMNAS
-        // =====================================
 
         private void FormatearColumnas()
         {
+            // VALIDA SI EXISTEN COLUMNAS
             if (dgvKardex.Columns.Count == 0)
                 return;
 
+            // ANCHO DE COLUMNAS
             dgvKardex.Columns["IdMovimiento"].Width = 90;
 
             dgvKardex.Columns["TipoMovimiento"].Width = 150;
@@ -199,9 +200,7 @@ namespace Sistema_Inventario.Presentacion
 
             dgvKardex.Columns["UsuarioRegistro"].Width = 160;
 
-            // ===============================
             // ALIGNMENTS
-            // ===============================
 
             dgvKardex.Columns["IdMovimiento"]
                 .DefaultCellStyle.Alignment =
@@ -215,17 +214,13 @@ namespace Sistema_Inventario.Presentacion
                 .DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleCenter;
 
-            // ===============================
             // WRAP
-            // ===============================
 
             dgvKardex.Columns["Observacion"]
                 .DefaultCellStyle.WrapMode =
                 DataGridViewTriState.False;
 
-            // ===============================
             // HEADERS
-            // ===============================
 
             dgvKardex.Columns["IdMovimiento"].HeaderText =
                 "ID";
@@ -237,9 +232,7 @@ namespace Sistema_Inventario.Presentacion
                 "Usuario Registro";
         }
 
-        // =====================================
         // FILTRAR
-        // =====================================
 
         private void btnBuscar_Click(
             object sender,
@@ -247,6 +240,7 @@ namespace Sistema_Inventario.Presentacion
         {
             try
             {
+                // VALIDA SI SELECCIONO UN PRODUCTO
                 if (cboProducto.SelectedIndex == -1)
                 {
                     MessageBox.Show(
@@ -258,15 +252,18 @@ namespace Sistema_Inventario.Presentacion
                     return;
                 }
 
+                // FILTRA EL KARDEX
                 dgvKardex.DataSource =
                     lKardex.FiltrarProducto(
                         Convert.ToInt32(
                             cboProducto.SelectedValue));
 
+                // FORMATEA LAS COLUMNAS
                 FormatearColumnas();
             }
             catch (Exception ex)
             {
+                // MUESTRA EL ERROR
                 MessageBox.Show(
                     ex.Message,
                     "Error",
@@ -275,22 +272,20 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-        // =====================================
         // RECARGAR
-        // =====================================
 
         private void btnRecargar_Click(
             object sender,
             EventArgs e)
         {
+            // MUESTRA EL KARDEX COMPLETO
             MostrarKardex();
 
+            // LIMPIA EL COMBOBOX
             cboProducto.SelectedIndex = -1;
         }
 
-        // =====================================
         // EXPORTAR
-        // =====================================
 
         private void btnExportar_Click(
             object sender,
@@ -298,6 +293,7 @@ namespace Sistema_Inventario.Presentacion
         {
             try
             {
+                // VALIDA SI HAY DATOS
                 if (dgvKardex.Rows.Count == 0)
                 {
                     MessageBox.Show(
@@ -309,10 +305,12 @@ namespace Sistema_Inventario.Presentacion
                     return;
                 }
 
+                // EXPORTA EL REPORTE A EXCEL
                 ExportarExcel.Exportar(
                     dgvKardex,
                     "Reporte_Kardex");
 
+                // MENSAJE DE CONFIRMACION
                 MessageBox.Show(
                     "Reporte exportado correctamente",
                     "Exportación",
@@ -321,6 +319,7 @@ namespace Sistema_Inventario.Presentacion
             }
             catch (Exception ex)
             {
+                // MUESTRA EL ERROR
                 MessageBox.Show(
                     ex.Message,
                     "Error",

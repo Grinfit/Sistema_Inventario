@@ -1,64 +1,90 @@
-﻿namespace Sistema_Inventario
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+using FontAwesome.Sharp;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Sistema_Inventario
 {
+    // CLASE PARCIAL DEL FORMULARIO LOGIN
     partial class FrmLogin
     {
+        // CONTENEDOR DE COMPONENTES DEL FORMULARIO
         private System.ComponentModel.IContainer components = null;
 
+        // METODO PARA LIBERAR RECURSOS
         protected override void Dispose(
             bool disposing)
         {
+            // VERIFICA SI LOS COMPONENTES EXISTEN
             if (disposing &&
                 (components != null))
             {
+                // LIBERA LOS COMPONENTES
                 components.Dispose();
             }
 
+            // EJECUTA EL METODO BASE
             base.Dispose(disposing);
         }
 
         #region Código generado por el Diseñador
 
+        // METODO DONDE SE INICIALIZAN LOS COMPONENTES
         private void InitializeComponent()
         {
+            // PANEL IZQUIERDO DEL LOGIN
             this.panelLeft =
                 new System.Windows.Forms.Panel();
 
+            // LABEL DEL NOMBRE DEL SISTEMA
             this.lblSistema =
                 new System.Windows.Forms.Label();
 
+            // LABEL DEL SUBTITULO
             this.lblSubtitulo =
                 new System.Windows.Forms.Label();
 
+            // ICONO PRINCIPAL DEL SISTEMA
             this.iconSistema =
                 new FontAwesome.Sharp.IconPictureBox();
 
+            // PANEL DEL LOGIN
             this.panelLogin =
                 new System.Windows.Forms.Panel();
 
+            // LABEL TITULO LOGIN
             this.lblLogin =
                 new System.Windows.Forms.Label();
 
+            // LABEL USUARIO
             this.Label1 =
                 new System.Windows.Forms.Label();
 
+            // LABEL CONTRASEÑA
             this.label2 =
                 new System.Windows.Forms.Label();
 
+            // TEXTBOX USUARIO
             this.txtUsuario =
                 new System.Windows.Forms.TextBox();
 
+            // TEXTBOX CONTRASEÑA
             this.txtClave =
                 new System.Windows.Forms.TextBox();
 
+            // BOTON INGRESAR
             this.btnIngresar =
                 new FontAwesome.Sharp.IconButton();
 
+            // ICONO USUARIO
             this.iconUsuario =
                 new FontAwesome.Sharp.IconPictureBox();
 
+            // ICONO CONTRASEÑA
             this.iconClave =
                 new FontAwesome.Sharp.IconPictureBox();
 
+            // CHECKBOX MOSTRAR CONTRASEÑA
             this.chkMostrarClave =
                 new System.Windows.Forms.CheckBox();
 
@@ -77,9 +103,7 @@
 
             this.SuspendLayout();
 
-            // =====================================
-            // FORM LOGIN
-            // =====================================
+            // CONFIGURACION GENERAL DEL FORMULARIO
 
             this.AutoScaleDimensions =
                 new System.Drawing.SizeF(8F, 16F);
@@ -107,9 +131,7 @@
             this.Text =
                 "Sistema Inventario";
 
-            // =====================================
-            // PANEL LEFT
-            // =====================================
+            // CONFIGURACION DEL PANEL IZQUIERDO
 
             this.panelLeft.BackColor =
                 System.Drawing.Color.FromArgb(
@@ -122,9 +144,7 @@
 
             this.panelLeft.Width = 400;
 
-            // =====================================
-            // ICON SISTEMA
-            // =====================================
+            // CONFIGURACION DEL ICONO PRINCIPAL
 
             this.iconSistema.BackColor =
                 System.Drawing.Color.Transparent;
@@ -146,9 +166,7 @@
             this.iconSistema.Size =
                 new System.Drawing.Size(110, 110);
 
-            // =====================================
-            // LABEL SISTEMA
-            // =====================================
+            // CONFIGURACION DEL LABEL SISTEMA
 
             this.lblSistema.AutoSize = true;
 
@@ -167,9 +185,7 @@
             this.lblSistema.Text =
                 "Sistema Inventario";
 
-            // =====================================
-            // SUBTITULO
-            // =====================================
+            // CONFIGURACION DEL SUBTITULO
 
             this.lblSubtitulo.AutoSize = true;
 
@@ -188,9 +204,7 @@
             this.lblSubtitulo.Text =
                 "Control y gestión de inventario";
 
-            // =====================================
-            // PANEL LOGIN
-            // =====================================
+            // CONFIGURACION DEL PANEL LOGIN
 
             this.panelLogin.BackColor =
                 System.Drawing.Color.FromArgb(
@@ -204,9 +218,7 @@
             this.panelLogin.Location =
                 new System.Drawing.Point(420, 65);
 
-            // =====================================
-            // TITULO LOGIN
-            // =====================================
+            // CONFIGURACION DEL TITULO LOGIN
 
             this.lblLogin.AutoSize = true;
 
@@ -225,9 +237,7 @@
             this.lblLogin.Text =
                 "Iniciar Sesión";
 
-            // =====================================
-            // LABEL USUARIO
-            // =====================================
+            // CONFIGURACION DEL LABEL USUARIO
 
             this.Label1.AutoSize = true;
 
@@ -245,9 +255,7 @@
             this.Label1.Text =
                 "Usuario";
 
-            // =====================================
-            // TXT USUARIO
-            // =====================================
+            // CONFIGURACION DEL TEXTBOX USUARIO
 
             this.txtUsuario.BackColor =
                 System.Drawing.Color.FromArgb(
@@ -272,9 +280,7 @@
             this.txtUsuario.Size =
                 new System.Drawing.Size(310, 42);
 
-            // =====================================
-            // ICON USUARIO
-            // =====================================
+            // CONFIGURACION DEL ICONO USUARIO
 
             this.iconUsuario.BackColor =
                 System.Drawing.Color.Transparent;
@@ -296,9 +302,7 @@
             this.iconUsuario.Size =
                 new System.Drawing.Size(24, 24);
 
-            // =====================================
-            // LABEL CLAVE
-            // =====================================
+            // CONFIGURACION DEL LABEL CONTRASEÑA
 
             this.label2.AutoSize = true;
 
@@ -317,9 +321,7 @@
             this.label2.Text =
                 "Contraseña";
 
-            // =====================================
-            // TXT CLAVE
-            // =====================================
+            // CONFIGURACION DEL TEXTBOX CONTRASEÑA
 
             this.txtClave.BackColor =
                 System.Drawing.Color.FromArgb(
@@ -350,9 +352,7 @@
             this.txtClave.UseSystemPasswordChar =
                 true;
 
-            // =====================================
-            // ICON CLAVE
-            // =====================================
+            // CONFIGURACION DEL ICONO CONTRASEÑA
 
             this.iconClave.BackColor =
                 System.Drawing.Color.Transparent;
@@ -374,9 +374,7 @@
             this.iconClave.Size =
                 new System.Drawing.Size(24, 24);
 
-            // =====================================
-            // CHECK PASSWORD
-            // =====================================
+            // CONFIGURACION DEL CHECKBOX
 
             this.chkMostrarClave.AutoSize = true;
 
@@ -393,9 +391,7 @@
                 new System.EventHandler(
                     this.chkMostrarClave_CheckedChanged);
 
-            // =====================================
-            // BOTON LOGIN
-            // =====================================
+            // CONFIGURACION DEL BOTON LOGIN
 
             this.btnIngresar.BackColor =
                 System.Drawing.Color.FromArgb(
@@ -416,6 +412,7 @@
 
             this.btnIngresar.ForeColor =
                 System.Drawing.Color.White;
+
             this.txtUsuario.TextAlign =
     System.Windows.Forms.HorizontalAlignment.Center;
 
@@ -449,9 +446,7 @@
                 new System.EventHandler(
                     this.btnIngresar_Click);
 
-            // =====================================
-            // AGREGAR CONTROLES
-            // =====================================
+            // AGREGAR CONTROLES AL PANEL IZQUIERDO
 
             this.panelLeft.Controls.Add(
                 this.iconSistema);
@@ -461,6 +456,8 @@
 
             this.panelLeft.Controls.Add(
                 this.lblSubtitulo);
+
+            // AGREGAR CONTROLES AL PANEL LOGIN
 
             this.panelLogin.Controls.Add(
                 this.lblLogin);
@@ -488,6 +485,8 @@
 
             this.panelLogin.Controls.Add(
                 this.btnIngresar);
+
+            // AGREGAR PANELES AL FORMULARIO
 
             this.Controls.Add(
                 this.panelLeft);
@@ -517,32 +516,46 @@
 
         #endregion
 
+        // DECLARACION DEL PANEL IZQUIERDO
         private System.Windows.Forms.Panel panelLeft;
 
+        // DECLARACION DEL PANEL LOGIN
         private System.Windows.Forms.Panel panelLogin;
 
+        // DECLARACION DEL LABEL SISTEMA
         private System.Windows.Forms.Label lblSistema;
 
+        // DECLARACION DEL LABEL SUBTITULO
         private System.Windows.Forms.Label lblSubtitulo;
 
+        // DECLARACION DEL LABEL LOGIN
         private System.Windows.Forms.Label lblLogin;
 
+        // DECLARACION DEL LABEL USUARIO
         private System.Windows.Forms.Label Label1;
 
+        // DECLARACION DEL LABEL CONTRASEÑA
         private System.Windows.Forms.Label label2;
 
+        // DECLARACION DEL TEXTBOX USUARIO
         private System.Windows.Forms.TextBox txtUsuario;
 
+        // DECLARACION DEL TEXTBOX CONTRASEÑA
         private System.Windows.Forms.TextBox txtClave;
 
+        // DECLARACION DEL BOTON INGRESAR
         private FontAwesome.Sharp.IconButton btnIngresar;
 
+        // DECLARACION DEL ICONO PRINCIPAL
         private FontAwesome.Sharp.IconPictureBox iconSistema;
 
+        // DECLARACION DEL ICONO USUARIO
         private FontAwesome.Sharp.IconPictureBox iconUsuario;
 
+        // DECLARACION DEL ICONO CONTRASEÑA
         private FontAwesome.Sharp.IconPictureBox iconClave;
 
+        // DECLARACION DEL CHECKBOX MOSTRAR CONTRASEÑA
         private System.Windows.Forms.CheckBox chkMostrarClave;
     }
 }

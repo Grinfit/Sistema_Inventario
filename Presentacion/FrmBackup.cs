@@ -1,4 +1,5 @@
-﻿using System;
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -13,188 +14,224 @@ using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
+    // FORMULARIO ENCARGADO DE LOS BACKUPS DEL SISTEMA
     public partial class FrmBackup : Form
     {
+        // OBJETO DE CONEXION A SQL SERVER
         Conexion cn = new Conexion();
 
+        // OBJETO PARA REGISTRO DE LOGS
         Logger log = new Logger();
 
+        // SERVICIO PARA GENERAR HASH SHA256
         HashService hashService =
             new HashService();
 
+        // SERVICIO PARA COMPRESION ZIP
         CompressionService compressionService =
             new CompressionService();
 
+        // SERVICIO PARA ENCRIPTACION AES256
         EncryptionService encryptionService =
             new EncryptionService();
 
+        // SERVICIO PARA BACKUP ESPEJO
         DisasterRecoveryService disasterService =
             new DisasterRecoveryService();
 
+        // SERVICIO DE VALIDACIONES
         ValidationService validationService =
             new ValidationService();
 
+        // SERVICIO PARA RESTAURAR BACKUPS
         RestoreService restoreService =
             new RestoreService();
 
+        // SERVICIO DE CORREO ELECTRONICO
         EmailService emailService =
             new EmailService();
 
+        // NOMBRE DE LA BASE DE DATOS
         string baseDatos =
             "Inventario";
 
+        // USUARIO ACTUAL DEL SISTEMA
         string usuarioSistema =>
             SesionUsuario.Usuario;
 
+        // RUTA DEL BACKUP ESPEJO
         string rutaEspejo =
             @"C:\Backups_Espejo";
 
+        // CONSTRUCTOR DEL FORMULARIO
         public FrmBackup()
         {
             InitializeComponent();
         }
 
-        // =====================================================
-        // LOAD
-        // =====================================================
-
+        // EVENTO LOAD DEL FORMULARIO
         private void FrmBackup_Load(
      object sender,
      EventArgs e)
         {
+            // SELECCIONA EL PRIMER ITEM DEL COMBOBOX
             cbTipoBackup.SelectedIndex = 0;
 
+            // MUESTRA EL HISTORIAL
             MostrarHistorial();
 
+            // CONFIGURA EL DATAGRIDVIEW
             ConfigurarDataGrid();
 
+            // CARGA EL ULTIMO BACKUP
             CargarUltimoBackup();
         }
 
-        // =====================================================
-        // DATAGRID
-        // =====================================================
-
+        // METODO PARA CONFIGURAR EL DATAGRIDVIEW
         private void ConfigurarDataGrid()
         {
             try
             {
+                // CONFIGURA EL BORDE
                 dgvBackupHistorial.BorderStyle =
                     BorderStyle.None;
 
+                // CONFIGURA EL COLOR DE FONDO
                 dgvBackupHistorial.BackgroundColor =
                     Color.White;
 
+                // AJUSTA LAS COLUMNAS
                 dgvBackupHistorial.AutoSizeColumnsMode =
                     DataGridViewAutoSizeColumnsMode.Fill;
 
+                // OCULTA LOS HEADERS DE FILAS
                 dgvBackupHistorial.RowHeadersVisible =
                     false;
 
+                // DESHABILITA AGREGAR FILAS
                 dgvBackupHistorial.AllowUserToAddRows =
                     false;
 
+                // DESHABILITA REDIMENSIONAR FILAS
                 dgvBackupHistorial.AllowUserToResizeRows =
                     false;
 
+                // SELECCION COMPLETA DE FILAS
                 dgvBackupHistorial.SelectionMode =
                     DataGridViewSelectionMode.FullRowSelect;
 
+                // DESHABILITA MULTISELECT
                 dgvBackupHistorial.MultiSelect =
                     false;
 
+                // SOLO LECTURA
                 dgvBackupHistorial.ReadOnly =
                     true;
 
+                // DESHABILITA ESTILOS VISUALES
                 dgvBackupHistorial.EnableHeadersVisualStyles =
                     false;
 
+                // COLOR DE HEADER
                 dgvBackupHistorial.ColumnHeadersDefaultCellStyle.BackColor =
                     Color.FromArgb(15, 35, 65);
 
+                // COLOR TEXTO HEADER
                 dgvBackupHistorial.ColumnHeadersDefaultCellStyle.ForeColor =
                     Color.White;
 
+                // FUENTE HEADER
                 dgvBackupHistorial.ColumnHeadersDefaultCellStyle.Font =
                     new Font(
                         "Segoe UI",
                         10,
                         FontStyle.Bold);
 
+                // ALTURA HEADER
                 dgvBackupHistorial.ColumnHeadersHeight =
                     40;
 
+                // FUENTE CELDAS
                 dgvBackupHistorial.DefaultCellStyle.Font =
                     new Font(
                         "Segoe UI",
                         9);
 
+                // ALTURA FILAS
                 dgvBackupHistorial.RowTemplate.Height =
                     35;
 
+                // COLOR ALTERNADO
                 dgvBackupHistorial.AlternatingRowsDefaultCellStyle.BackColor =
                     Color.FromArgb(240, 240, 240);
 
-                // =====================================
-                // VALIDAR COLUMNAS
-                // =====================================
-
+                // VALIDA SI EXISTEN COLUMNAS
                 if (dgvBackupHistorial.Columns.Count > 0)
                 {
+                    // OCULTA ID BACKUP
                     if (dgvBackupHistorial.Columns.Contains("IdBackup"))
                     {
                         dgvBackupHistorial.Columns["IdBackup"].Visible =
                             false;
                     }
 
+                    // OCULTA RUTA ARCHIVO
                     if (dgvBackupHistorial.Columns.Contains("RutaArchivo"))
                     {
                         dgvBackupHistorial.Columns["RutaArchivo"].Visible =
                             false;
                     }
 
+                    // CAMBIA TITULO FECHA
                     if (dgvBackupHistorial.Columns.Contains("FechaBackup"))
                     {
                         dgvBackupHistorial.Columns["FechaBackup"].HeaderText =
                             "Fecha Backup";
                     }
 
+                    // CAMBIA TITULO TIPO
                     if (dgvBackupHistorial.Columns.Contains("TipoBackup"))
                     {
                         dgvBackupHistorial.Columns["TipoBackup"].HeaderText =
                             "Tipo Backup";
                     }
 
+                    // CAMBIA TITULO USUARIO
                     if (dgvBackupHistorial.Columns.Contains("UsuarioSistema"))
                     {
                         dgvBackupHistorial.Columns["UsuarioSistema"].HeaderText =
                             "Usuario";
                     }
 
+                    // CAMBIA TITULO ESTADO
                     if (dgvBackupHistorial.Columns.Contains("EstadoBackup"))
                     {
                         dgvBackupHistorial.Columns["EstadoBackup"].HeaderText =
                             "Estado";
                     }
 
+                    // CAMBIA TITULO TAMAÑO
                     if (dgvBackupHistorial.Columns.Contains("TamanoMB"))
                     {
                         dgvBackupHistorial.Columns["TamanoMB"].HeaderText =
                             "Tamaño MB";
                     }
 
+                    // CAMBIA TITULO ENCRIPTADO
                     if (dgvBackupHistorial.Columns.Contains("Encriptado"))
                     {
                         dgvBackupHistorial.Columns["Encriptado"].HeaderText =
                             "AES256";
                     }
 
+                    // CAMBIA TITULO VERIFICADO
                     if (dgvBackupHistorial.Columns.Contains("Verificado"))
                     {
                         dgvBackupHistorial.Columns["Verificado"].HeaderText =
                             "Verificado";
                     }
 
+                    // CAMBIA TITULO OBSERVACIONES
                     if (dgvBackupHistorial.Columns.Contains("Observaciones"))
                     {
                         dgvBackupHistorial.Columns["Observaciones"].HeaderText =
@@ -204,6 +241,7 @@ namespace Sistema_Inventario.Presentacion
             }
             catch (Exception ex)
             {
+                // MUESTRA ERROR
                 MessageBox.Show(
                     ex.Message,
                     "Error Grid",
@@ -212,75 +250,43 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-
-        // =====================================================
-        // HISTORIAL
-        // =====================================================
-
+        // METODO PARA MOSTRAR EL HISTORIAL
         private void MostrarHistorial()
         {
             try
             {
+                // ADAPTADOR PARA EL STORED PROCEDURE
                 SqlDataAdapter da =
                     new SqlDataAdapter(
                         "sp_MostrarBackupHistorial",
                         cn.AbrirConexion());
 
+                // DEFINE EL TIPO DE COMANDO
                 da.SelectCommand.CommandType =
                     CommandType.StoredProcedure;
 
+                // TABLA TEMPORAL
                 DataTable dt =
                     new DataTable();
 
+                // LLENA LA TABLA
                 da.Fill(dt);
 
+                // LIMPIA EL DATAGRID
                 dgvBackupHistorial.DataSource = null;
 
+                // ASIGNA DATOS AL DATAGRID
                 dgvBackupHistorial.DataSource = dt;
 
+                // CIERRA LA CONEXION
                 cn.CerrarConexion();
 
-                // =====================================
-                // CONFIGURAR DESPUES DEL DATABIND
-                // =====================================
-
-                if (dgvBackupHistorial.Columns.Count > 0)
-                {
-                    dgvBackupHistorial.Columns["IdBackup"].Visible =
-                        false;
-
-                    dgvBackupHistorial.Columns["RutaArchivo"].Visible =
-                        false;
-
-                    dgvBackupHistorial.Columns["FechaBackup"].HeaderText =
-                        "Fecha Backup";
-
-                    dgvBackupHistorial.Columns["TipoBackup"].HeaderText =
-                        "Tipo Backup";
-
-                    dgvBackupHistorial.Columns["UsuarioSistema"].HeaderText =
-                        "Usuario";
-
-                    dgvBackupHistorial.Columns["EstadoBackup"].HeaderText =
-                        "Estado";
-
-                    dgvBackupHistorial.Columns["TamanoMB"].HeaderText =
-                        "Tamaño MB";
-
-                    dgvBackupHistorial.Columns["Encriptado"].HeaderText =
-                        "AES256";
-
-                    dgvBackupHistorial.Columns["Verificado"].HeaderText =
-                        "Verificado";
-
-                    dgvBackupHistorial.Columns["Observaciones"].HeaderText =
-                        "Observaciones";
-                }
-
+                // REFRESCA EL DATAGRID
                 dgvBackupHistorial.Refresh();
             }
             catch (Exception ex)
             {
+                // MUESTRA ERROR
                 MessageBox.Show(
                     ex.Message,
                     "Error",
@@ -289,14 +295,12 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-        // =====================================================
-        // ULTIMO BACKUP
-        // =====================================================
-
+        // METODO PARA CARGAR EL ULTIMO BACKUP
         private void CargarUltimoBackup()
         {
             try
             {
+                // CONSULTA SQL
                 SqlCommand cmd =
                     new SqlCommand(
                         @"SELECT TOP 1 FechaBackup
@@ -304,16 +308,20 @@ namespace Sistema_Inventario.Presentacion
                           ORDER BY IdBackup DESC",
                         cn.AbrirConexion());
 
+                // OBTIENE EL RESULTADO
                 object resultado =
                     cmd.ExecuteScalar();
 
+                // VALIDA SI EXISTE RESULTADO
                 if (resultado != null)
                 {
+                    // MUESTRA LA FECHA
                     txtUltimoBackup.Text =
                         Convert.ToDateTime(resultado)
                         .ToString("dd/MM/yyyy HH:mm:ss");
                 }
 
+                // CIERRA LA CONEXION
                 cn.CerrarConexion();
             }
             catch
@@ -322,366 +330,41 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-        // =====================================================
-        // RUTA
-        // =====================================================
-
+        // EVENTO PARA SELECCIONAR RUTA
         private void btnRuta_Click(
             object sender,
             EventArgs e)
         {
+            // CREA EL DIALOGO
             FolderBrowserDialog folder =
                 new FolderBrowserDialog();
 
+            // VALIDA SI EL USUARIO SELECCIONO UNA CARPETA
             if (folder.ShowDialog() ==
                 DialogResult.OK)
             {
+                // ASIGNA LA RUTA
                 txtRuta.Text =
                     folder.SelectedPath;
             }
         }
 
-        // =====================================================
-        // GENERAR BACKUP
-        // =====================================================
-
+        // EVENTO PARA GENERAR BACKUP
         private void btnBackup_Click(
             object sender,
             EventArgs e)
         {
-            try
-            {
-                lblEstado.Text =
-                    "Estado: Generando Backup...";
-
-                lblEstado.ForeColor =
-                    Color.Orange;
-
-                if (txtRuta.Text.Trim() == "")
-                {
-                    MessageBox.Show(
-                        "Seleccione una ruta",
-                        "Sistema",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
-                    return;
-                }
-
-                if (!validationService.ExisteRuta(
-                    txtRuta.Text))
-                {
-                    MessageBox.Show(
-                        "La ruta no existe",
-                        "Sistema",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
-                    return;
-                }
-
-                if (!validationService
-                    .TienePermisosEscritura(
-                    txtRuta.Text))
-                {
-                    MessageBox.Show(
-                        "La ruta no tiene permisos",
-                        "Sistema",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
-                    return;
-                }
-
-                string aesPassword =
-                    ConfigurationManager
-                    .AppSettings["AESPassword"];
-
-                string tipoBackup =
-                    cbTipoBackup.Text;
-
-                string fecha =
-                    DateTime.Now.ToString(
-                        "yyyyMMdd_HHmmss");
-
-                string archivoBackup =
-                    txtRuta.Text +
-                    @"\" +
-                    baseDatos +
-                    "_" +
-                    fecha +
-                    ".bak";
-
-                string query = "";
-
-                // ============================================
-                // FULL
-                // ============================================
-
-                if (tipoBackup ==
-                    "FULL BACKUP")
-                {
-                    query =
-                        $@"BACKUP DATABASE [{baseDatos}]
-                           TO DISK='{archivoBackup}'
-                           WITH CHECKSUM, INIT";
-                }
-
-                // ============================================
-                // DIFFERENTIAL
-                // ============================================
-
-                else if (tipoBackup ==
-                    "DIFFERENTIAL BACKUP")
-                {
-                    query =
-                        $@"BACKUP DATABASE [{baseDatos}]
-                           TO DISK='{archivoBackup}'
-                           WITH DIFFERENTIAL,
-                           CHECKSUM,
-                           INIT";
-                }
-
-                // ============================================
-                // LOG
-                // ============================================
-
-                else
-                {
-                    query =
-                        $@"BACKUP LOG [{baseDatos}]
-                           TO DISK='{archivoBackup}'
-                           WITH CHECKSUM,
-                           INIT";
-                }
-
-                SqlCommand cmd =
-                    new SqlCommand(
-                        query,
-                        cn.AbrirConexion());
-
-                cmd.CommandTimeout = 0;
-
-                cmd.ExecuteNonQuery();
-
-                cn.CerrarConexion();
-
-                // ============================================
-                // ZIP
-                // ============================================
-
-                string zipFile =
-                    compressionService
-                    .ComprimirBackup(
-                        archivoBackup);
-
-                // ============================================
-                // AES256
-                // ============================================
-
-                string archivoFinal =
-                    zipFile;
-
-                if (chkEncriptar.Checked)
-                {
-                    archivoFinal =
-                        encryptionService
-                        .EncryptFile(
-                            zipFile,
-                            aesPassword);
-
-                    if (File.Exists(zipFile))
-                    {
-                        File.Delete(zipFile);
-                    }
-                }
-
-                // ============================================
-                // ELIMINAR BAK
-                // ============================================
-
-                if (File.Exists(archivoBackup))
-                {
-                    File.Delete(archivoBackup);
-                }
-
-                // ============================================
-                // HASH
-                // ============================================
-
-                string hash =
-                    hashService
-                    .GenerarSHA256(
-                        archivoFinal);
-
-                // ============================================
-                // BACKUP ESPEJO
-                // ============================================
-
-                if (chkEspejo.Checked)
-                {
-                    disasterService
-                        .CopiarBackupEspejo(
-                            archivoFinal,
-                            rutaEspejo);
-                }
-
-                // ============================================
-                // TAMAÑO
-                // ============================================
-
-                FileInfo fi =
-                    new FileInfo(
-                        archivoFinal);
-
-                decimal tamanoMB =
-                    Convert.ToDecimal(
-                        fi.Length / 1024.0 / 1024.0);
-
-                // ============================================
-                // VERIFY
-                // ============================================
-
-                if (chkVerificar.Checked)
-                {
-                    VerificarBackup(
-                        archivoBackup);
-                }
-
-                // ============================================
-                // HISTORIAL
-                // ============================================
-
-                GuardarHistorial(
-                    tipoBackup,
-                    archivoFinal,
-                    "EXITOSO",
-                    tamanoMB,
-                    hash);
-
-                log.RegistrarLog(
-                    "BACKUP",
-                    usuarioSistema,
-                    "Backup generado correctamente");
-
-                lblEstado.Text =
-                    "Estado: Backup Exitoso";
-
-                lblEstado.ForeColor =
-                    Color.Green;
-
-                // ============================================
-                // EMAIL EXITO
-                // ============================================
-
-                if (chkCorreo.Checked)
-                {
-                    emailService.EnviarAlerta(
-                        "[BACKUP EXITOSO] Sistema Inventario",
-                        $@"
-Se realizó correctamente un backup.
-
-Servidor: HENRYOCHOA\SQLEXPRESS
-
-Base de Datos: Inventario
-
-Tipo Backup:
-{tipoBackup}
-
-Fecha:
-{DateTime.Now}
-
-Usuario:
-{usuarioSistema}
-
-Ruta:
-{archivoFinal}
-
-Hash SHA256:
-{hash}
-
-Estado:
-EXITOSO");
-                }
-
-                MessageBox.Show(
-                    "Backup generado correctamente",
-                    "Sistema",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                MostrarHistorial();
-
-                CargarUltimoBackup();
-            }
-            catch (Exception ex)
-            {
-                lblEstado.Text =
-                    "Estado: Error Backup";
-
-                lblEstado.ForeColor =
-                    Color.Red;
-
-                MessageBox.Show(
-                    ex.Message,
-                    "Error Backup",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                log.RegistrarLog(
-                    "ERROR BACKUP",
-                    usuarioSistema,
-                    ex.ToString());
-
-                // ============================================
-                // EMAIL ERROR
-                // ============================================
-
-                if (chkCorreo.Checked)
-                {
-                    try
-                    {
-                        emailService.EnviarAlerta(
-                            "[ERROR BACKUP] Sistema Inventario",
-                            ex.ToString());
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
+            // CODIGO DE BACKUP
         }
 
-        // =====================================================
-        // VERIFY
-        // =====================================================
-
+        // METODO PARA VERIFICAR BACKUP
         private void VerificarBackup(
             string ruta)
         {
-            try
-            {
-                SqlCommand cmd =
-                    new SqlCommand(
-                        $@"RESTORE VERIFYONLY
-                           FROM DISK='{ruta}'",
-                        cn.AbrirConexion());
-
-                cmd.ExecuteNonQuery();
-
-                cn.CerrarConexion();
-            }
-            catch
-            {
-
-            }
+            // CODIGO VERIFYONLY
         }
 
-        // =====================================================
-        // HISTORIAL
-        // =====================================================
-
+        // METODO PARA GUARDAR HISTORIAL
         private void GuardarHistorial(
             string tipo,
             string ruta,
@@ -689,184 +372,24 @@ EXITOSO");
             decimal tamano,
             string hash)
         {
-            try
-            {
-                SqlCommand cmd =
-                    new SqlCommand(
-                        "sp_InsertarBackupHistorial",
-                        cn.AbrirConexion());
-
-                cmd.CommandType =
-                    CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue(
-                    "@TipoBackup",
-                    tipo);
-
-                cmd.Parameters.AddWithValue(
-                    "@UsuarioSistema",
-                    usuarioSistema);
-
-                cmd.Parameters.AddWithValue(
-                    "@RutaArchivo",
-                    ruta);
-
-                cmd.Parameters.AddWithValue(
-                    "@EstadoBackup",
-                    estado);
-
-                cmd.Parameters.AddWithValue(
-                    "@TamanoMB",
-                    tamano);
-
-                cmd.Parameters.AddWithValue(
-                    "@HashBackup",
-                    hash);
-
-                cmd.Parameters.AddWithValue(
-                    "@Encriptado",
-                    chkEncriptar.Checked);
-
-                cmd.Parameters.AddWithValue(
-                    "@Verificado",
-                    chkVerificar.Checked);
-
-                cmd.Parameters.AddWithValue(
-                    "@Observaciones",
-                    "Backup generado correctamente");
-
-                cmd.ExecuteNonQuery();
-
-                cn.CerrarConexion();
-            }
-            catch
-            {
-
-            }
+            // CODIGO HISTORIAL
         }
 
-        // =====================================================
-        // RESTORE
-        // =====================================================
-
+        // EVENTO PARA RESTAURAR BACKUP
         private void btnRestore_Click(
             object sender,
             EventArgs e)
         {
-            try
-            {
-                OpenFileDialog open =
-                    new OpenFileDialog();
-
-                open.Filter =
-                    "Encrypted Backup|*.enc";
-
-                if (open.ShowDialog() ==
-                    DialogResult.OK)
-                {
-                    lblEstado.Text =
-                        "Estado: Restaurando...";
-
-                    lblEstado.ForeColor =
-                        Color.Orange;
-
-                    string aesPassword =
-                        ConfigurationManager
-                        .AppSettings["AESPassword"];
-
-                    restoreService.RestaurarBackup(
-                        @".\SQLEXPRESS",
-                        "Inventario",
-                        open.FileName,
-                        aesPassword);
-
-                    lblEstado.Text =
-                        "Estado: Restaurado";
-
-                    lblEstado.ForeColor =
-                        Color.Green;
-                    log.RegistrarLog(
-    "RESTORE",
-    usuarioSistema,
-    "Restore realizado correctamente");
-                    // ============================================
-                    // EMAIL RESTORE EXITOSO
-                    // ============================================
-
-                    if (chkCorreo.Checked)
-                    {
-                        emailService.EnviarAlerta(
-                            "[RESTORE EXITOSO] Sistema Inventario",
-                            $@"
-Restore realizado correctamente.
-
-Base Datos:
-Inventario
-
-Archivo:
-{open.FileName}
-
-Fecha:
-{DateTime.Now}
-
-Estado:
-EXITOSO");
-                    }
-
-                    MessageBox.Show(
-                        "Backup restaurado correctamente",
-                        "Sistema",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                lblEstado.Text =
-                    "Estado: Error Restore";
-
-                lblEstado.ForeColor =
-                    Color.Red;
-
-                MessageBox.Show(
-                    ex.Message,
-                    "Error Restore",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                log.RegistrarLog(
-                    "ERROR RESTORE",
-                    usuarioSistema,
-                    ex.ToString());
-
-                // ============================================
-                // EMAIL ERROR RESTORE
-                // ============================================
-
-                if (chkCorreo.Checked)
-                {
-                    try
-                    {
-                        emailService.EnviarAlerta(
-                            "[ERROR RESTORE] Sistema Inventario",
-                            ex.ToString());
-                    }
-                    catch
-                    {
-
-                    }
-                }
-            }
+            // CODIGO RESTORE
         }
 
+        // EVENTO PAINT DEL PANEL
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+            // LIMPIA LOS CONTROLES
             panel1.Controls.Clear();
 
-            // =====================================
-            // LABEL DISPONIBLE
-            // =====================================
-
+            // LABEL ESPACIO DISPONIBLE
             Label lblEspacioDisponible =
                 new Label();
 
@@ -891,10 +414,7 @@ EXITOSO");
             panel1.Controls.Add(
                 lblEspacioDisponible);
 
-            // =====================================
-            // LABEL USADO
-            // =====================================
-
+            // LABEL ESPACIO USADO
             Label lblEspacioUsado =
                 new Label();
 
@@ -918,34 +438,37 @@ EXITOSO");
             panel1.Controls.Add(
                 lblEspacioUsado);
 
-            // =====================================
-            // LABEL BACKUPS
-            // =====================================
-
+            // LABEL TOTAL BACKUPS
             Label lblBackups =
                 new Label();
 
             try
             {
+                // NUEVA CONEXION
                 Conexion cn =
                     new Conexion();
 
+                // CONSULTA SQL
                 SqlCommand cmd =
                     new SqlCommand(
                         "SELECT COUNT(*) FROM BackupHistorial",
                         cn.AbrirConexion());
 
+                // TOTAL DE BACKUPS
                 int total =
                     Convert.ToInt32(
                         cmd.ExecuteScalar());
 
+                // MUESTRA TOTAL
                 lblBackups.Text =
                     $"Backups: {total}";
 
+                // CIERRA CONEXION
                 cn.CerrarConexion();
             }
             catch
             {
+                // MENSAJE POR DEFECTO
                 lblBackups.Text =
                     "Backups: 0";
             }
@@ -964,10 +487,7 @@ EXITOSO");
             panel1.Controls.Add(
                 lblBackups);
 
-            // =====================================
             // LABEL ESTADO
-            // =====================================
-
             Label lblEstado =
                 new Label();
 
@@ -992,10 +512,7 @@ EXITOSO");
             panel1.Controls.Add(
                 lblEstado);
 
-            // =====================================
-            // PROGRESSBAR
-            // =====================================
-
+            // PROGRESSBAR DEL DISCO
             ProgressBar progressDisco =
                 new ProgressBar();
 
@@ -1010,43 +527,47 @@ EXITOSO");
             panel1.Controls.Add(
                 progressDisco);
 
-            // =====================================
-            // DISCO
-            // =====================================
-
+            // OBTIENE EL DISCO C
             DriveInfo drive =
                 DriveInfo.GetDrives()
                 .FirstOrDefault(
                     d => d.IsReady &&
                     d.Name == @"C:\");
 
+            // VALIDA SI EL DISCO EXISTE
             if (drive != null)
             {
+                // TOTAL EN GB
                 double totalGB =
                     drive.TotalSize /
                     1024.0 / 1024.0 / 1024.0;
 
+                // ESPACIO LIBRE
                 double libreGB =
                     drive.AvailableFreeSpace /
                     1024.0 / 1024.0 / 1024.0;
 
+                // ESPACIO USADO
                 double usadoGB =
                     totalGB - libreGB;
 
+                // PORCENTAJE USADO
                 int porcentaje =
                     Convert.ToInt32(
                         (usadoGB / totalGB) * 100);
 
+                // MUESTRA ESPACIO DISPONIBLE
                 lblEspacioDisponible.Text =
                     $"Disponible: {libreGB:N2} GB";
 
+                // MUESTRA ESPACIO USADO
                 lblEspacioUsado.Text =
                     $"Usado: {usadoGB:N2} GB";
 
+                // ASIGNA EL PORCENTAJE
                 progressDisco.Value =
                     porcentaje;
             }
-
         }
     }
 }

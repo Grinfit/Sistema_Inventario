@@ -1,26 +1,23 @@
-﻿using Sistema_Inventario.Datos;
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+using Sistema_Inventario.Datos;
 using System.Data;
 
 namespace Sistema_Inventario.Logica
 {
+    // CLASE ENCARGADA DE LA LOGICA DE PROVEEDORES
     public class LProveedores
     {
+        // OBJETO DE LA CLASE DPROVEEDORES
         DProveedores dProveedores =
             new DProveedores();
 
-        // =====================================
-        // MOSTRAR
-        // =====================================
-
+        // METODO PARA MOSTRAR LOS PROVEEDORES
         public DataTable MostrarProveedores()
         {
             return dProveedores.MostrarProveedores();
         }
 
-        // =====================================
-        // INSERTAR
-        // =====================================
-
+        // METODO PARA INSERTAR UN PROVEEDOR
         public void InsertarProveedor(
             string nombre,
             string empresa,
@@ -36,10 +33,7 @@ namespace Sistema_Inventario.Logica
                 direccion);
         }
 
-        // =====================================
-        // EDITAR
-        // =====================================
-
+        // METODO PARA EDITAR UN PROVEEDOR
         public void EditarProveedor(
             int idProveedor,
             string nombre,
@@ -57,10 +51,7 @@ namespace Sistema_Inventario.Logica
                 direccion);
         }
 
-        // =====================================
-        // ELIMINAR
-        // =====================================
-
+        // METODO PARA ELIMINAR UN PROVEEDOR
         public void EliminarProveedor(
             int idProveedor)
         {
@@ -68,10 +59,7 @@ namespace Sistema_Inventario.Logica
                 idProveedor);
         }
 
-        // =====================================
-        // BUSCAR
-        // =====================================
-
+        // METODO PARA BUSCAR UN PROVEEDOR
         public DataTable BuscarProveedor(
             string buscar)
         {

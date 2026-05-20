@@ -1,55 +1,65 @@
-﻿using System;
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
+// IMPORTACION DE LA CAPA DE DATOS
 using Sistema_Inventario.Datos;
 
 namespace Sistema_Inventario.Presentacion
 {
+    // FORMULARIO PRINCIPAL DE INICIO
     public partial class FrmInicio : Form
     {
+        // OBJETO DE CONEXION A BASE DE DATOS
         Conexion cn =
             new Conexion();
 
+        // DATAGRIDVIEW PARA ACTIVIDAD RECIENTE
         private DataGridView dgvActividad;
 
+        // GRAFICA DE MOVIMIENTOS
         private Chart chartMovimientos;
 
+        // CONSTRUCTOR DEL FORMULARIO
         public FrmInicio()
         {
             InitializeComponent();
 
+            // CONSTRUYE EL DASHBOARD
             ConstruirDashboard();
         }
 
+        // EVENTO LOAD DEL FORMULARIO
         private void FrmInicio_Load(
             object sender,
             EventArgs e)
         {
+            // CARGA LOS INDICADORES
             CargarIndicadores();
 
+            // CARGA LA ACTIVIDAD RECIENTE
             CargarActividad();
 
+            // CARGA LA GRAFICA
             CargarGraficaMovimientos();
         }
 
-        // =====================================
         // DASHBOARD
-        // =====================================
 
         private void ConstruirDashboard()
         {
+            // COLOR DE FONDO DEL FORMULARIO
             this.BackColor =
                 Color.FromArgb(243, 244, 246);
 
+            // ACTIVA EL SCROLL
             this.AutoScroll = true;
 
-            // =====================================
             // PANEL CONTENEDOR
-            // =====================================
 
             Panel contenedor =
                 new Panel();
@@ -65,9 +75,7 @@ namespace Sistema_Inventario.Presentacion
 
             this.Controls.Add(contenedor);
 
-            // =====================================
             // TITULO
-            // =====================================
 
             Label titulo =
                 new Label();
@@ -91,9 +99,7 @@ namespace Sistema_Inventario.Presentacion
 
             contenedor.Controls.Add(titulo);
 
-            // =====================================
             // CARDS KPI
-            // =====================================
 
             FlowLayoutPanel cards =
                 new FlowLayoutPanel();
@@ -112,30 +118,35 @@ namespace Sistema_Inventario.Presentacion
 
             contenedor.Controls.Add(cards);
 
+            // CARD BODEGAS
             panelClientes =
                 CrearCard(
                     "Bodegas",
                     out lblClientes,
                     Color.FromArgb(52, 152, 219));
 
+            // CARD PRODUCTOS
             panelProductos =
                 CrearCard(
                     "Productos",
                     out lblProductos,
                     Color.FromArgb(46, 204, 113));
 
+            // CARD STOCK BAJO
             panelVentas =
                 CrearCard(
                     "Stock Bajo",
                     out lblVentas,
                     Color.FromArgb(231, 76, 60));
 
+            // CARD TRANSFERENCIAS
             panelLogin =
                 CrearCard(
                     "Transferencias Hoy",
                     out lblLogin,
                     Color.FromArgb(155, 89, 182));
 
+            // AGREGA LAS CARDS
             cards.Controls.Add(panelClientes);
 
             cards.Controls.Add(panelProductos);
@@ -144,9 +155,7 @@ namespace Sistema_Inventario.Presentacion
 
             cards.Controls.Add(panelLogin);
 
-            // =====================================
             // PANEL ACTIVIDAD
-            // =====================================
 
             Panel panelTabla =
                 new Panel();
@@ -165,9 +174,7 @@ namespace Sistema_Inventario.Presentacion
 
             contenedor.Controls.Add(panelTabla);
 
-            // =====================================
             // TITULO ACTIVIDAD
-            // =====================================
 
             Label lblActividad =
                 new Label();
@@ -191,9 +198,7 @@ namespace Sistema_Inventario.Presentacion
 
             panelTabla.Controls.Add(lblActividad);
 
-            // =====================================
             // GRID
-            // =====================================
 
             dgvActividad =
                 new DataGridView();
@@ -262,9 +267,7 @@ namespace Sistema_Inventario.Presentacion
 
             panelTabla.Controls.Add(dgvActividad);
 
-            // =====================================
             // PANEL GRAFICA
-            // =====================================
 
             Panel panelGrafica =
                 new Panel();
@@ -283,9 +286,7 @@ namespace Sistema_Inventario.Presentacion
 
             contenedor.Controls.Add(panelGrafica);
 
-            // =====================================
             // TITULO GRAFICA
-            // =====================================
 
             Label lblGrafica =
                 new Label();
@@ -310,9 +311,7 @@ namespace Sistema_Inventario.Presentacion
 
             panelGrafica.Controls.Add(lblGrafica);
 
-            // =====================================
             // CHART
-            // =====================================
 
             chartMovimientos =
                 new Chart();
@@ -358,15 +357,14 @@ namespace Sistema_Inventario.Presentacion
                 chartMovimientos);
         }
 
-        // =====================================
         // CREAR CARD
-        // =====================================
 
         private Panel CrearCard(
             string titulo,
             out Label lblValor,
             Color color)
         {
+            // CREA EL PANEL
             Panel panel =
                 new Panel();
 
@@ -382,6 +380,7 @@ namespace Sistema_Inventario.Presentacion
             panel.BorderStyle =
                 BorderStyle.FixedSingle;
 
+            // CREA BARRA SUPERIOR
             Panel barra =
                 new Panel();
 
@@ -396,6 +395,7 @@ namespace Sistema_Inventario.Presentacion
 
             panel.Controls.Add(barra);
 
+            // CREA LABEL TITULO
             Label lblTitulo =
                 new Label();
 
@@ -419,6 +419,7 @@ namespace Sistema_Inventario.Presentacion
 
             panel.Controls.Add(lblTitulo);
 
+            // CREA LABEL VALOR
             lblValor =
                 new Label();
 
@@ -445,17 +446,17 @@ namespace Sistema_Inventario.Presentacion
             return panel;
         }
 
-        // =====================================
         // KPI
-        // =====================================
 
         private void CargarIndicadores()
         {
             try
             {
+                // ABRE LA CONEXION
                 SqlConnection conexion =
                     cn.AbrirConexion();
 
+                // CONSULTA PRODUCTOS
                 SqlCommand cmdProductos =
                     new SqlCommand(
                         "SELECT COUNT(*) FROM Productos",
@@ -464,6 +465,7 @@ namespace Sistema_Inventario.Presentacion
                 lblProductos.Text =
                     cmdProductos.ExecuteScalar().ToString();
 
+                // CONSULTA BODEGAS
                 SqlCommand cmdBodegas =
                     new SqlCommand(
                         "SELECT COUNT(*) FROM Bodegas",
@@ -472,6 +474,7 @@ namespace Sistema_Inventario.Presentacion
                 lblClientes.Text =
                     cmdBodegas.ExecuteScalar().ToString();
 
+                // CONSULTA STOCK BAJO
                 SqlCommand cmdStockBajo =
                     new SqlCommand(
                         @"SELECT COUNT(*)
@@ -482,6 +485,7 @@ namespace Sistema_Inventario.Presentacion
                 lblVentas.Text =
                     cmdStockBajo.ExecuteScalar().ToString();
 
+                // CONSULTA TRANSFERENCIAS
                 SqlCommand cmdTransferencias =
                     new SqlCommand(
                         @"SELECT COUNT(*)
@@ -493,26 +497,28 @@ namespace Sistema_Inventario.Presentacion
                 lblLogin.Text =
                     cmdTransferencias.ExecuteScalar().ToString();
 
+                // CIERRA LA CONEXION
                 cn.CerrarConexion();
             }
             catch (Exception ex)
             {
+                // MUESTRA EL ERROR
                 MessageBox.Show(
                     ex.Message);
             }
         }
 
-        // =====================================
         // ACTIVIDAD
-        // =====================================
 
         private void CargarActividad()
         {
             try
             {
+                // ABRE LA CONEXION
                 SqlConnection conexion =
                     cn.AbrirConexion();
 
+                // CONSULTA LOGS
                 SqlDataAdapter da =
                     new SqlDataAdapter(
                         @"SELECT TOP 15
@@ -524,34 +530,39 @@ FROM LogsSistema
 ORDER BY Fecha DESC",
                         conexion);
 
+                // TABLA TEMPORAL
                 DataTable dt =
                     new DataTable();
 
+                // LLENA LA TABLA
                 da.Fill(dt);
 
+                // MUESTRA LOS DATOS
                 dgvActividad.DataSource =
                     dt;
 
+                // CIERRA LA CONEXION
                 cn.CerrarConexion();
             }
             catch (Exception ex)
             {
+                // MUESTRA EL ERROR
                 MessageBox.Show(
                     ex.Message);
             }
         }
 
-        // =====================================
         // GRAFICA
-        // =====================================
 
         private void CargarGraficaMovimientos()
         {
             try
             {
+                // ABRE LA CONEXION
                 SqlConnection conexion =
                     cn.AbrirConexion();
 
+                // CONSULTA MOVIMIENTOS
                 SqlCommand cmd =
                     new SqlCommand(
                         @"SELECT
@@ -563,12 +574,15 @@ ORDER BY Fecha DESC",
                         ORDER BY Dia",
                         conexion);
 
+                // EJECUTA EL READER
                 SqlDataReader dr =
                     cmd.ExecuteReader();
 
+                // LIMPIA LA GRAFICA
                 chartMovimientos.Series[0]
                     .Points.Clear();
 
+                // RECORRE LOS DATOS
                 while (dr.Read())
                 {
                     chartMovimientos.Series[0]
@@ -579,12 +593,15 @@ ORDER BY Fecha DESC",
                         dr["Total"]);
                 }
 
+                // CIERRA EL READER
                 dr.Close();
 
+                // CIERRA LA CONEXION
                 cn.CerrarConexion();
             }
             catch (Exception ex)
             {
+                // MUESTRA EL ERROR
                 MessageBox.Show(
                     ex.Message);
             }

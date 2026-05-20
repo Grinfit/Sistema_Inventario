@@ -1,4 +1,5 @@
-﻿using Sistema_Inventario.Logica;
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+using Sistema_Inventario.Logica;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -6,44 +7,46 @@ using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
+    // FORMULARIO DE MOVIMIENTOS DE INVENTARIO
     public partial class FrmMovimientosInventario : Form
     {
+        // OBJETO DE LA CAPA LOGICA
         LMovimientosInventario lMovimientos =
             new LMovimientosInventario();
 
+        // CONSTRUCTOR DEL FORMULARIO
         public FrmMovimientosInventario()
         {
             InitializeComponent();
 
+            // CONFIGURA EL GRID
             ConfigurarGrid();
         }
 
-        // =====================================
         // LOAD
-        // =====================================
 
         private void FrmMovimientosInventario_Load(
             object sender,
             EventArgs e)
         {
+            // CARGA TIPOS DE MOVIMIENTO
             CargarTiposMovimiento();
 
+            // CARGA PRODUCTOS
             CargarProductos();
 
+            // CARGA BODEGAS
             CargarBodegas();
 
+            // MUESTRA LOS MOVIMIENTOS
             MostrarMovimientos();
         }
 
-        // =====================================
         // CONFIG GRID
-        // =====================================
 
         private void ConfigurarGrid()
         {
-            // ===============================
             // CONFIG GENERAL
-            // ===============================
 
             dgvMovimientos.EnableHeadersVisualStyles =
                 false;
@@ -78,9 +81,7 @@ namespace Sistema_Inventario.Presentacion
             dgvMovimientos.GridColor =
                 Color.LightGray;
 
-            // ===============================
             // HEADER
-            // ===============================
 
             dgvMovimientos.ColumnHeadersBorderStyle =
                 DataGridViewHeaderBorderStyle.None;
@@ -100,9 +101,7 @@ namespace Sistema_Inventario.Presentacion
             dgvMovimientos.ColumnHeadersHeight =
                 45;
 
-            // ===============================
             // FILAS
-            // ===============================
 
             dgvMovimientos.DefaultCellStyle.Font =
                 new Font(
@@ -125,75 +124,85 @@ namespace Sistema_Inventario.Presentacion
                 35;
         }
 
-        // =====================================
         // COMBOS
-        // =====================================
 
         private void CargarTiposMovimiento()
         {
+            // ASIGNA DATOS AL COMBOBOX
             cboTipoMovimiento.DataSource =
                 lMovimientos.MostrarTiposMovimiento();
 
+            // MUESTRA EL NOMBRE
             cboTipoMovimiento.DisplayMember =
                 "Nombre";
 
+            // ASIGNA EL ID
             cboTipoMovimiento.ValueMember =
                 "IdTipoMovimiento";
 
+            // SELECCIONA EL PRIMER ITEM
             cboTipoMovimiento.SelectedIndex = 0;
         }
 
         private void CargarProductos()
         {
+            // ASIGNA DATOS AL COMBOBOX
             cboProducto.DataSource =
                 lMovimientos.MostrarProductos();
 
+            // MUESTRA EL NOMBRE
             cboProducto.DisplayMember =
                 "Nombre";
 
+            // ASIGNA EL ID
             cboProducto.ValueMember =
                 "IdProducto";
 
+            // SELECCIONA EL PRIMER ITEM
             cboProducto.SelectedIndex = 0;
         }
 
         private void CargarBodegas()
         {
+            // ASIGNA DATOS AL COMBOBOX
             cboBodega.DataSource =
                 lMovimientos.MostrarBodegas();
 
+            // MUESTRA EL NOMBRE
             cboBodega.DisplayMember =
                 "Nombre";
 
+            // ASIGNA EL ID
             cboBodega.ValueMember =
                 "IdBodega";
 
+            // SELECCIONA EL PRIMER ITEM
             cboBodega.SelectedIndex = 0;
         }
 
-        // =====================================
         // GRID
-        // =====================================
 
         private void MostrarMovimientos()
         {
+            // MUESTRA LOS MOVIMIENTOS
             dgvMovimientos.DataSource =
                 lMovimientos.MostrarMovimientos();
 
+            // FORMATEA LAS COLUMNAS
             FormatearColumnas();
         }
 
-        // =====================================
         // FORMATEAR COLUMNAS
-        // =====================================
 
         private void FormatearColumnas()
         {
+            // VALIDA SI EXISTEN COLUMNAS
             if (dgvMovimientos.Columns.Count == 0)
                 return;
 
             try
             {
+                // ANCHO DE COLUMNAS
                 dgvMovimientos.Columns["IdMovimiento"].Width = 90;
 
                 dgvMovimientos.Columns["TipoMovimiento"].Width = 150;
@@ -210,9 +219,7 @@ namespace Sistema_Inventario.Presentacion
 
                 dgvMovimientos.Columns["UsuarioRegistro"].Width = 160;
 
-                // ===========================
                 // HEADERS
-                // ===========================
 
                 dgvMovimientos.Columns["IdMovimiento"].HeaderText =
                     "ID";
@@ -223,9 +230,7 @@ namespace Sistema_Inventario.Presentacion
                 dgvMovimientos.Columns["UsuarioRegistro"].HeaderText =
                     "Usuario Registro";
 
-                // ===========================
                 // ALIGNMENTS
-                // ===========================
 
                 dgvMovimientos.Columns["IdMovimiento"]
                     .DefaultCellStyle.Alignment =
@@ -239,9 +244,7 @@ namespace Sistema_Inventario.Presentacion
                     .DefaultCellStyle.Alignment =
                     DataGridViewContentAlignment.MiddleCenter;
 
-                // ===========================
                 // WRAP
-                // ===========================
 
                 dgvMovimientos.Columns["Observacion"]
                     .DefaultCellStyle.WrapMode =
@@ -253,34 +256,32 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-        // =====================================
         // LIMPIAR
-        // =====================================
 
         private void LimpiarCampos()
         {
+            // LIMPIA LA CANTIDAD
             txtCantidad.Clear();
 
+            // LIMPIA LA OBSERVACION
             txtObservacion.Clear();
 
+            // RESETEA LOS COMBOS
             cboTipoMovimiento.SelectedIndex = 0;
 
             cboProducto.SelectedIndex = 0;
 
             cboBodega.SelectedIndex = 0;
 
+            // ENVIA EL FOCO
             txtCantidad.Focus();
         }
 
-        // =====================================
         // VALIDAR
-        // =====================================
 
         private bool ValidarCampos()
         {
-            // ===============================
             // CANTIDAD VACIA
-            // ===============================
 
             if (txtCantidad.Text.Trim() == "")
             {
@@ -295,9 +296,7 @@ namespace Sistema_Inventario.Presentacion
                 return false;
             }
 
-            // ===============================
             // NUMERO VALIDO
-            // ===============================
 
             if (!decimal.TryParse(
                 txtCantidad.Text,
@@ -314,9 +313,7 @@ namespace Sistema_Inventario.Presentacion
                 return false;
             }
 
-            // ===============================
             // MAYOR A 0
-            // ===============================
 
             if (cantidad <= 0)
             {
@@ -331,9 +328,7 @@ namespace Sistema_Inventario.Presentacion
                 return false;
             }
 
-            // ===============================
             // OBSERVACION
-            // ===============================
 
             if (txtObservacion.Text.Trim() == "")
             {
@@ -348,9 +343,7 @@ namespace Sistema_Inventario.Presentacion
                 return false;
             }
 
-            // ===============================
             // LONGITUD OBSERVACION
-            // ===============================
 
             if (txtObservacion.Text.Length < 5)
             {
@@ -368,9 +361,7 @@ namespace Sistema_Inventario.Presentacion
             return true;
         }
 
-        // =====================================
         // GUARDAR
-        // =====================================
 
         private void btnGuardar_Click(
             object sender,
@@ -378,9 +369,7 @@ namespace Sistema_Inventario.Presentacion
         {
             try
             {
-                // ===========================
                 // VALIDACIONES
-                // ===========================
 
                 if (!ValidarCampos())
                     return;
@@ -394,9 +383,7 @@ namespace Sistema_Inventario.Presentacion
                     .ToUpper()
                     .Trim();
 
-                // ===========================
                 // VALIDAR SALIDAS
-                // ===========================
 
                 if (tipoMovimiento == "SALIDA")
                 {
@@ -420,9 +407,7 @@ namespace Sistema_Inventario.Presentacion
                     }
                 }
 
-                // ===========================
-                // REGISTRAR
-                // ===========================
+                // REGISTRAR MOVIMIENTO
 
                 lMovimientos.RegistrarMovimiento(
                     Convert.ToInt32(
@@ -446,8 +431,10 @@ namespace Sistema_Inventario.Presentacion
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
+                // ACTUALIZA EL GRID
                 MostrarMovimientos();
 
+                // LIMPIA LOS CAMPOS
                 LimpiarCampos();
             }
             catch (Exception ex)
@@ -460,20 +447,17 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-        // =====================================
         // NUEVO
-        // =====================================
 
         private void btnNuevo_Click(
             object sender,
             EventArgs e)
         {
+            // LIMPIA LOS CAMPOS
             LimpiarCampos();
         }
 
-        // =====================================
         // EXPORTAR
-        // =====================================
 
         private void btnExportar_Click(
             object sender,
@@ -481,6 +465,7 @@ namespace Sistema_Inventario.Presentacion
         {
             try
             {
+                // VALIDA SI EXISTEN DATOS
                 if (dgvMovimientos.Rows.Count == 0)
                 {
                     MessageBox.Show(
@@ -492,6 +477,7 @@ namespace Sistema_Inventario.Presentacion
                     return;
                 }
 
+                // EXPORTA EL REPORTE
                 ExportarExcel.Exportar(
                     dgvMovimientos,
                     "Reporte_Movimientos");
@@ -512,14 +498,13 @@ namespace Sistema_Inventario.Presentacion
             }
         }
 
-        // =====================================
         // SOLO NUMEROS
-        // =====================================
 
         private void txtCantidad_KeyPress(
             object sender,
             KeyPressEventArgs e)
         {
+            // VALIDA SI ES NUMERO O PUNTO
             if (!char.IsControl(e.KeyChar) &&
                 !char.IsDigit(e.KeyChar) &&
                 e.KeyChar != '.')
@@ -527,6 +512,7 @@ namespace Sistema_Inventario.Presentacion
                 e.Handled = true;
             }
 
+            // EVITA DOS PUNTOS
             if (e.KeyChar == '.' &&
                 txtCantidad.Text.Contains("."))
             {
