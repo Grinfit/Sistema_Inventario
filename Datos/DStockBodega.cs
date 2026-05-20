@@ -1,22 +1,24 @@
-﻿using System.Data;
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS PARA EL MANEJO DE DATOS Y SQL SERVER
+using System.Data;
 using System.Data.SqlClient;
 
 namespace Sistema_Inventario.Datos
 {
+    // CLASE ENCARGADA DE MOSTRAR EL STOCK DE LAS BODEGAS
     public class DStockBodega
     {
+        // OBJETO DE CONEXION A LA BASE DE DATOS
         Conexion cn =
             new Conexion();
 
-        // =====================================
-        // MOSTRAR STOCK
-        // =====================================
-
+        // METODO PARA MOSTRAR TODO EL STOCK
         public DataTable MostrarStock()
         {
+            // CREACION DE TABLA TEMPORAL
             DataTable tabla =
                 new DataTable();
 
+            // CONSULTA SQL PARA MOSTRAR EL STOCK ACTUAL
             SqlDataAdapter da =
                 new SqlDataAdapter(
                     @"SELECT
@@ -32,22 +34,24 @@ namespace Sistema_Inventario.Datos
                     ORDER BY P.Nombre",
                     cn.AbrirConexion());
 
+            // LLENA LA TABLA CON LOS DATOS
             da.Fill(tabla);
 
+            // CIERRA LA CONEXION
             cn.CerrarConexion();
 
+            // RETORNA LOS DATOS
             return tabla;
         }
 
-        // =====================================
-        // STOCK BAJO
-        // =====================================
-
+        // METODO PARA MOSTRAR PRODUCTOS CON STOCK BAJO
         public DataTable MostrarStockBajo()
         {
+            // CREACION DE TABLA TEMPORAL
             DataTable tabla =
                 new DataTable();
 
+            // CONSULTA SQL PARA MOSTRAR PRODUCTOS CON STOCK MENOR O IGUAL A 5
             SqlDataAdapter da =
                 new SqlDataAdapter(
                     @"SELECT
@@ -64,10 +68,13 @@ namespace Sistema_Inventario.Datos
                     ORDER BY SB.StockActual ASC",
                     cn.AbrirConexion());
 
+            // LLENA LA TABLA CON LOS DATOS
             da.Fill(tabla);
 
+            // CIERRA LA CONEXION
             cn.CerrarConexion();
 
+            // RETORNA LOS DATOS
             return tabla;
         }
     }

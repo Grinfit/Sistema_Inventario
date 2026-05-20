@@ -1,26 +1,23 @@
-﻿using Sistema_Inventario.Datos;
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+using Sistema_Inventario.Datos;
 using System.Data;
 
 namespace Sistema_Inventario.Logica
 {
+    // CLASE ENCARGADA DE LA LOGICA DE BODEGAS
     public class LBodegas
     {
+        // OBJETO DE LA CLASE DBODEGAS
         DBodegas dBodegas =
             new DBodegas();
 
-        // =========================================
-        // MOSTRAR
-        // =========================================
-
+        // METODO PARA MOSTRAR LAS BODEGAS
         public DataTable MostrarBodegas()
         {
             return dBodegas.MostrarBodegas();
         }
 
-        // =========================================
-        // INSERTAR
-        // =========================================
-
+        // METODO PARA INSERTAR UNA BODEGA
         public void InsertarBodega(
             string nombre,
             string direccion)
@@ -30,10 +27,7 @@ namespace Sistema_Inventario.Logica
                 direccion);
         }
 
-        // =========================================
-        // EDITAR
-        // =========================================
-
+        // METODO PARA EDITAR UNA BODEGA
         public void EditarBodega(
             int idBodega,
             string nombre,
@@ -45,10 +39,7 @@ namespace Sistema_Inventario.Logica
                 direccion);
         }
 
-        // =========================================
-        // ELIMINAR
-        // =========================================
-
+        // METODO PARA ELIMINAR UNA BODEGA
         public void EliminarBodega(
             int idBodega)
         {
@@ -56,10 +47,7 @@ namespace Sistema_Inventario.Logica
                 idBodega);
         }
 
-        // =========================================
-        // BUSCAR
-        // =========================================
-
+        // METODO PARA BUSCAR UNA BODEGA
         public DataTable BuscarBodega(
             string buscar)
         {

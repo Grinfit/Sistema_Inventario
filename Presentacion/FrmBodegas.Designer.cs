@@ -1,63 +1,93 @@
-﻿using System.Drawing;
+﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+using System.Drawing;
 using System.Windows.Forms;
 using FontAwesome.Sharp;
 
 namespace Sistema_Inventario.Presentacion
 {
+    // CLASE PARCIAL DEL FORMULARIO BODEGAS
     partial class FrmBodegas
     {
+        // CONTENEDOR DE COMPONENTES DEL FORMULARIO
         private System.ComponentModel.IContainer components = null;
 
+        // METODO PARA LIBERAR RECURSOS
         protected override void Dispose(bool disposing)
         {
+            // VERIFICA SI LOS COMPONENTES DEBEN SER LIBERADOS
             if (disposing && (components != null))
             {
+                // LIBERA LOS COMPONENTES
                 components.Dispose();
             }
 
+            // LLAMA AL METODO BASE
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
+        // METODO PARA INICIALIZAR LOS COMPONENTES
         private void InitializeComponent()
         {
+            // ESTILOS DEL DATAGRIDVIEW
             DataGridViewCellStyle headerStyle =
                 new DataGridViewCellStyle();
 
             DataGridViewCellStyle rowsStyle =
                 new DataGridViewCellStyle();
 
-            // =========================================
-            // CONTROLES
-            // =========================================
+            // CONTROLES DEL FORMULARIO
 
-            this.lblTitulo = new Label();
+            // LABEL TITULO
+            this.lblTitulo =
+                new Label();
 
-            this.label1 = new Label();
-            this.label2 = new Label();
-            this.label3 = new Label();
+            // LABELS
+            this.label1 =
+                new Label();
 
-            this.txtNombre = new TextBox();
-            this.txtDireccion = new TextBox();
-            this.txtBuscar = new TextBox();
+            this.label2 =
+                new Label();
 
-            this.btnNuevo = new IconButton();
-            this.btnGuardar = new IconButton();
-            this.btnEditar = new IconButton();
-            this.btnEliminar = new IconButton();
-            this.btnBuscar = new IconButton();
+            this.label3 =
+                new Label();
 
-            this.dgvBodegas = new DataGridView();
+            // TEXTBOX
+            this.txtNombre =
+                new TextBox();
+
+            this.txtDireccion =
+                new TextBox();
+
+            this.txtBuscar =
+                new TextBox();
+
+            // BOTONES
+            this.btnNuevo =
+                new IconButton();
+
+            this.btnGuardar =
+                new IconButton();
+
+            this.btnEditar =
+                new IconButton();
+
+            this.btnEliminar =
+                new IconButton();
+
+            this.btnBuscar =
+                new IconButton();
+
+            // DATAGRIDVIEW
+            this.dgvBodegas =
+                new DataGridView();
 
             ((System.ComponentModel.ISupportInitialize)(this.dgvBodegas)).BeginInit();
 
             this.SuspendLayout();
 
-            // =========================================
-            // FORMULARIO
-            // =========================================
-
+            // CONFIGURACION DEL FORMULARIO
             this.ClientSize =
                 new Size(1350, 860);
 
@@ -73,14 +103,13 @@ namespace Sistema_Inventario.Presentacion
             this.Text =
                 "FrmBodegas";
 
+            // EVENTO LOAD DEL FORMULARIO
             this.Load +=
                 new System.EventHandler(this.FrmBodegas_Load);
 
-            // =========================================
-            // TITULO
-            // =========================================
-
-            this.lblTitulo.AutoSize = true;
+            // CONFIGURACION LABEL TITULO
+            this.lblTitulo.AutoSize =
+                true;
 
             this.lblTitulo.Font =
                 new Font(
@@ -97,11 +126,9 @@ namespace Sistema_Inventario.Presentacion
             this.lblTitulo.Text =
                 "Gestión de Bodegas";
 
-            // =========================================
-            // LABEL BUSCAR
-            // =========================================
-
-            this.label3.AutoSize = true;
+            // CONFIGURACION LABEL BUSCAR
+            this.label3.AutoSize =
+                true;
 
             this.label3.Font =
                 new Font(
@@ -115,10 +142,7 @@ namespace Sistema_Inventario.Presentacion
             this.label3.Text =
                 "Buscar Bodega";
 
-            // =========================================
-            // TXT BUSCAR
-            // =========================================
-
+            // CONFIGURACION TXT BUSCAR
             this.txtBuscar.Font =
                 new Font(
                     "Segoe UI",
@@ -133,17 +157,15 @@ namespace Sistema_Inventario.Presentacion
             this.txtBuscar.BorderStyle =
                 BorderStyle.FixedSingle;
 
-            // =========================================
-            // BTN BUSCAR
-            // =========================================
-
+            // CONFIGURACION BTN BUSCAR
             this.btnBuscar.BackColor =
                 Color.FromArgb(10, 35, 66);
 
             this.btnBuscar.FlatStyle =
                 FlatStyle.Flat;
 
-            this.btnBuscar.FlatAppearance.BorderSize = 0;
+            this.btnBuscar.FlatAppearance.BorderSize =
+                0;
 
             this.btnBuscar.ForeColor =
                 Color.White;
@@ -163,7 +185,8 @@ namespace Sistema_Inventario.Presentacion
             this.btnBuscar.IconFont =
                 IconFont.Auto;
 
-            this.btnBuscar.IconSize = 24;
+            this.btnBuscar.IconSize =
+                24;
 
             this.btnBuscar.Text =
                 " Buscar";
@@ -180,14 +203,13 @@ namespace Sistema_Inventario.Presentacion
             this.btnBuscar.Cursor =
                 Cursors.Hand;
 
+            // EVENTO BOTON BUSCAR
             this.btnBuscar.Click +=
                 new System.EventHandler(this.btnBuscar_Click);
 
-            // =========================================
-            // LABEL NOMBRE
-            // =========================================
-
-            this.label1.AutoSize = true;
+            // CONFIGURACION LABEL NOMBRE
+            this.label1.AutoSize =
+                true;
 
             this.label1.Font =
                 new Font(
@@ -201,10 +223,7 @@ namespace Sistema_Inventario.Presentacion
             this.label1.Text =
                 "Nombre";
 
-            // =========================================
-            // TXT NOMBRE
-            // =========================================
-
+            // CONFIGURACION TXT NOMBRE
             this.txtNombre.Font =
                 new Font(
                     "Segoe UI",
@@ -219,11 +238,9 @@ namespace Sistema_Inventario.Presentacion
             this.txtNombre.BorderStyle =
                 BorderStyle.FixedSingle;
 
-            // =========================================
-            // LABEL DIRECCION
-            // =========================================
-
-            this.label2.AutoSize = true;
+            // CONFIGURACION LABEL DIRECCION
+            this.label2.AutoSize =
+                true;
 
             this.label2.Font =
                 new Font(
@@ -237,10 +254,7 @@ namespace Sistema_Inventario.Presentacion
             this.label2.Text =
                 "Dirección";
 
-            // =========================================
-            // TXT DIRECCION
-            // =========================================
-
+            // CONFIGURACION TXT DIRECCION
             this.txtDireccion.Font =
                 new Font(
                     "Segoe UI",
@@ -255,17 +269,15 @@ namespace Sistema_Inventario.Presentacion
             this.txtDireccion.BorderStyle =
                 BorderStyle.FixedSingle;
 
-            // =========================================
-            // BTN NUEVO
-            // =========================================
-
+            // CONFIGURACION BTN NUEVO
             this.btnNuevo.BackColor =
                 Color.FromArgb(52, 152, 219);
 
             this.btnNuevo.FlatStyle =
                 FlatStyle.Flat;
 
-            this.btnNuevo.FlatAppearance.BorderSize = 0;
+            this.btnNuevo.FlatAppearance.BorderSize =
+                0;
 
             this.btnNuevo.ForeColor =
                 Color.White;
@@ -285,7 +297,8 @@ namespace Sistema_Inventario.Presentacion
             this.btnNuevo.IconFont =
                 IconFont.Auto;
 
-            this.btnNuevo.IconSize = 28;
+            this.btnNuevo.IconSize =
+                28;
 
             this.btnNuevo.Text =
                 " Nuevo";
@@ -302,17 +315,15 @@ namespace Sistema_Inventario.Presentacion
             this.btnNuevo.Cursor =
                 Cursors.Hand;
 
-            // =========================================
-            // BTN GUARDAR
-            // =========================================
-
+            // CONFIGURACION BTN GUARDAR
             this.btnGuardar.BackColor =
                 Color.FromArgb(46, 204, 113);
 
             this.btnGuardar.FlatStyle =
                 FlatStyle.Flat;
 
-            this.btnGuardar.FlatAppearance.BorderSize = 0;
+            this.btnGuardar.FlatAppearance.BorderSize =
+                0;
 
             this.btnGuardar.ForeColor =
                 Color.White;
@@ -332,7 +343,8 @@ namespace Sistema_Inventario.Presentacion
             this.btnGuardar.IconFont =
                 IconFont.Auto;
 
-            this.btnGuardar.IconSize = 28;
+            this.btnGuardar.IconSize =
+                28;
 
             this.btnGuardar.Text =
                 " Guardar";
@@ -349,17 +361,15 @@ namespace Sistema_Inventario.Presentacion
             this.btnGuardar.Cursor =
                 Cursors.Hand;
 
-            // =========================================
-            // BTN EDITAR
-            // =========================================
-
+            // CONFIGURACION BTN EDITAR
             this.btnEditar.BackColor =
                 Color.FromArgb(241, 196, 15);
 
             this.btnEditar.FlatStyle =
                 FlatStyle.Flat;
 
-            this.btnEditar.FlatAppearance.BorderSize = 0;
+            this.btnEditar.FlatAppearance.BorderSize =
+                0;
 
             this.btnEditar.ForeColor =
                 Color.White;
@@ -379,7 +389,8 @@ namespace Sistema_Inventario.Presentacion
             this.btnEditar.IconFont =
                 IconFont.Auto;
 
-            this.btnEditar.IconSize = 28;
+            this.btnEditar.IconSize =
+                28;
 
             this.btnEditar.Text =
                 " Editar";
@@ -396,17 +407,15 @@ namespace Sistema_Inventario.Presentacion
             this.btnEditar.Cursor =
                 Cursors.Hand;
 
-            // =========================================
-            // BTN ELIMINAR
-            // =========================================
-
+            // CONFIGURACION BTN ELIMINAR
             this.btnEliminar.BackColor =
                 Color.FromArgb(231, 76, 60);
 
             this.btnEliminar.FlatStyle =
                 FlatStyle.Flat;
 
-            this.btnEliminar.FlatAppearance.BorderSize = 0;
+            this.btnEliminar.FlatAppearance.BorderSize =
+                0;
 
             this.btnEliminar.ForeColor =
                 Color.White;
@@ -426,7 +435,8 @@ namespace Sistema_Inventario.Presentacion
             this.btnEliminar.IconFont =
                 IconFont.Auto;
 
-            this.btnEliminar.IconSize = 28;
+            this.btnEliminar.IconSize =
+                28;
 
             this.btnEliminar.Text =
                 " Eliminar";
@@ -443,13 +453,12 @@ namespace Sistema_Inventario.Presentacion
             this.btnEliminar.Cursor =
                 Cursors.Hand;
 
-            // =========================================
-            // DATAGRIDVIEW
-            // =========================================
+            // CONFIGURACION DATAGRIDVIEW
+            this.dgvBodegas.AllowUserToAddRows =
+                false;
 
-            this.dgvBodegas.AllowUserToAddRows = false;
-
-            this.dgvBodegas.AllowUserToDeleteRows = false;
+            this.dgvBodegas.AllowUserToDeleteRows =
+                false;
 
             this.dgvBodegas.AutoSizeColumnsMode =
                 DataGridViewAutoSizeColumnsMode.Fill;
@@ -469,28 +478,31 @@ namespace Sistema_Inventario.Presentacion
             this.dgvBodegas.Size =
                 new Size(1500, 400);
 
-            this.dgvBodegas.ReadOnly = true;
+            this.dgvBodegas.ReadOnly =
+                true;
 
-            this.dgvBodegas.RowHeadersVisible = false;
+            this.dgvBodegas.RowHeadersVisible =
+                false;
 
             this.dgvBodegas.SelectionMode =
                 DataGridViewSelectionMode.FullRowSelect;
 
-            this.dgvBodegas.MultiSelect = false;
+            this.dgvBodegas.MultiSelect =
+                false;
 
-            this.dgvBodegas.EnableHeadersVisualStyles = false;
+            this.dgvBodegas.EnableHeadersVisualStyles =
+                false;
 
-            this.dgvBodegas.ColumnHeadersHeight = 45;
+            this.dgvBodegas.ColumnHeadersHeight =
+                45;
 
             this.dgvBodegas.ColumnHeadersHeightSizeMode =
                 DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
 
-            this.dgvBodegas.RowTemplate.Height = 42;
+            this.dgvBodegas.RowTemplate.Height =
+                42;
 
-            // =========================================
-            // HEADER STYLE
-            // =========================================
-
+            // CONFIGURACION ESTILO HEADER
             headerStyle.BackColor =
                 Color.FromArgb(10, 35, 66);
 
@@ -506,10 +518,7 @@ namespace Sistema_Inventario.Presentacion
             this.dgvBodegas.ColumnHeadersDefaultCellStyle =
                 headerStyle;
 
-            // =========================================
-            // ROW STYLE
-            // =========================================
-
+            // CONFIGURACION ESTILO FILAS
             rowsStyle.Font =
                 new Font(
                     "Segoe UI",
@@ -533,14 +542,12 @@ namespace Sistema_Inventario.Presentacion
             this.dgvBodegas.GridColor =
                 Color.FromArgb(225, 225, 225);
 
+            // EVENTO CELLCLICK
             this.dgvBodegas.CellClick +=
                 new DataGridViewCellEventHandler(
                     this.dgvBodegas_CellClick);
 
-            // =========================================
             // EVENTOS BOTONES
-            // =========================================
-
             this.btnNuevo.Click +=
                 new System.EventHandler(this.btnNuevo_Click);
 
@@ -553,10 +560,7 @@ namespace Sistema_Inventario.Presentacion
             this.btnEliminar.Click +=
                 new System.EventHandler(this.btnEliminar_Click);
 
-            // =========================================
-            // CONTROLES
-            // =========================================
-
+            // AGREGA LOS CONTROLES
             this.Controls.Add(this.lblTitulo);
 
             this.Controls.Add(this.label1);
@@ -585,22 +589,27 @@ namespace Sistema_Inventario.Presentacion
 
         #endregion
 
+        // LABEL TITULO
         private Label lblTitulo;
 
+        // LABELS
         private Label label1;
         private Label label2;
         private Label label3;
 
+        // TEXTBOX
         private TextBox txtNombre;
         private TextBox txtDireccion;
         private TextBox txtBuscar;
 
+        // BOTONES
         private IconButton btnNuevo;
         private IconButton btnGuardar;
         private IconButton btnEditar;
         private IconButton btnEliminar;
         private IconButton btnBuscar;
 
+        // DATAGRIDVIEW
         private DataGridView dgvBodegas;
     }
 }
