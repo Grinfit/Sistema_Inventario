@@ -188,7 +188,7 @@ namespace Sistema_Inventario.Presentacion
 
                 log.RegistrarLog(
                     "ERROR PRODUCTOS",
-                    "admin",
+                    SesionUsuario.Usuario,
                     ex.Message);
             }
         }
@@ -240,6 +240,11 @@ namespace Sistema_Inventario.Presentacion
 
                 MessageBox.Show(
                     "Producto guardado correctamente");
+
+                log.RegistrarLog(
+    "PRODUCTO_CREATE",
+    SesionUsuario.Usuario,
+    "Producto agregado: " + txtNombre.Text);
 
                 MostrarProductos();
 
@@ -328,6 +333,11 @@ namespace Sistema_Inventario.Presentacion
                 MessageBox.Show(
                     "Producto actualizado");
 
+                log.RegistrarLog(
+    "PRODUCTO_UPDATE",
+    SesionUsuario.Usuario,
+    "Producto actualizado: " + txtNombre.Text);
+
                 MostrarProductos();
 
                 LimpiarCampos();
@@ -374,6 +384,11 @@ namespace Sistema_Inventario.Presentacion
 
                     MessageBox.Show(
                         "Producto eliminado");
+
+                    log.RegistrarLog(
+    "PRODUCTO_DELETE",
+    SesionUsuario.Usuario,
+    "Producto eliminado: " + txtNombre.Text);
 
                     MostrarProductos();
 

@@ -75,8 +75,8 @@ namespace Sistema_Inventario.Presentacion
                     MessageBoxIcon.Error);
 
                 log.RegistrarLog(
-                    "ERROR CLIENTES",
-                    "admin",
+                    "ERROR_CLIENTES",
+                    SesionUsuario.Usuario,
                     ex.Message);
             }
         }
@@ -234,6 +234,11 @@ namespace Sistema_Inventario.Presentacion
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
+                log.RegistrarLog(
+    "CLIENTE_CREATE",
+    SesionUsuario.Usuario,
+    "Cliente agregado: " + txtNombre.Text);
+
                 MostrarClientes();
 
                 LimpiarCampos();
@@ -250,7 +255,7 @@ namespace Sistema_Inventario.Presentacion
 
                 log.RegistrarLog(
                     "ERROR CLIENTE",
-                    "admin",
+                    SesionUsuario.Usuario,
                     ex.Message);
             }
         }
@@ -353,6 +358,11 @@ namespace Sistema_Inventario.Presentacion
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
+                log.RegistrarLog(
+    "CLIENTE_UPDATE",
+    SesionUsuario.Usuario,
+    "Cliente actualizado: " + txtNombre.Text);
+
                 MostrarClientes();
 
                 LimpiarCampos();
@@ -370,8 +380,8 @@ namespace Sistema_Inventario.Presentacion
                     MessageBoxIcon.Error);
 
                 log.RegistrarLog(
-                    "ERROR EDITAR CLIENTE",
-                    "admin",
+                    "ERROR_CLIENTE_UPDATE",
+                    SesionUsuario.Usuario,
                     ex.Message);
             }
         }
@@ -423,9 +433,9 @@ namespace Sistema_Inventario.Presentacion
                     cmd.ExecuteNonQuery();
 
                     log.RegistrarLog(
-                        "ELIMINAR CLIENTE",
-                        "admin",
-                        "Cliente eliminado correctamente");
+    "CLIENTE_DELETE",
+    SesionUsuario.Usuario,
+    "Cliente eliminado: " + txtNombre.Text);
 
                     MessageBox.Show(
                         "Cliente eliminado correctamente",
@@ -451,8 +461,8 @@ namespace Sistema_Inventario.Presentacion
                     MessageBoxIcon.Error);
 
                 log.RegistrarLog(
-                    "ERROR ELIMINAR CLIENTE",
-                    "admin",
+                    "ERROR_CLIENTE_DELETE",
+                    SesionUsuario.Usuario,
                     ex.Message);
             }
         }
@@ -497,8 +507,8 @@ namespace Sistema_Inventario.Presentacion
                     MessageBoxIcon.Error);
 
                 log.RegistrarLog(
-                    "ERROR BUSCAR CLIENTE",
-                    "admin",
+                    "ERROR_CLIENTE_SEARCH",
+                    SesionUsuario.Usuario,
                     ex.Message);
             }
         }

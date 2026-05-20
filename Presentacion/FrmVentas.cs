@@ -160,7 +160,7 @@ namespace Sistema_Inventario.Presentacion
 
                 log.RegistrarLog(
                     "ERROR MOSTRAR VENTAS",
-                    "admin",
+                    SesionUsuario.Usuario,
                     ex.Message);
             }
         }
@@ -357,9 +357,16 @@ namespace Sistema_Inventario.Presentacion
                 cmd.ExecuteNonQuery();
 
                 log.RegistrarLog(
-                    "VENTA",
-                    "admin",
-                    "Venta registrada correctamente");
+    "VENTA_CREATE",
+    SesionUsuario.Usuario,
+    "Venta registrada | Cliente: " +
+    cbClientes.Text +
+    " | Producto: " +
+    cbProductos.Text +
+    " | Cantidad: " +
+    txtCantidad.Text +
+    " | Total: $" +
+    txtTotal.Text);
 
                 MessageBox.Show(
                     "Venta registrada correctamente",
@@ -382,8 +389,8 @@ namespace Sistema_Inventario.Presentacion
                     MessageBoxIcon.Error);
 
                 log.RegistrarLog(
-                    "ERROR VENTA",
-                    "admin",
+                    "ERROR_VENTA_CREATE",
+                    SesionUsuario.Usuario,
                     ex.Message);
             }
         }

@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 
 using Sistema_Inventario.Datos;
-
+using System.Windows.Forms;
 namespace Sistema_Inventario.Utilidades
 {
     internal class Logger
@@ -17,32 +17,40 @@ namespace Sistema_Inventario.Utilidades
         {
             try
             {
-                SqlCommand cmd = new SqlCommand(
-                    "sp_InsertarLog",
-                    cn.AbrirConexion());
+                using (SqlCommand cmd =
+                    new SqlCommand(
+                        "sp_InsertarLog",
+                        cn.AbrirConexion()))
+                {
+                    cmd.CommandType =
+                        CommandType.StoredProcedure;
 
-                cmd.CommandType =
-                    CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue(
+                        "@Evento",
+                        evento);
 
-                cmd.Parameters.AddWithValue(
-                    "@Evento",
-                    evento);
+                    cmd.Parameters.AddWithValue(
+                        "@Usuario",
+                        usuario);
 
-                cmd.Parameters.AddWithValue(
-                    "@Usuario",
-                    usuario);
+                    cmd.Parameters.AddWithValue(
+                        "@Descripcion",
+                        descripcion);
 
-                cmd.Parameters.AddWithValue(
-                    "@Descripcion",
-                    descripcion);
-
-                cmd.ExecuteNonQuery();
-
-                cn.CerrarConexion();
+                    cmd.ExecuteNonQuery();
+                }
             }
-            catch
+            catch (Exception ex)
             {
-
+                MessageBox.Show(
+                    "Error al registrar log: " + ex.Message,
+                    "Logger",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                cn.CerrarConexion();
             }
         }
     }
