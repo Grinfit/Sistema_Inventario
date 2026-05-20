@@ -77,8 +77,17 @@ namespace Sistema_Inventario.Presentacion
 
         private void ConfigurarDataGrid()
         {
+            dgvBackupHistorial.BorderStyle =
+                BorderStyle.None;
+
+            dgvBackupHistorial.BackgroundColor =
+                Color.White;
+
             dgvBackupHistorial.AutoSizeColumnsMode =
                 DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvBackupHistorial.AutoSizeRowsMode =
+                DataGridViewAutoSizeRowsMode.AllCells;
 
             dgvBackupHistorial.RowHeadersVisible =
                 false;
@@ -95,8 +104,18 @@ namespace Sistema_Inventario.Presentacion
             dgvBackupHistorial.MultiSelect =
                 false;
 
+            dgvBackupHistorial.ReadOnly =
+                true;
+
             dgvBackupHistorial.EnableHeadersVisualStyles =
                 false;
+
+            dgvBackupHistorial.ScrollBars =
+                ScrollBars.Vertical;
+
+            // ============================================
+            // HEADER
+            // ============================================
 
             dgvBackupHistorial.ColumnHeadersDefaultCellStyle.BackColor =
                 Color.FromArgb(15, 35, 65);
@@ -104,12 +123,63 @@ namespace Sistema_Inventario.Presentacion
             dgvBackupHistorial.ColumnHeadersDefaultCellStyle.ForeColor =
                 Color.White;
 
+            dgvBackupHistorial.ColumnHeadersDefaultCellStyle.Font =
+                new Font(
+                    "Segoe UI",
+                    10,
+                    FontStyle.Bold);
+
+            dgvBackupHistorial.ColumnHeadersHeight =
+                40;
+
+            // ============================================
+            // FILAS
+            // ============================================
+
             dgvBackupHistorial.DefaultCellStyle.Font =
-                new Font("Segoe UI", 10);
+                new Font(
+                    "Segoe UI",
+                    9);
+
+            dgvBackupHistorial.RowTemplate.Height =
+                35;
 
             dgvBackupHistorial.AlternatingRowsDefaultCellStyle.BackColor =
                 Color.FromArgb(240, 240, 240);
+
+            // ============================================
+            // AJUSTE COLUMNAS
+            // ============================================
+
+            dgvBackupHistorial.Columns["FechaBackup"].FillWeight =
+                18;
+
+            dgvBackupHistorial.Columns["TipoBackup"].FillWeight =
+                14;
+
+            dgvBackupHistorial.Columns["UsuarioSistema"].FillWeight =
+                16;
+
+            dgvBackupHistorial.Columns["RutaArchivo"].Visible =
+                false;
+                //28;
+
+            dgvBackupHistorial.Columns["EstadoBackup"].FillWeight =
+                14;
+
+            dgvBackupHistorial.Columns["TamanoMB"].FillWeight =
+                10;
+
+            dgvBackupHistorial.Columns["Encriptado"].FillWeight =
+                8;
+
+            dgvBackupHistorial.Columns["Verificado"].FillWeight =
+                8;
+
+            dgvBackupHistorial.Columns["Observaciones"].FillWeight =
+                20;
         }
+
 
         // =====================================================
         // HISTORIAL
