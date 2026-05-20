@@ -119,6 +119,7 @@
     <Compile Include="Logica\LProveedores.cs" />
     <Compile Include="Logica\LStockBodega.cs" />
     <Compile Include="Logica\LTransferencias.cs" />
+    <Compile Include="Logica\PasswordService.cs" />
     <Compile Include="Logica\RestoreService.cs" />
     <Compile Include="Logica\ValidationService.cs" />
     <Compile Include="Presentacion\FrmAjustes.cs">
@@ -245,6 +246,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Presentacion\FrmProductos.resx">
       <DependentUpon>FrmProductos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentacion\FrmRoles.resx">
+      <DependentUpon>FrmRoles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

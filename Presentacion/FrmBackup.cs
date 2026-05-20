@@ -43,8 +43,8 @@ namespace Sistema_Inventario.Presentacion
         string baseDatos =
             "Inventario";
 
-        string usuarioSistema =
-            "Administrador";
+        string usuarioSistema =>
+            SesionUsuario.Usuario;
 
         string rutaEspejo =
             @"C:\Backups_Espejo";
@@ -717,7 +717,10 @@ EXITOSO");
 
                     lblEstado.ForeColor =
                         Color.Green;
-
+                    log.RegistrarLog(
+    "RESTORE",
+    usuarioSistema,
+    "Restore realizado correctamente");
                     // ============================================
                     // EMAIL RESTORE EXITOSO
                     // ============================================

@@ -48,8 +48,46 @@ namespace Sistema_Inventario.Presentacion
 
         private void ConfigurarGrid()
         {
+            // =====================================
+            // CONFIG GENERAL
+            // =====================================
+
             dgvRoles.EnableHeadersVisualStyles =
                 false;
+
+            dgvRoles.BorderStyle =
+                BorderStyle.None;
+
+            dgvRoles.CellBorderStyle =
+                DataGridViewCellBorderStyle.SingleHorizontal;
+
+            dgvRoles.BackgroundColor =
+                Color.White;
+
+            dgvRoles.RowHeadersVisible =
+                false;
+
+            dgvRoles.SelectionMode =
+                DataGridViewSelectionMode.FullRowSelect;
+
+            dgvRoles.MultiSelect =
+                false;
+
+            dgvRoles.AllowUserToAddRows =
+                false;
+
+            dgvRoles.AllowUserToResizeRows =
+                false;
+
+            dgvRoles.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill;
+
+            // =====================================
+            // HEADER
+            // =====================================
+
+            dgvRoles.ColumnHeadersBorderStyle =
+                DataGridViewHeaderBorderStyle.None;
 
             dgvRoles.ColumnHeadersDefaultCellStyle.BackColor =
                 Color.FromArgb(11, 31, 58);
@@ -63,10 +101,20 @@ namespace Sistema_Inventario.Presentacion
                     11,
                     FontStyle.Bold);
 
+            dgvRoles.ColumnHeadersHeight =
+                45;
+
+            // =====================================
+            // FILAS
+            // =====================================
+
             dgvRoles.DefaultCellStyle.Font =
                 new Font(
                     "Segoe UI",
                     10);
+
+            dgvRoles.DefaultCellStyle.Padding =
+                new Padding(5);
 
             dgvRoles.DefaultCellStyle.SelectionBackColor =
                 Color.FromArgb(59, 130, 246);
@@ -74,7 +122,18 @@ namespace Sistema_Inventario.Presentacion
             dgvRoles.DefaultCellStyle.SelectionForeColor =
                 Color.White;
 
-            dgvRoles.RowTemplate.Height = 35;
+            dgvRoles.AlternatingRowsDefaultCellStyle.BackColor =
+                Color.FromArgb(245, 247, 250);
+
+            dgvRoles.RowTemplate.Height =
+                38;
+
+            // =====================================
+            // GRID
+            // =====================================
+
+            dgvRoles.GridColor =
+                Color.LightGray;
         }
 
         // =========================================
@@ -508,6 +567,11 @@ namespace Sistema_Inventario.Presentacion
             }
 
             txtNombre.Focus();
+        }
+
+        private void dgvRoles_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 
