@@ -151,12 +151,6 @@
     <Compile Include="Presentacion\FrmBodegas.Designer.cs">
       <DependentUpon>FrmBodegas.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presentacion\FrmClientes.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Presentacion\FrmClientes.Designer.cs">
-      <DependentUpon>FrmClientes.cs</DependentUpon>
-    </Compile>
     <Compile Include="Presentacion\FrmCompras.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -229,12 +223,6 @@
     <Compile Include="Presentacion\FrmUsuarios.Designer.cs">
       <DependentUpon>FrmUsuarios.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presentacion\FrmVentas.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Presentacion\FrmVentas.Designer.cs">
-      <DependentUpon>FrmVentas.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilidades\ExportarExcel.cs" />
@@ -245,9 +233,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Presentacion\FrmBackup.resx">
       <DependentUpon>FrmBackup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Presentacion\FrmClientes.resx">
-      <DependentUpon>FrmClientes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentacion\FrmDashboard.resx">
       <DependentUpon>FrmDashboard.cs</DependentUpon>
@@ -260,9 +245,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Presentacion\FrmProductos.resx">
       <DependentUpon>FrmProductos.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Presentacion\FrmVentas.resx">
-      <DependentUpon>FrmVentas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

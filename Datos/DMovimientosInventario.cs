@@ -2,12 +2,17 @@
 using System.Data;
 using System.Data.SqlClient;
 
+using Sistema_Inventario.Utilidades;
+
 namespace Sistema_Inventario.Datos
 {
     public class DMovimientosInventario
     {
         Conexion cn =
             new Conexion();
+
+        Logger log =
+            new Logger();
 
         // =====================================
         // COMBOS
@@ -82,7 +87,8 @@ namespace Sistema_Inventario.Datos
                         B.Nombre AS Bodega,
                         DMI.Cantidad,
                         MI.Fecha,
-                        MI.Observacion
+                        MI.Observacion,
+                        MI.UsuarioRegistro
                     FROM MovimientosInventario MI
                     INNER JOIN TiposMovimiento TM
                         ON MI.IdTipoMovimiento = TM.IdTipoMovimiento
@@ -107,12 +113,12 @@ namespace Sistema_Inventario.Datos
         // =====================================
 
         public void RegistrarMovimiento(
-    int idTipoMovimiento,
-    int idProducto,
-    int idBodega,
-    decimal cantidad,
-    string observacion,
-    string usuario)
+            int idTipoMovimiento,
+            int idProducto,
+            int idBodega,
+            decimal cantidad,
+            string observacion,
+            string usuario)
         {
             SqlConnection conexion =
                 cn.AbrirConexion();
@@ -131,9 +137,9 @@ namespace Sistema_Inventario.Datos
                     SqlCommand cmdValidar =
                         new SqlCommand(
                             @"SELECT ISNULL(StockActual,0)
-                    FROM StockBodega
-                    WHERE IdProducto=@IdProducto
-                    AND IdBodega=@IdBodega",
+                            FROM StockBodega
+                            WHERE IdProducto=@IdProducto
+                            AND IdBodega=@IdBodega",
                             conexion,
                             transaccion);
 
@@ -170,19 +176,19 @@ namespace Sistema_Inventario.Datos
                 SqlCommand cmdMovimiento =
                     new SqlCommand(
                         @"INSERT INTO MovimientosInventario
-                (
-                    IdTipoMovimiento,
-                    Observacion,
-                    UsuarioRegistro
-                )
-                VALUES
-                (
-                    @IdTipoMovimiento,
-                    @Observacion,
-                    @UsuarioRegistro
-                );
+                        (
+                            IdTipoMovimiento,
+                            Observacion,
+                            UsuarioRegistro
+                        )
+                        VALUES
+                        (
+                            @IdTipoMovimiento,
+                            @Observacion,
+                            @UsuarioRegistro
+                        );
 
-                SELECT SCOPE_IDENTITY();",
+                        SELECT SCOPE_IDENTITY();",
                         conexion,
                         transaccion);
 
@@ -209,20 +215,20 @@ namespace Sistema_Inventario.Datos
                 SqlCommand cmdDetalle =
                     new SqlCommand(
                         @"INSERT INTO
-                DetalleMovimientoInventario
-                (
-                    IdMovimiento,
-                    IdProducto,
-                    IdBodega,
-                    Cantidad
-                )
-                VALUES
-                (
-                    @IdMovimiento,
-                    @IdProducto,
-                    @IdBodega,
-                    @Cantidad
-                )",
+                        DetalleMovimientoInventario
+                        (
+                            IdMovimiento,
+                            IdProducto,
+                            IdBodega,
+                            Cantidad
+                        )
+                        VALUES
+                        (
+                            @IdMovimiento,
+                            @IdProducto,
+                            @IdBodega,
+                            @Cantidad
+                        )",
                         conexion,
                         transaccion);
 
@@ -260,8 +266,8 @@ namespace Sistema_Inventario.Datos
                 SqlCommand cmdStockProducto =
                     new SqlCommand(
                         $@"UPDATE Productos
-                SET Stock = Stock {operacion} @Cantidad
-                WHERE IdProducto=@IdProducto",
+                        SET Stock = Stock {operacion} @Cantidad
+                        WHERE IdProducto=@IdProducto",
                         conexion,
                         transaccion);
 
@@ -282,9 +288,9 @@ namespace Sistema_Inventario.Datos
                 SqlCommand cmdExiste =
                     new SqlCommand(
                         @"SELECT COUNT(*)
-                FROM StockBodega
-                WHERE IdProducto=@IdProducto
-                AND IdBodega=@IdBodega",
+                        FROM StockBodega
+                        WHERE IdProducto=@IdProducto
+                        AND IdBodega=@IdBodega",
                         conexion,
                         transaccion);
 
@@ -305,17 +311,17 @@ namespace Sistema_Inventario.Datos
                     SqlCommand cmdInsertStock =
                         new SqlCommand(
                             @"INSERT INTO StockBodega
-                    (
-                        IdProducto,
-                        IdBodega,
-                        StockActual
-                    )
-                    VALUES
-                    (
-                        @IdProducto,
-                        @IdBodega,
-                        @StockActual
-                    )",
+                            (
+                                IdProducto,
+                                IdBodega,
+                                StockActual
+                            )
+                            VALUES
+                            (
+                                @IdProducto,
+                                @IdBodega,
+                                @StockActual
+                            )",
                             conexion,
                             transaccion);
 
@@ -338,10 +344,10 @@ namespace Sistema_Inventario.Datos
                     SqlCommand cmdUpdateStock =
                         new SqlCommand(
                             $@"UPDATE StockBodega
-                    SET StockActual =
-                    StockActual {operacion} @Cantidad
-                    WHERE IdProducto=@IdProducto
-                    AND IdBodega=@IdBodega",
+                            SET StockActual =
+                            StockActual {operacion} @Cantidad
+                            WHERE IdProducto=@IdProducto
+                            AND IdBodega=@IdBodega",
                             conexion,
                             transaccion);
 
@@ -360,13 +366,37 @@ namespace Sistema_Inventario.Datos
                     cmdUpdateStock.ExecuteNonQuery();
                 }
 
+                // =================================
+                // LOGS
+                // =================================
+
+                string tipoMovimiento =
+                    (idTipoMovimiento == 1)
+                    ? "INVENTARIO_ENTRADA"
+                    : "INVENTARIO_SALIDA";
+
+                log.RegistrarLog(
+                    tipoMovimiento,
+                    usuario,
+                    "Movimiento inventario | Producto ID: " +
+                    idProducto +
+                    " | Bodega ID: " +
+                    idBodega +
+                    " | Cantidad: " +
+                    cantidad);
+
                 transaccion.Commit();
 
                 cn.CerrarConexion();
             }
-            catch
+            catch (Exception ex)
             {
                 transaccion.Rollback();
+
+                log.RegistrarLog(
+                    "ERROR_INVENTARIO",
+                    usuario,
+                    ex.Message);
 
                 cn.CerrarConexion();
 

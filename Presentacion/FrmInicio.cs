@@ -516,11 +516,12 @@ namespace Sistema_Inventario.Presentacion
                 SqlDataAdapter da =
                     new SqlDataAdapter(
                         @"SELECT TOP 15
-                        Usuario,
-                        Fecha,
-                        Descripcion
-                        FROM LogsSistema
-                        ORDER BY Fecha DESC",
+    Evento,
+    Usuario,
+    Fecha,
+    Descripcion
+FROM LogsSistema
+ORDER BY Fecha DESC",
                         conexion);
 
                 DataTable dt =

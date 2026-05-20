@@ -1,9 +1,10 @@
-﻿using FontAwesome.Sharp;
-using Sistema_Inventario.Utilidades;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using FontAwesome.Sharp;
+using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
@@ -16,6 +17,8 @@ namespace Sistema_Inventario.Presentacion
         private IconButton btnMenu;
 
         private bool menuExpandido = true;
+        private Timer reloj;
+        Logger log = new Logger();
 
         public FrmDashboard()
         {
@@ -466,7 +469,10 @@ namespace Sistema_Inventario.Presentacion
             panelTop.Controls.Add(lblSistema);
 
             Label lblFecha =
-                new Label();
+    new Label();
+
+            lblFecha.Name =
+                "lblFecha";
 
             lblFecha.Text =
                 DateTime.Now.ToString(
@@ -486,6 +492,46 @@ namespace Sistema_Inventario.Presentacion
                 new Point(900, 25);
 
             panelTop.Controls.Add(lblFecha);
+
+            // =====================================
+            // TIMER RELOJ
+            // =====================================
+
+            reloj = new Timer();
+
+            reloj.Interval = 1000;
+
+            reloj.Tick += (s, e) =>
+            {
+                lblFecha.Text =
+                    DateTime.Now.ToString(
+                        "dd/MM/yyyy HH:mm:ss");
+            };
+
+            reloj.Start(); Label lblUsuario =
+    new Label();
+
+            lblUsuario.Text =
+                "Usuario: " +
+                SesionUsuario.Usuario +
+                " | Rol: " +
+                SesionUsuario.Rol;
+
+            lblUsuario.Font =
+                new Font(
+                    "Segoe UI",
+                    10,
+                    FontStyle.Bold);
+
+            lblUsuario.ForeColor =
+                Color.FromArgb(52, 73, 94);
+
+            lblUsuario.AutoSize = true;
+
+            lblUsuario.Location =
+                new Point(900, 45);
+
+            panelTop.Controls.Add(lblUsuario);
         }
 
         // =========================================
@@ -832,8 +878,8 @@ namespace Sistema_Inventario.Presentacion
         }
 
         private void BtnSalir_Click(
-            object sender,
-            EventArgs e)
+    object sender,
+    EventArgs e)
         {
             DialogResult resultado =
                 MessageBox.Show(
@@ -844,12 +890,28 @@ namespace Sistema_Inventario.Presentacion
 
             if (resultado == DialogResult.Yes)
             {
-                FrmLogin login =
-                    new FrmLogin();
+                try
+                {
+                    log.RegistrarLog(
+                        "LOGOUT",
+                        SesionUsuario.Usuario,
+                        "Cierre de sesión correcto");
 
-                login.Show();
+                    FrmLogin login =
+                        new FrmLogin();
 
-                this.Close();
+                    login.Show();
+
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        ex.Message,
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
             }
         }
     }
