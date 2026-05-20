@@ -2,6 +2,8 @@
 using System.Configuration;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Sistema_Inventario.Logica
 {
@@ -25,6 +27,32 @@ namespace Sistema_Inventario.Logica
         {
             try
             {
+                // ============================================
+                // FORZAR TLS 1.2
+                // ============================================
+
+                ServicePointManager.SecurityProtocol =
+                    SecurityProtocolType.Tls12;
+
+                // ============================================
+                // VALIDACION SSL
+                // ============================================
+
+                ServicePointManager
+                    .ServerCertificateValidationCallback =
+                    delegate (
+                        object sender,
+                        X509Certificate certificate,
+                        X509Chain chain,
+                        SslPolicyErrors sslPolicyErrors)
+                    {
+                        return true;
+                    };
+
+                // ============================================
+                // EMAIL
+                // ============================================
+
                 MailMessage mail =
                     new MailMessage();
 
@@ -44,27 +72,39 @@ namespace Sistema_Inventario.Logica
                 mail.IsBodyHtml =
                     false;
 
+                // ============================================
+                // SMTP
+                // ============================================
+
                 SmtpClient smtp =
-                    new SmtpClient(
-                        "smtp.gmail.com",
-                        587);
+    new SmtpClient();
+
+                smtp.Host =
+     "smtp.gmail.com";
+
+                smtp.Port =
+                    587;
+
+                smtp.EnableSsl =
+                    true;
+
+                smtp.UseDefaultCredentials =
+                    false;
 
                 smtp.Credentials =
                     new NetworkCredential(
                         correoSistema,
                         password);
 
-                smtp.EnableSsl =
-                    true;
-
                 smtp.DeliveryMethod =
                     SmtpDeliveryMethod.Network;
 
-                smtp.UseDefaultCredentials =
-                    false;
-
                 smtp.Timeout =
-                    20000;
+                    30000;
+
+                // ============================================
+                // SEND
+                // ============================================
 
                 smtp.Send(mail);
             }
