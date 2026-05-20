@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+
 using Sistema_Inventario.Datos;
+using Sistema_Inventario.Logica;
 using Sistema_Inventario.Presentacion;
 using Sistema_Inventario.Utilidades;
 
@@ -9,9 +11,14 @@ namespace Sistema_Inventario
 {
     public partial class FrmLogin : Form
     {
-        Conexion cn = new Conexion();
+        Conexion cn =
+            new Conexion();
 
-        Logger log = new Logger();
+        Logger log =
+            new Logger();
+
+        PasswordService passwordService =
+            new PasswordService();
 
         public FrmLogin()
         {
@@ -62,6 +69,7 @@ namespace Sistema_Inventario
                         @"SELECT
                             U.IdUsuario,
                             U.Usuario,
+                            U.Clave,
                             U.IdRol,
                             R.Nombre AS Rol
                         FROM Usuarios U
@@ -69,7 +77,6 @@ namespace Sistema_Inventario
                             ON U.IdRol = R.IdRol
                         WHERE
                             U.Usuario = @Usuario
-                            AND U.Clave = @Clave
                             AND U.Estado = 1",
                         conexion);
 
@@ -77,62 +84,84 @@ namespace Sistema_Inventario
                     "@Usuario",
                     txtUsuario.Text.Trim());
 
-                cmd.Parameters.AddWithValue(
-                    "@Clave",
-                    txtClave.Text.Trim());
-
                 SqlDataReader dr =
                     cmd.ExecuteReader();
 
                 if (dr.Read())
                 {
-                    // =====================================
-                    // SESIÓN
-                    // =====================================
+                    string hashGuardado =
+                        dr["Clave"].ToString();
 
-                    SesionUsuario.IdUsuario =
-                        Convert.ToInt32(
-                            dr["IdUsuario"]);
+                    bool passwordCorrecto =
+                        passwordService.VerificarHash(
+                            txtClave.Text.Trim(),
+                            hashGuardado);
 
-                    SesionUsuario.Usuario =
-                        dr["Usuario"].ToString();
+                    if (passwordCorrecto)
+                    {
+                        // =====================================
+                        // SESIÓN
+                        // =====================================
 
-                    SesionUsuario.IdRol =
-                        Convert.ToInt32(
-                            dr["IdRol"]);
+                        SesionUsuario.IdUsuario =
+                            Convert.ToInt32(
+                                dr["IdUsuario"]);
 
-                    SesionUsuario.Rol =
-                        dr["Rol"].ToString();
+                        SesionUsuario.Usuario =
+                            dr["Usuario"].ToString();
 
-                    dr.Close();
+                        SesionUsuario.IdRol =
+                            Convert.ToInt32(
+                                dr["IdRol"]);
 
-                    // =====================================
-                    // PERMISOS
-                    // =====================================
+                        SesionUsuario.Rol =
+                            dr["Rol"].ToString();
 
-                    CargarPermisos();
+                        dr.Close();
 
-                    // =====================================
-                    // LOG
-                    // =====================================
+                        // =====================================
+                        // PERMISOS
+                        // =====================================
 
-                    log.RegistrarLog(
-                        "LOGIN",
-                        txtUsuario.Text,
-                        "Inicio de sesión correcto");
+                        CargarPermisos();
 
-                    MessageBox.Show(
-                        "Bienvenido al sistema",
-                        "Login Correcto",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                        // =====================================
+                        // LOG
+                        // =====================================
 
-                    FrmDashboard frm =
-                        new FrmDashboard();
+                        log.RegistrarLog(
+                            "LOGIN",
+                            txtUsuario.Text,
+                            "Inicio de sesión correcto");
 
-                    frm.Show();
+                        MessageBox.Show(
+                            "Bienvenido al sistema",
+                            "Login Correcto",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
 
-                    this.Hide();
+                        FrmDashboard frm =
+                            new FrmDashboard();
+
+                        frm.Show();
+
+                        this.Hide();
+                    }
+                    else
+                    {
+                        dr.Close();
+
+                        MessageBox.Show(
+                            "Usuario o contraseña incorrectos",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+
+                        log.RegistrarLog(
+                            "ERROR_LOGIN",
+                            txtUsuario.Text,
+                            "Contraseña incorrecta");
+                    }
                 }
                 else
                 {
@@ -143,6 +172,11 @@ namespace Sistema_Inventario
                         "Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
+
+                    log.RegistrarLog(
+                        "ERROR_LOGIN",
+                        txtUsuario.Text,
+                        "Usuario no encontrado");
                 }
 
                 cn.CerrarConexion();
@@ -153,7 +187,7 @@ namespace Sistema_Inventario
                     ex.Message);
 
                 log.RegistrarLog(
-                    "ERROR LOGIN",
+                    "ERROR_LOGIN",
                     txtUsuario.Text,
                     ex.Message);
             }

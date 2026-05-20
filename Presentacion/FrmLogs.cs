@@ -43,13 +43,28 @@ namespace Sistema_Inventario.Presentacion
             cboEvento.Items.Clear();
 
             cboEvento.Items.Add("TODOS");
+
             cboEvento.Items.Add("LOGIN");
+            cboEvento.Items.Add("LOGOUT");
+
             cboEvento.Items.Add("BACKUP");
             cboEvento.Items.Add("RESTORE");
-            cboEvento.Items.Add("ERROR");
-            cboEvento.Items.Add("VENTA");
-            cboEvento.Items.Add("CLIENTE");
-            cboEvento.Items.Add("PRODUCTO");
+
+            cboEvento.Items.Add("PRODUCTO_CREATE");
+            cboEvento.Items.Add("PRODUCTO_UPDATE");
+            cboEvento.Items.Add("PRODUCTO_DELETE");
+
+            cboEvento.Items.Add("CLIENTE_CREATE");
+            cboEvento.Items.Add("CLIENTE_UPDATE");
+            cboEvento.Items.Add("CLIENTE_DELETE");
+
+            cboEvento.Items.Add("VENTA_CREATE");
+
+            cboEvento.Items.Add("INVENTARIO_ENTRADA");
+            cboEvento.Items.Add("INVENTARIO_SALIDA");
+
+            cboEvento.Items.Add("ERROR_LOGIN");
+            cboEvento.Items.Add("ERROR_INVENTARIO");
 
             cboEvento.SelectedIndex = 0;
         }
@@ -368,37 +383,101 @@ namespace Sistema_Inventario.Presentacion
                     continue;
 
                 string evento =
-                    fila.Cells["TipoEvento"].Value.ToString();
+                    fila.Cells["TipoEvento"]
+                    .Value
+                    .ToString();
 
-                switch (evento)
+                // =====================================
+                // LOGIN
+                // =====================================
+
+                if (evento.Contains("LOGIN"))
                 {
-                    case "LOGIN":
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(232, 244, 252);
+                }
 
-                        fila.DefaultCellStyle.BackColor =
-                            Color.FromArgb(232, 244, 252);
+                // =====================================
+                // LOGOUT
+                // =====================================
 
-                        break;
+                else if (evento.Contains("LOGOUT"))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(240, 240, 240);
+                }
 
-                    case "BACKUP":
+                // =====================================
+                // BACKUP
+                // =====================================
 
-                        fila.DefaultCellStyle.BackColor =
-                            Color.FromArgb(232, 250, 232);
+                else if (evento.Contains("BACKUP"))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(232, 250, 232);
+                }
 
-                        break;
+                // =====================================
+                // RESTORE
+                // =====================================
 
-                    case "ERROR":
+                else if (evento.Contains("RESTORE"))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(255, 248, 220);
+                }
 
-                        fila.DefaultCellStyle.BackColor =
-                            Color.FromArgb(255, 228, 225);
+                // =====================================
+                // PRODUCTOS
+                // =====================================
 
-                        break;
+                else if (evento.Contains("PRODUCTO"))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(230, 255, 230);
+                }
 
-                    case "RESTORE":
+                // =====================================
+                // CLIENTES
+                // =====================================
 
-                        fila.DefaultCellStyle.BackColor =
-                            Color.FromArgb(255, 248, 220);
+                else if (evento.Contains("CLIENTE"))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(255, 250, 230);
+                }
 
-                        break;
+                // =====================================
+                // INVENTARIO
+                // =====================================
+
+                else if (evento.Contains("INVENTARIO"))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(230, 240, 255);
+                }
+
+                // =====================================
+                // VENTAS
+                // =====================================
+
+                else if (evento.Contains("VENTA"))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(245, 230, 255);
+                }
+
+                // =====================================
+                // ERRORES
+                // =====================================
+
+                else if (evento.Contains("ERROR"))
+                {
+                    fila.DefaultCellStyle.BackColor =
+                        Color.FromArgb(255, 228, 225);
+
+                    fila.DefaultCellStyle.ForeColor =
+                        Color.DarkRed;
                 }
             }
         }

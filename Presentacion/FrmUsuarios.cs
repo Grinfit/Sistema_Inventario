@@ -4,12 +4,15 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using Sistema_Inventario.Logica;
 
 namespace Sistema_Inventario.Presentacion
 {
     public partial class FrmUsuarios : Form
     {
         Conexion cn = new Conexion();
+        PasswordService passwordService =
+    new PasswordService();
 
         int idUsuario = 0;
 
@@ -249,8 +252,9 @@ namespace Sistema_Inventario.Presentacion
                     txtUsuario.Text);
 
                 cmd.Parameters.AddWithValue(
-                    "@Clave",
-                    txtClave.Text);
+    "@Clave",
+    passwordService.GenerarHash(
+        txtClave.Text));
 
                 cmd.Parameters.AddWithValue(
                     "@Rol",
@@ -316,12 +320,13 @@ namespace Sistema_Inventario.Presentacion
                         conexion);
 
                 cmd.Parameters.AddWithValue(
-                    "@Usuario",
-                    txtUsuario.Text);
+                     "@Usuario",
+                     txtUsuario.Text);
 
                 cmd.Parameters.AddWithValue(
                     "@Clave",
-                    txtClave.Text);
+                    passwordService.GenerarHash(
+                        txtClave.Text));
 
                 cmd.Parameters.AddWithValue(
                     "@Rol",

@@ -132,7 +132,7 @@ namespace Sistema_Inventario.Presentacion
 
                     txtObservacion.Text,
 
-                    "admin");
+                    SesionUsuario.Usuario);
 
                 MessageBox.Show(
                     "Movimiento registrado correctamente");
