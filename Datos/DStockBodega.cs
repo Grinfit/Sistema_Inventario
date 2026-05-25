@@ -44,6 +44,44 @@ namespace Sistema_Inventario.Datos
             return tabla;
         }
 
+        // METODO PARA OBTENER LA LISTA DE PRODUCTOS
+        public DataTable MostrarProductos()
+        {
+            DataTable tabla = new DataTable();
+
+            SqlDataAdapter da = new SqlDataAdapter(
+                "SELECT IdProducto, Nombre FROM Productos ORDER BY Nombre",
+                cn.AbrirConexion());
+
+            da.Fill(tabla);
+            cn.CerrarConexion();
+            return tabla;
+        }
+
+        // METODO PARA FILTRAR EL STOCK POR PRODUCTO
+        public DataTable FiltrarPorProducto(int idProducto)
+        {
+            DataTable tabla = new DataTable();
+
+            SqlDataAdapter da = new SqlDataAdapter(
+                @"SELECT
+                    SB.IdStock,
+                    P.Nombre AS Producto,
+                    B.Nombre AS Bodega,
+                    SB.StockActual
+                FROM StockBodega SB
+                INNER JOIN Productos P ON SB.IdProducto = P.IdProducto
+                INNER JOIN Bodegas   B ON SB.IdBodega   = B.IdBodega
+                WHERE SB.IdProducto = @IdProducto
+                ORDER BY B.Nombre",
+                cn.AbrirConexion());
+
+            da.SelectCommand.Parameters.AddWithValue("@IdProducto", idProducto);
+            da.Fill(tabla);
+            cn.CerrarConexion();
+            return tabla;
+        }
+
         // METODO PARA MOSTRAR PRODUCTOS CON STOCK BAJO
         public DataTable MostrarStockBajo()
         {

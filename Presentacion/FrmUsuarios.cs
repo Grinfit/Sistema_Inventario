@@ -1,10 +1,11 @@
-﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+// IMPORTACION DE LIBRERIAS NECESARIAS
 using Sistema_Inventario.Datos;
 using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using FontAwesome.Sharp;
 using Sistema_Inventario.Logica;
 
 namespace Sistema_Inventario.Presentacion
@@ -16,648 +17,407 @@ namespace Sistema_Inventario.Presentacion
         Conexion cn = new Conexion();
 
         // OBJETO PARA EL MANEJO DE CONTRASEÑAS
-        PasswordService passwordService =
-    new PasswordService();
+        PasswordService passwordService = new PasswordService();
 
-        // VARIABLE PARA GUARDAR EL ID DEL USUARIO
+        // VARIABLE PARA GUARDAR EL ID DEL USUARIO SELECCIONADO
         int idUsuario = 0;
 
         // CONSTRUCTOR DEL FORMULARIO
         public FrmUsuarios()
         {
-            // INICIALIZA LOS COMPONENTES
             InitializeComponent();
-
-            // CONFIGURA EL GRID
+            AplicarEstilos();
             ConfigurarGrid();
-
-            // CARGA LOS USUARIOS
-            CargarUsuarios();
-
-            // CARGA LOS ROLES
-            CargarRoles();
-
-            // CARGA LOS EVENTOS
             Eventos();
+            CargarUsuarios();
+            ActualizarCards();
         }
 
-        // =========================================
-        // EVENTOS
-        // =========================================
+        // ─────────────────────────────────────────
+        // ESTILOS
+        // ─────────────────────────────────────────
 
-        // METODO PARA REGISTRAR LOS EVENTOS
-        private void Eventos()
+        private void AplicarEstilos()
         {
-            // EVENTO DEL BOTON NUEVO
-            btnNuevo.Click += BtnNuevo_Click;
-
-            // EVENTO DEL BOTON GUARDAR
-            btnGuardar.Click += BtnGuardar_Click;
-
-            // EVENTO DEL BOTON EDITAR
-            btnEditar.Click += BtnEditar_Click;
-
-            // EVENTO DEL BOTON ELIMINAR
-            btnEliminar.Click += BtnEliminar_Click;
-
-            // EVENTO DOBLE CLICK DEL GRID
-            dgvUsuarios.CellDoubleClick +=
-                DgvUsuarios_CellDoubleClick;
-
-            // EVENTO DEL TEXTBOX BUSCAR
-            txtBuscar.TextChanged +=
-                TxtBuscar_TextChanged;
+            ConfigurarBoton(btnNuevo,      Color.FromArgb(59,  130, 246));
+            ConfigurarBoton(btnEditar,     Color.FromArgb(234, 179,   8));
+            ConfigurarBoton(btnEliminar,   Color.FromArgb(239,  68,  68));
+            ConfigurarBoton(btnActualizar, Color.FromArgb(46,  204, 113));
         }
 
-        // =========================================
-        // CONFIG GRID
-        // =========================================
+        private void ConfigurarBoton(IconButton btn, Color color)
+        {
+            btn.BackColor                 = color;
+            btn.ForeColor                 = Color.White;
+            btn.FlatStyle                 = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Font                      = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btn.IconColor                 = Color.White;
+            btn.IconSize                  = 22;
+            btn.TextImageRelation         = TextImageRelation.ImageBeforeText;
+            btn.Cursor                    = Cursors.Hand;
 
-        // METODO PARA CONFIGURAR EL DATAGRIDVIEW
+            btn.MouseEnter += (s, e) => { btn.BackColor = ControlPaint.Dark(color); };
+            btn.MouseLeave += (s, e) => { btn.BackColor = color; };
+        }
+
+        // ─────────────────────────────────────────
+        // CONFIGURAR GRID
+        // ─────────────────────────────────────────
+
         private void ConfigurarGrid()
         {
-            // DESHABILITA ESTILOS VISUALES
-            dgvUsuarios.EnableHeadersVisualStyles =
-                false;
+            dgvUsuarios.EnableHeadersVisualStyles = false;
+            dgvUsuarios.BorderStyle               = BorderStyle.None;
+            dgvUsuarios.CellBorderStyle           = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvUsuarios.BackgroundColor           = Color.White;
+            dgvUsuarios.RowHeadersVisible         = false;
+            dgvUsuarios.SelectionMode             = DataGridViewSelectionMode.FullRowSelect;
+            dgvUsuarios.MultiSelect               = false;
+            dgvUsuarios.AllowUserToAddRows        = false;
+            dgvUsuarios.AllowUserToResizeRows     = false;
+            dgvUsuarios.AutoSizeColumnsMode       = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvUsuarios.GridColor                 = Color.LightGray;
 
-            // COLOR DEL HEADER
-            dgvUsuarios.ColumnHeadersDefaultCellStyle.BackColor =
-                Color.FromArgb(11, 31, 58);
+            dgvUsuarios.ColumnHeadersBorderStyle                = DataGridViewHeaderBorderStyle.None;
+            dgvUsuarios.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(11, 31, 58);
+            dgvUsuarios.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvUsuarios.ColumnHeadersDefaultCellStyle.Font      = new Font("Segoe UI", 11, FontStyle.Bold);
+            dgvUsuarios.ColumnHeadersHeight                     = 45;
 
-            // COLOR DEL TEXTO DEL HEADER
-            dgvUsuarios.ColumnHeadersDefaultCellStyle.ForeColor =
-                Color.White;
+            dgvUsuarios.DefaultCellStyle.Font               = new Font("Segoe UI", 10);
+            dgvUsuarios.DefaultCellStyle.Padding            = new Padding(4);
+            dgvUsuarios.DefaultCellStyle.SelectionBackColor = Color.FromArgb(59, 130, 246);
+            dgvUsuarios.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvUsuarios.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
+            dgvUsuarios.RowTemplate.Height = 38;
 
-            // FUENTE DEL HEADER
-            dgvUsuarios.ColumnHeadersDefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    11,
-                    FontStyle.Bold);
-
-            // FUENTE DE LAS CELDAS
-            dgvUsuarios.DefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    10);
-
-            // COLOR DE SELECCION
-            dgvUsuarios.DefaultCellStyle.SelectionBackColor =
-                Color.FromArgb(59, 130, 246);
-
-            // COLOR DEL TEXTO SELECCIONADO
-            dgvUsuarios.DefaultCellStyle.SelectionForeColor =
-                Color.White;
-
-            // ALTURA DE LAS FILAS
-            dgvUsuarios.RowTemplate.Height = 35;
+            // BADGE DE ESTADO EN CELDA
+            dgvUsuarios.CellFormatting += DgvUsuarios_CellFormatting;
         }
 
-        // =========================================
-        // CARGAR USUARIOS
-        // =========================================
+        // ─────────────────────────────────────────
+        // EVENTOS
+        // ─────────────────────────────────────────
 
-        // METODO PARA CARGAR LOS USUARIOS
+        private void Eventos()
+        {
+            btnNuevo.Click      += BtnNuevo_Click;
+            btnEditar.Click     += BtnEditar_Click;
+            btnEliminar.Click   += BtnEliminar_Click;
+            btnActualizar.Click += BtnActualizar_Click;
+
+            dgvUsuarios.SelectionChanged += DgvUsuarios_SelectionChanged;
+            dgvUsuarios.CellDoubleClick  += DgvUsuarios_CellDoubleClick;
+            txtBuscar.TextChanged        += TxtBuscar_TextChanged;
+        }
+
+        // ─────────────────────────────────────────
+        // CARGAR USUARIOS
+        // ─────────────────────────────────────────
+
         private void CargarUsuarios()
         {
             try
             {
-                // ABRE LA CONEXION
-                SqlConnection conexion =
-                    cn.AbrirConexion();
+                SqlConnection conexion = cn.AbrirConexion();
 
-                // CONSULTA SQL PARA OBTENER LOS USUARIOS
-                SqlDataAdapter da =
-                    new SqlDataAdapter(
-                        @"SELECT
-                            U.IdUsuario,
-                            U.Usuario,
-                            R.Nombre AS Rol,
-                            U.Estado,
-                            U.FechaRegistro
-                        FROM Usuarios U
-                        INNER JOIN Roles R
-                            ON U.IdRol = R.IdRol
-                        ORDER BY U.IdUsuario DESC",
-                        conexion);
+                SqlDataAdapter da = new SqlDataAdapter(
+                    @"SELECT
+                        U.IdUsuario,
+                        U.Usuario,
+                        R.Nombre AS Rol,
+                        U.Estado,
+                        U.FechaRegistro
+                    FROM Usuarios U
+                    INNER JOIN Roles R
+                        ON U.IdRol = R.IdRol
+                    ORDER BY U.IdUsuario DESC",
+                    conexion);
 
-                // TABLA TEMPORAL
-                DataTable dt =
-                    new DataTable();
-
-                // LLENA LA TABLA
+                DataTable dt = new DataTable();
                 da.Fill(dt);
-
-                // ASIGNA LOS DATOS AL GRID
+                cn.CerrarConexion();
+                ConvertirEstado(dt);
                 dgvUsuarios.DataSource = dt;
 
-                // CIERRA LA CONEXION
-                cn.CerrarConexion();
+                if (dgvUsuarios.Columns.Contains("IdUsuario"))
+                    dgvUsuarios.Columns["IdUsuario"].Width = 80;
+                if (dgvUsuarios.Columns.Contains("Usuario"))
+                    dgvUsuarios.Columns["Usuario"].Width = 200;
+                if (dgvUsuarios.Columns.Contains("Rol"))
+                    dgvUsuarios.Columns["Rol"].Width = 200;
+                if (dgvUsuarios.Columns.Contains("Estado"))
+                    dgvUsuarios.Columns["Estado"].Width = 110;
+                if (dgvUsuarios.Columns.Contains("FechaRegistro"))
+                    dgvUsuarios.Columns["FechaRegistro"].Width = 180;
 
-                // ANCHO DE COLUMNAS
-                dgvUsuarios.Columns["IdUsuario"].Width = 80;
-
-                dgvUsuarios.Columns["Usuario"].Width = 180;
-
-                dgvUsuarios.Columns["Rol"].Width = 180;
-
-                dgvUsuarios.Columns["Estado"].Width = 80;
-
-                dgvUsuarios.Columns["FechaRegistro"].Width = 180;
+                idUsuario = 0;
+                lblResumen.Text = $"Mostrando {dgvUsuarios.Rows.Count} registro(s)";
             }
             catch (Exception ex)
             {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
-        // =========================================
-        // CARGAR ROLES
-        // =========================================
+        // ─────────────────────────────────────────
+        // ACTUALIZAR CARDS
+        // ─────────────────────────────────────────
 
-        // METODO PARA CARGAR LOS ROLES
-        private void CargarRoles()
+        private void ActualizarCards()
         {
             try
             {
-                // ABRE LA CONEXION
-                SqlConnection conexion =
-                    cn.AbrirConexion();
+                SqlCommand cmd;
 
-                // CONSULTA SQL PARA OBTENER LOS ROLES ACTIVOS
-                SqlDataAdapter da =
-                    new SqlDataAdapter(
-                        @"SELECT
-                            IdRol,
-                            Nombre
-                        FROM Roles
-                        WHERE Estado = 1",
-                        conexion);
-
-                // TABLA TEMPORAL
-                DataTable dt =
-                    new DataTable();
-
-                // LLENA LA TABLA
-                da.Fill(dt);
-
-                // ASIGNA LOS DATOS AL COMBOBOX
-                cboRoles.DataSource = dt;
-
-                // CAMPO A MOSTRAR
-                cboRoles.DisplayMember =
-                    "Nombre";
-
-                // CAMPO DEL VALOR
-                cboRoles.ValueMember =
-                    "IdRol";
-
-                // CIERRA LA CONEXION
-                cn.CerrarConexion();
-            }
-            catch (Exception ex)
-            {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message);
-            }
-        }
-
-        // =========================================
-        // NUEVO
-        // =========================================
-
-        // EVENTO DEL BOTON NUEVO
-        private void BtnNuevo_Click(
-            object sender,
-            EventArgs e)
-        {
-            // LIMPIA LOS CAMPOS
-            Limpiar();
-        }
-
-        // =========================================
-        // GUARDAR
-        // =========================================
-
-        // EVENTO DEL BOTON GUARDAR
-        private void BtnGuardar_Click(
-            object sender,
-            EventArgs e)
-        {
-            try
-            {
-                // VALIDA SI EL USUARIO ESTA VACIO
-                if (txtUsuario.Text.Trim() == "")
-                {
-                    MessageBox.Show(
-                        "Ingrese usuario");
-
-                    return;
-                }
-
-                // VALIDA SI LA CONTRASEÑA ESTA VACIA
-                if (txtClave.Text.Trim() == "")
-                {
-                    MessageBox.Show(
-                        "Ingrese contraseña");
-
-                    return;
-                }
-
-                // VALIDA SI LAS CONTRASEÑAS COINCIDEN
-                if (txtClave.Text !=
-                    txtConfirmar.Text)
-                {
-                    MessageBox.Show(
-                        "Las contraseñas no coinciden");
-
-                    return;
-                }
-
-                // ABRE LA CONEXION
-                SqlConnection conexion =
-                    cn.AbrirConexion();
-
-                // CONSULTA SQL PARA INSERTAR USUARIOS
-                SqlCommand cmd =
-                    new SqlCommand(
-                        @"INSERT INTO Usuarios
-                        (
-                            Usuario,
-                            Clave,
-                            Rol,
-                            IdRol,
-                            Estado
-                        )
-                        VALUES
-                        (
-                            @Usuario,
-                            @Clave,
-                            @Rol,
-                            @IdRol,
-                            @Estado
-                        )",
-                        conexion);
-
-                // PARAMETRO USUARIO
-                cmd.Parameters.AddWithValue(
-                    "@Usuario",
-                    txtUsuario.Text);
-
-                // PARAMETRO CONTRASEÑA ENCRIPTADA
-                cmd.Parameters.AddWithValue(
-    "@Clave",
-    passwordService.GenerarHash(
-        txtClave.Text));
-
-                // PARAMETRO ROL
-                cmd.Parameters.AddWithValue(
-                    "@Rol",
-                    cboRoles.Text);
-
-                // PARAMETRO ID ROL
-                cmd.Parameters.AddWithValue(
-                    "@IdRol",
-                    cboRoles.SelectedValue);
-
-                // PARAMETRO ESTADO
-                cmd.Parameters.AddWithValue(
-                    "@Estado",
-                    chkEstado.Checked);
-
-                // EJECUTA LA CONSULTA
-                cmd.ExecuteNonQuery();
-
-                // CIERRA LA CONEXION
+                cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM Usuarios WHERE Estado = 1",
+                    cn.AbrirConexion());
+                lblCard1Valor.Text = cmd.ExecuteScalar().ToString();
                 cn.CerrarConexion();
 
-                // MENSAJE DE EXITO
-                MessageBox.Show(
-                    "Usuario guardado correctamente");
+                cmd = new SqlCommand(
+                    @"SELECT COUNT(*) FROM Usuarios U
+                      INNER JOIN Roles R ON U.IdRol = R.IdRol
+                      WHERE R.Nombre LIKE '%Admin%'",
+                    cn.AbrirConexion());
+                lblCard2Valor.Text = cmd.ExecuteScalar().ToString();
+                cn.CerrarConexion();
 
-                // RECARGA EL GRID
-                CargarUsuarios();
-
-                // LIMPIA LOS CAMPOS
-                Limpiar();
+                cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM Usuarios WHERE Estado = 0",
+                    cn.AbrirConexion());
+                lblCard3Valor.Text = cmd.ExecuteScalar().ToString();
+                cn.CerrarConexion();
             }
-            catch (Exception ex)
+            catch { }
+        }
+
+        // ─────────────────────────────────────────
+        // CONVERTIR COLUMNA ESTADO: bool → string
+        // Evita que el grid cree DataGridViewCheckBoxColumn
+        // ─────────────────────────────────────────
+
+        private void ConvertirEstado(DataTable dt)
+        {
+            if (!dt.Columns.Contains("Estado")) return;
+
+            dt.Columns.Add("_EstadoTexto", typeof(string));
+            foreach (DataRow row in dt.Rows)
+                row["_EstadoTexto"] = Convert.ToBoolean(row["Estado"]) ? "Activo" : "Inactivo";
+
+            dt.Columns.Remove("Estado");
+            dt.Columns["_EstadoTexto"].ColumnName = "Estado";
+        }
+
+        // ─────────────────────────────────────────
+        // BADGE DE ESTADO (CellFormatting)
+        // ─────────────────────────────────────────
+
+        private void DgvUsuarios_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex < 0 || e.Value == null) return;
+            if (dgvUsuarios.Columns[e.ColumnIndex].Name != "Estado") return;
+
+            // El valor ya es string ("Activo"/"Inactivo") — solo aplicar color
+            e.CellStyle.ForeColor = e.Value.ToString() == "Activo"
+                ? Color.FromArgb(22, 163, 74)
+                : Color.FromArgb(220, 38, 38);
+            e.CellStyle.Font    = new Font("Segoe UI", 9, FontStyle.Bold);
+            e.FormattingApplied = true;
+        }
+
+        // ─────────────────────────────────────────
+        // SELECCION DEL GRID
+        // ─────────────────────────────────────────
+
+        private void DgvUsuarios_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvUsuarios.SelectedRows.Count > 0)
             {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message);
+                var cel = dgvUsuarios.SelectedRows[0].Cells["IdUsuario"].Value;
+                if (cel != null)
+                    idUsuario = Convert.ToInt32(cel);
             }
         }
 
-        // =========================================
-        // EDITAR
-        // =========================================
+        // ─────────────────────────────────────────
+        // DOBLE CLICK GRID → ABRE EDICION
+        // ─────────────────────────────────────────
 
-        // EVENTO DEL BOTON EDITAR
-        private void BtnEditar_Click(
-            object sender,
-            EventArgs e)
+        private void DgvUsuarios_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var cel = dgvUsuarios.Rows[e.RowIndex].Cells["IdUsuario"].Value;
+            if (cel == null) return;
+
+            idUsuario = Convert.ToInt32(cel);
+            AbrirModalEdicion();
+        }
+
+        // ─────────────────────────────────────────
+        // BOTON NUEVO
+        // ─────────────────────────────────────────
+
+        private void BtnNuevo_Click(object sender, EventArgs e)
+        {
+            using (var modal = new FrmUsuarioModal())
+            {
+                if (modal.ShowDialog(this) == DialogResult.OK)
+                {
+                    CargarUsuarios();
+                    ActualizarCards();
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────
+        // BOTON EDITAR
+        // ─────────────────────────────────────────
+
+        private void BtnEditar_Click(object sender, EventArgs e)
+        {
+            if (idUsuario == 0)
+            {
+                MessageBox.Show(
+                    "Seleccione un usuario",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            AbrirModalEdicion();
+        }
+
+        // ABRE EL MODAL EN MODO EDICION CON DATOS DE LA FILA SELECCIONADA
+        private void AbrirModalEdicion()
+        {
+            if (dgvUsuarios.SelectedRows.Count == 0) return;
+
+            var fila    = dgvUsuarios.SelectedRows[0];
+            string user = fila.Cells["Usuario"].Value?.ToString() ?? "";
+            string rol  = fila.Cells["Rol"].Value?.ToString() ?? "";
+
+            // Obtiene el estado real desde la BD (la celda fue formateada como texto)
+            bool estado = false;
+            try
+            {
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT Estado FROM Usuarios WHERE IdUsuario = @Id",
+                    cn.AbrirConexion());
+                cmd.Parameters.AddWithValue("@Id", idUsuario);
+                estado = Convert.ToBoolean(cmd.ExecuteScalar());
+                cn.CerrarConexion();
+            }
+            catch { cn.CerrarConexion(); }
+
+            using (var modal = new FrmUsuarioModal(idUsuario, user, rol, estado))
+            {
+                if (modal.ShowDialog(this) == DialogResult.OK)
+                {
+                    CargarUsuarios();
+                    ActualizarCards();
+                }
+            }
+        }
+
+        // ─────────────────────────────────────────
+        // BOTON ELIMINAR
+        // ─────────────────────────────────────────
+
+        private void BtnEliminar_Click(object sender, EventArgs e)
         {
             try
             {
-                // VALIDA SI HAY USUARIO SELECCIONADO
                 if (idUsuario == 0)
                 {
-                    MessageBox.Show(
-                        "Seleccione un usuario");
-
+                    MessageBox.Show("Seleccione un usuario");
                     return;
                 }
 
-                // ABRE LA CONEXION
-                SqlConnection conexion =
-                    cn.AbrirConexion();
+                DialogResult resultado = MessageBox.Show(
+                    "¿Desea eliminar el usuario?",
+                    "Confirmar",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
 
-                // CONSULTA SQL PARA ACTUALIZAR USUARIO
-                SqlCommand cmd =
-                    new SqlCommand(
-                        @"UPDATE Usuarios
-                        SET
-                            Usuario = @Usuario,
-                            Clave = @Clave,
-                            Rol = @Rol,
-                            IdRol = @IdRol,
-                            Estado = @Estado
-                        WHERE IdUsuario = @IdUsuario",
+                if (resultado == DialogResult.Yes)
+                {
+                    SqlConnection conexion = cn.AbrirConexion();
+
+                    SqlCommand cmd = new SqlCommand(
+                        @"DELETE FROM Usuarios WHERE IdUsuario = @IdUsuario",
                         conexion);
-
-                // PARAMETRO USUARIO
-                cmd.Parameters.AddWithValue(
-                     "@Usuario",
-                     txtUsuario.Text);
-
-                // PARAMETRO CONTRASEÑA ENCRIPTADA
-                cmd.Parameters.AddWithValue(
-                    "@Clave",
-                    passwordService.GenerarHash(
-                        txtClave.Text));
-
-                // PARAMETRO ROL
-                cmd.Parameters.AddWithValue(
-                    "@Rol",
-                    cboRoles.Text);
-
-                // PARAMETRO ID ROL
-                cmd.Parameters.AddWithValue(
-                    "@IdRol",
-                    cboRoles.SelectedValue);
-
-                // PARAMETRO ESTADO
-                cmd.Parameters.AddWithValue(
-                    "@Estado",
-                    chkEstado.Checked);
-
-                // PARAMETRO ID USUARIO
-                cmd.Parameters.AddWithValue(
-                    "@IdUsuario",
-                    idUsuario);
-
-                // EJECUTA LA CONSULTA
-                cmd.ExecuteNonQuery();
-
-                // CIERRA LA CONEXION
-                cn.CerrarConexion();
-
-                // MENSAJE DE EXITO
-                MessageBox.Show(
-                    "Usuario actualizado");
-
-                // RECARGA LOS USUARIOS
-                CargarUsuarios();
-
-                // LIMPIA LOS CAMPOS
-                Limpiar();
-            }
-            catch (Exception ex)
-            {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message);
-            }
-        }
-
-        // =========================================
-        // ELIMINAR
-        // =========================================
-
-        // EVENTO DEL BOTON ELIMINAR
-        private void BtnEliminar_Click(
-            object sender,
-            EventArgs e)
-        {
-            try
-            {
-                // VALIDA SI HAY USUARIO SELECCIONADO
-                if (idUsuario == 0)
-                {
-                    MessageBox.Show(
-                        "Seleccione un usuario");
-
-                    return;
-                }
-
-                // MENSAJE DE CONFIRMACION
-                DialogResult resultado =
-                    MessageBox.Show(
-                        "¿Desea eliminar el usuario?",
-                        "Confirmar",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
-
-                // VERIFICA SI EL USUARIO CONFIRMO
-                if (resultado ==
-                    DialogResult.Yes)
-                {
-                    // ABRE LA CONEXION
-                    SqlConnection conexion =
-                        cn.AbrirConexion();
-
-                    // CONSULTA SQL PARA ELIMINAR
-                    SqlCommand cmd =
-                        new SqlCommand(
-                            @"DELETE FROM Usuarios
-                            WHERE IdUsuario = @IdUsuario",
-                            conexion);
-
-                    // PARAMETRO ID USUARIO
-                    cmd.Parameters.AddWithValue(
-                        "@IdUsuario",
-                        idUsuario);
-
-                    // EJECUTA LA CONSULTA
+                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
                     cmd.ExecuteNonQuery();
 
-                    // CIERRA LA CONEXION
                     cn.CerrarConexion();
+                    MessageBox.Show("Usuario eliminado");
 
-                    // MENSAJE DE EXITO
-                    MessageBox.Show(
-                        "Usuario eliminado");
-
-                    // RECARGA LOS USUARIOS
+                    idUsuario = 0;
                     CargarUsuarios();
-
-                    // LIMPIA LOS CAMPOS
-                    Limpiar();
+                    ActualizarCards();
                 }
             }
             catch (Exception ex)
             {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
-        // =========================================
-        // DOBLE CLICK GRID
-        // =========================================
+        // ─────────────────────────────────────────
+        // BOTON ACTUALIZAR
+        // ─────────────────────────────────────────
 
-        // EVENTO DOBLE CLICK DEL DATAGRIDVIEW
-        private void DgvUsuarios_CellDoubleClick(
-            object sender,
-            DataGridViewCellEventArgs e)
+        private void BtnActualizar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // VERIFICA QUE LA FILA SEA VALIDA
-                if (e.RowIndex >= 0)
-                {
-                    // OBTIENE LA FILA SELECCIONADA
-                    DataGridViewRow fila =
-                        dgvUsuarios.Rows[e.RowIndex];
-
-                    // OBTIENE EL ID DEL USUARIO
-                    idUsuario =
-                        Convert.ToInt32(
-                            fila.Cells["IdUsuario"].Value);
-
-                    // CARGA EL USUARIO
-                    txtUsuario.Text =
-                        fila.Cells["Usuario"].Value.ToString();
-
-                    // CARGA EL ROL
-                    cboRoles.Text =
-                        fila.Cells["Rol"].Value.ToString();
-
-                    // CARGA EL ESTADO
-                    chkEstado.Checked =
-                        Convert.ToBoolean(
-                            fila.Cells["Estado"].Value);
-
-                    // LIMPIA LA CONTRASEÑA
-                    txtClave.Text = "";
-
-                    // LIMPIA LA CONFIRMACION
-                    txtConfirmar.Text = "";
-                }
-            }
-            catch (Exception ex)
-            {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message);
-            }
+            txtBuscar.Clear();
+            CargarUsuarios();
+            ActualizarCards();
         }
 
-        // =========================================
-        // BUSCAR
-        // =========================================
+        // ─────────────────────────────────────────
+        // BUSCAR (TextChanged)
+        // ─────────────────────────────────────────
 
-        // EVENTO DEL TEXTBOX BUSCAR
-        private void TxtBuscar_TextChanged(
-            object sender,
-            EventArgs e)
+        private void TxtBuscar_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                // ABRE LA CONEXION
-                SqlConnection conexion =
-                    cn.AbrirConexion();
+                SqlConnection conexion = cn.AbrirConexion();
 
-                // CONSULTA SQL PARA BUSCAR USUARIOS
-                SqlDataAdapter da =
-                    new SqlDataAdapter(
-                        @"SELECT
-                            U.IdUsuario,
-                            U.Usuario,
-                            R.Nombre AS Rol,
-                            U.Estado,
-                            U.FechaRegistro
-                        FROM Usuarios U
-                        INNER JOIN Roles R
-                            ON U.IdRol = R.IdRol
-                        WHERE U.Usuario LIKE @Buscar",
-                        conexion);
+                SqlDataAdapter da = new SqlDataAdapter(
+                    @"SELECT
+                        U.IdUsuario,
+                        U.Usuario,
+                        R.Nombre AS Rol,
+                        U.Estado,
+                        U.FechaRegistro
+                    FROM Usuarios U
+                    INNER JOIN Roles R
+                        ON U.IdRol = R.IdRol
+                    WHERE U.Usuario LIKE @Buscar",
+                    conexion);
 
-                // PARAMETRO DE BUSQUEDA
                 da.SelectCommand.Parameters.AddWithValue(
                     "@Buscar",
                     "%" + txtBuscar.Text + "%");
 
-                // TABLA TEMPORAL
-                DataTable dt =
-                    new DataTable();
-
-                // LLENA LA TABLA
+                DataTable dt = new DataTable();
                 da.Fill(dt);
-
-                // ASIGNA LOS DATOS AL GRID
+                cn.CerrarConexion();
+                ConvertirEstado(dt);
                 dgvUsuarios.DataSource = dt;
 
-                // CIERRA LA CONEXION
-                cn.CerrarConexion();
+                lblResumen.Text = $"Mostrando {dgvUsuarios.Rows.Count} registro(s)";
             }
             catch (Exception ex)
             {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message);
+                MessageBox.Show(ex.Message);
             }
-        }
-
-        // =========================================
-        // LIMPIAR
-        // =========================================
-
-        // METODO PARA LIMPIAR LOS CAMPOS
-        private void Limpiar()
-        {
-            // RESETEA EL ID
-            idUsuario = 0;
-
-            // LIMPIA EL USUARIO
-            txtUsuario.Clear();
-
-            // LIMPIA LA CONTRASEÑA
-            txtClave.Clear();
-
-            // LIMPIA LA CONFIRMACION
-            txtConfirmar.Clear();
-
-            // LIMPIA LA BUSQUEDA
-            txtBuscar.Clear();
-
-            // ACTIVA EL ESTADO
-            chkEstado.Checked = true;
-
-            // VALIDA SI EXISTEN ROLES
-            if (cboRoles.Items.Count > 0)
-            {
-                // SELECCIONA EL PRIMER ROL
-                cboRoles.SelectedIndex = 0;
-            }
-
-            // ENVIA EL FOCO AL USUARIO
-            txtUsuario.Focus();
         }
     }
 }

@@ -1,235 +1,247 @@
-﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+// IMPORTACION DE LIBRERIAS NECESARIAS
 using System;
+using System.Drawing;
 using System.Windows.Forms;
-using Sistema_Inventario.Datos;
+using FontAwesome.Sharp;
 using Sistema_Inventario.Logica;
+using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
-    // FORMULARIO DE PROVEEDORES
+    // FORMULARIO PRINCIPAL DE GESTION DE PROVEEDORES
     public partial class FrmProveedores : Form
     {
-        // OBJETO DE LA CAPA LOGICA
-        LProveedores lProveedores =
-            new LProveedores();
+        // CAPA LOGICA DE PROVEEDORES
+        LProveedores lProveedores = new LProveedores();
 
-        // VARIABLE PARA ID DEL PROVEEDOR
+        // ID DEL PROVEEDOR SELECCIONADO EN LA GRILLA
         int idProveedor = 0;
 
-        // CONSTRUCTOR DEL FORMULARIO
+        // CONSTRUCTOR
         public FrmProveedores()
         {
             InitializeComponent();
+            AplicarEstilos();
         }
 
-        // LOAD
-
-        private void FrmProveedores_Load(
-            object sender,
-            EventArgs e)
+        // APLICA ESTILOS A BOTONES Y GRILLA
+        private void AplicarEstilos()
         {
-            // MUESTRA LOS PROVEEDORES
+            ConfigurarBoton(btnNuevo,    Color.FromArgb(52,  152, 219));
+            ConfigurarBoton(btnEditar,   Color.FromArgb(241, 196,  15));
+            ConfigurarBoton(btnEliminar, Color.FromArgb(231,  76,  60));
+            ConfigurarBoton(btnBuscar,   Color.FromArgb( 10,  31,  58));
+            ConfigurarBoton(btnExportar, Color.FromArgb( 39, 174,  96));
+            ConfigurarGrid();
+        }
+
+        // CONFIGURA ESTILO UNIFICADO DE BOTON
+        private void ConfigurarBoton(IconButton btn, Color color)
+        {
+            btn.BackColor                 = color;
+            btn.ForeColor                 = Color.White;
+            btn.FlatStyle                 = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Font                      = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btn.IconColor                 = Color.White;
+            btn.IconSize                  = 24;
+            btn.TextImageRelation         = TextImageRelation.ImageBeforeText;
+            btn.ImageAlign                = ContentAlignment.MiddleLeft;
+            btn.Padding                   = new Padding(12, 0, 0, 0);
+            btn.Cursor                    = Cursors.Hand;
+
+            btn.MouseEnter += (s, e) => { btn.BackColor = ControlPaint.Dark(color); };
+            btn.MouseLeave += (s, e) => { btn.BackColor = color; };
+        }
+
+        // CONFIGURA ESTILO DE LA GRILLA
+        private void ConfigurarGrid()
+        {
+            dgvProveedores.BorderStyle                               = BorderStyle.None;
+            dgvProveedores.BackgroundColor                           = Color.White;
+            dgvProveedores.EnableHeadersVisualStyles                 = false;
+            dgvProveedores.ColumnHeadersBorderStyle                  = DataGridViewHeaderBorderStyle.None;
+            dgvProveedores.ColumnHeadersDefaultCellStyle.BackColor   = Color.FromArgb(11, 31, 58);
+            dgvProveedores.ColumnHeadersDefaultCellStyle.ForeColor   = Color.White;
+            dgvProveedores.ColumnHeadersDefaultCellStyle.Font        = new Font("Segoe UI", 11F, FontStyle.Bold);
+            dgvProveedores.ColumnHeadersHeight                       = 45;
+            dgvProveedores.DefaultCellStyle.Font                     = new Font("Segoe UI", 10F);
+            dgvProveedores.DefaultCellStyle.SelectionBackColor       = Color.FromArgb(52, 152, 219);
+            dgvProveedores.DefaultCellStyle.SelectionForeColor       = Color.White;
+            dgvProveedores.RowsDefaultCellStyle.BackColor            = Color.White;
+            dgvProveedores.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
+            dgvProveedores.RowTemplate.Height                        = 38;
+            dgvProveedores.AutoSizeColumnsMode                       = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvProveedores.SelectionMode                             = DataGridViewSelectionMode.FullRowSelect;
+            dgvProveedores.MultiSelect                               = false;
+            dgvProveedores.RowHeadersVisible                         = false;
+            dgvProveedores.GridColor                                 = Color.LightGray;
+        }
+
+        // ─────────────────────────────────────────
+        // CARGA INICIAL
+        // ─────────────────────────────────────────
+
+        private void FrmProveedores_Load(object sender, EventArgs e)
+        {
             MostrarProveedores();
         }
 
-        // MOSTRAR
-
+        // CARGA TODOS LOS PROVEEDORES EN LA GRILLA
         private void MostrarProveedores()
         {
-            // ASIGNA LOS DATOS AL GRID
-            dgvProveedores.DataSource =
-                lProveedores.MostrarProveedores();
+            try
+            {
+                dgvProveedores.DataSource = lProveedores.MostrarProveedores();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // LIMPIAR
+        // ─────────────────────────────────────────
+        // SELECCION EN LA GRILLA
+        // ─────────────────────────────────────────
 
-        private void LimpiarCampos()
+        private void dgvProveedores_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // LIMPIA LOS CAMPOS
-            txtNombre.Clear();
-            txtEmpresa.Clear();
-            txtTelefono.Clear();
-            txtCorreo.Clear();
-            txtDireccion.Clear();
-
-            // RESETEA EL ID
-            idProveedor = 0;
-
-            // ENVIA EL FOCO
-            txtNombre.Focus();
+            try
+            {
+                if (e.RowIndex >= 0)
+                {
+                    idProveedor = Convert.ToInt32(
+                        dgvProveedores.Rows[e.RowIndex].Cells["IdProveedor"].Value);
+                }
+            }
+            catch { }
         }
 
-        // NUEVO
+        // ─────────────────────────────────────────
+        // BOTON NUEVO — abre modal en modo creación
+        // ─────────────────────────────────────────
 
-        private void btnNuevo_Click(
-            object sender,
-            EventArgs e)
+        private void btnNuevo_Click(object sender, EventArgs e)
         {
-            // LIMPIA LOS CAMPOS
-            LimpiarCampos();
+            using (FrmProveedorModal modal = new FrmProveedorModal())
+            {
+                if (modal.ShowDialog(this) == DialogResult.OK)
+                {
+                    MostrarProveedores();
+                    idProveedor = 0;
+                }
+            }
         }
 
-        // GUARDAR
+        // ─────────────────────────────────────────
+        // BOTON EDITAR — abre modal en modo edición
+        // ─────────────────────────────────────────
 
-        private void btnGuardar_Click(
-            object sender,
-            EventArgs e)
+        private void btnEditar_Click(object sender, EventArgs e)
         {
-            // VALIDA EL NOMBRE
-            if (txtNombre.Text == "")
+            if (idProveedor == 0 || dgvProveedores.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
-                    "Ingrese el nombre");
-
+                    "Seleccione un proveedor de la lista antes de editar.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            // INSERTA EL PROVEEDOR
-            lProveedores.InsertarProveedor(
-                txtNombre.Text,
-                txtEmpresa.Text,
-                txtTelefono.Text,
-                txtCorreo.Text,
-                txtDireccion.Text);
+            try
+            {
+                DataGridViewRow fila = dgvProveedores.SelectedRows[0];
 
-            // MENSAJE DE CONFIRMACION
-            MessageBox.Show(
-                "Proveedor registrado correctamente");
-
-            // ACTUALIZA EL GRID
-            MostrarProveedores();
-
-            // LIMPIA LOS CAMPOS
-            LimpiarCampos();
+                using (FrmProveedorModal modal = new FrmProveedorModal(
+                    idProveedor,
+                    fila.Cells["Nombre"].Value?.ToString()    ?? "",
+                    fila.Cells["Empresa"].Value?.ToString()   ?? "",
+                    fila.Cells["Telefono"].Value?.ToString()  ?? "",
+                    fila.Cells["Correo"].Value?.ToString()    ?? "",
+                    fila.Cells["Direccion"].Value?.ToString() ?? ""))
+                {
+                    if (modal.ShowDialog(this) == DialogResult.OK)
+                        MostrarProveedores();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // EDITAR
+        // ─────────────────────────────────────────
+        // BOTON ELIMINAR
+        // ─────────────────────────────────────────
 
-        private void btnEditar_Click(
-            object sender,
-            EventArgs e)
+        private void btnEliminar_Click(object sender, EventArgs e)
         {
-            // VALIDA SI EXISTE UN ID
-            if (idProveedor == 0)
+            if (idProveedor == 0 || dgvProveedores.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
-                    "Seleccione un proveedor");
-
+                    "Seleccione un proveedor de la lista antes de eliminar.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            // ACTUALIZA EL PROVEEDOR
-            lProveedores.EditarProveedor(
-                idProveedor,
-                txtNombre.Text,
-                txtEmpresa.Text,
-                txtTelefono.Text,
-                txtCorreo.Text,
-                txtDireccion.Text);
-
-            // MENSAJE DE CONFIRMACION
-            MessageBox.Show(
-                "Proveedor actualizado");
-
-            // ACTUALIZA EL GRID
-            MostrarProveedores();
-
-            // LIMPIA LOS CAMPOS
-            LimpiarCampos();
-        }
-
-        // ELIMINAR
-
-        private void btnEliminar_Click(
-            object sender,
-            EventArgs e)
-        {
-            // VALIDA SI EXISTE UN ID
-            if (idProveedor == 0)
+            try
             {
-                MessageBox.Show(
-                    "Seleccione un proveedor");
+                string nombre = "";
+                try { nombre = dgvProveedores.SelectedRows[0].Cells["Nombre"].Value?.ToString() ?? ""; }
+                catch { }
 
-                return;
-            }
-
-            // MENSAJE DE CONFIRMACION
-            DialogResult resultado =
-                MessageBox.Show(
-                    "¿Desea eliminar el proveedor?",
-                    "Confirmación",
+                DialogResult resultado = MessageBox.Show(
+                    "¿Desea eliminar el proveedor: " + nombre + "?",
+                    "Confirmar eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
 
-            // VALIDA LA RESPUESTA
-            if (resultado == DialogResult.Yes)
+                if (resultado == DialogResult.Yes)
+                {
+                    lProveedores.EliminarProveedor(idProveedor);
+
+                    MessageBox.Show(
+                        "Proveedor eliminado correctamente.",
+                        "Éxito",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    MostrarProveedores();
+                    idProveedor = 0;
+                }
+            }
+            catch (Exception ex)
             {
-                // ELIMINA EL PROVEEDOR
-                lProveedores.EliminarProveedor(
-                    idProveedor);
-
-                // MENSAJE DE CONFIRMACION
-                MessageBox.Show(
-                    "Proveedor eliminado");
-
-                // ACTUALIZA EL GRID
-                MostrarProveedores();
-
-                // LIMPIA LOS CAMPOS
-                LimpiarCampos();
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // BUSCAR
+        // ─────────────────────────────────────────
+        // BOTON BUSCAR
+        // ─────────────────────────────────────────
 
-        private void btnBuscar_Click(
-            object sender,
-            EventArgs e)
+        private void btnBuscar_Click(object sender, EventArgs e)
         {
-            // BUSCA EL PROVEEDOR
-            dgvProveedores.DataSource =
-                lProveedores.BuscarProveedor(
-                    txtBuscar.Text);
+            try
+            {
+                dgvProveedores.DataSource = lProveedores.BuscarProveedor(txtBuscar.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // SELECCIONAR FILA
+        // ─────────────────────────────────────────
+        // BOTON EXPORTAR EXCEL
+        // ─────────────────────────────────────────
 
-        private void dgvProveedores_CellClick(
-            object sender,
-            DataGridViewCellEventArgs e)
+        private void btnExportar_Click(object sender, EventArgs e)
         {
-            // VALIDA LA FILA
-            if (e.RowIndex >= 0)
-            {
-                // OBTIENE LA FILA
-                DataGridViewRow fila =
-                    dgvProveedores.Rows[e.RowIndex];
-
-                // OBTIENE EL ID
-                idProveedor =
-                    Convert.ToInt32(
-                        fila.Cells["IdProveedor"].Value);
-
-                // ASIGNA EL NOMBRE
-                txtNombre.Text =
-                    fila.Cells["Nombre"].Value.ToString();
-
-                // ASIGNA LA EMPRESA
-                txtEmpresa.Text =
-                    fila.Cells["Empresa"].Value.ToString();
-
-                // ASIGNA EL TELEFONO
-                txtTelefono.Text =
-                    fila.Cells["Telefono"].Value.ToString();
-
-                // ASIGNA EL CORREO
-                txtCorreo.Text =
-                    fila.Cells["Correo"].Value.ToString();
-
-                // ASIGNA LA DIRECCION
-                txtDireccion.Text =
-                    fila.Cells["Direccion"].Value.ToString();
-            }
+            ExportarExcel.Exportar(dgvProveedores, "Reporte_Proveedores");
         }
     }
 }

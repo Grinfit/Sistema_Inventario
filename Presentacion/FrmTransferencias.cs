@@ -1,8 +1,11 @@
-﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+// IMPORTACION DE LIBRERIAS NECESARIAS
 using System;
+using System.Data;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using FontAwesome.Sharp;
 using Sistema_Inventario.Utilidades;
-using Sistema_Inventario.Datos;
 using Sistema_Inventario.Logica;
 
 namespace Sistema_Inventario.Presentacion
@@ -11,200 +14,185 @@ namespace Sistema_Inventario.Presentacion
     public partial class FrmTransferencias : Form
     {
         // OBJETO DE LA CAPA LOGICA DE TRANSFERENCIAS
-        LTransferencias lTransferencias =
-            new LTransferencias();
+        LTransferencias lTransferencias = new LTransferencias();
+
+        // TABLA COMPLETA PARA FILTRADO EN CLIENTE
+        private DataTable _tablaCompleta;
 
         // CONSTRUCTOR DEL FORMULARIO
         public FrmTransferencias()
         {
-            // INICIALIZA LOS COMPONENTES DEL FORMULARIO
             InitializeComponent();
+            AplicarEstilos();
+            ConfigurarGrid();
         }
 
-        // =====================================
-        // LOAD
-        // =====================================
+        // ─────────────────────────────────────────
+        // ESTILOS
+        // ─────────────────────────────────────────
 
-        // EVENTO QUE SE EJECUTA AL CARGAR EL FORMULARIO
-        private void FrmTransferencias_Load(
-            object sender,
-            EventArgs e)
+        private void AplicarEstilos()
         {
-            // CARGA LOS PRODUCTOS
-            CargarProductos();
+            ConfigurarBoton(btnNuevo,    Color.FromArgb(52,  152, 219));
+            ConfigurarBoton(btnFiltrar,  Color.FromArgb(52,  152, 219));
+            ConfigurarBoton(btnRecargar, Color.FromArgb(46,  204, 113));
+            ConfigurarBoton(btnExportar, Color.FromArgb(39,  174,  96));
+        }
 
-            // CARGA LAS BODEGAS
-            CargarBodegas();
+        private void ConfigurarBoton(IconButton btn, Color color)
+        {
+            btn.BackColor                 = color;
+            btn.ForeColor                 = Color.White;
+            btn.FlatStyle                 = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Font                      = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btn.IconColor                 = Color.White;
+            btn.IconSize                  = 22;
+            btn.TextImageRelation         = TextImageRelation.ImageBeforeText;
+            btn.Cursor                    = Cursors.Hand;
 
-            // MUESTRA LAS TRANSFERENCIAS
+            btn.MouseEnter += (s, e) => { btn.BackColor = ControlPaint.Dark(color); };
+            btn.MouseLeave += (s, e) => { btn.BackColor = color; };
+        }
+
+        // ─────────────────────────────────────────
+        // CONFIGURAR GRID
+        // ─────────────────────────────────────────
+
+        private void ConfigurarGrid()
+        {
+            dgvTransferencias.EnableHeadersVisualStyles = false;
+            dgvTransferencias.BorderStyle               = BorderStyle.None;
+            dgvTransferencias.CellBorderStyle           = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvTransferencias.BackgroundColor           = Color.White;
+            dgvTransferencias.RowHeadersVisible         = false;
+            dgvTransferencias.SelectionMode             = DataGridViewSelectionMode.FullRowSelect;
+            dgvTransferencias.MultiSelect               = false;
+            dgvTransferencias.AllowUserToAddRows        = false;
+            dgvTransferencias.AllowUserToResizeRows     = false;
+            dgvTransferencias.AutoSizeColumnsMode       = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvTransferencias.GridColor                 = Color.LightGray;
+
+            dgvTransferencias.ColumnHeadersBorderStyle                = DataGridViewHeaderBorderStyle.None;
+            dgvTransferencias.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(11, 31, 58);
+            dgvTransferencias.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvTransferencias.ColumnHeadersDefaultCellStyle.Font      = new Font("Segoe UI", 11, FontStyle.Bold);
+            dgvTransferencias.ColumnHeadersHeight                     = 45;
+
+            dgvTransferencias.DefaultCellStyle.Font               = new Font("Segoe UI", 10);
+            dgvTransferencias.DefaultCellStyle.Padding            = new Padding(4);
+            dgvTransferencias.DefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 152, 219);
+            dgvTransferencias.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvTransferencias.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
+            dgvTransferencias.RowTemplate.Height = 38;
+        }
+
+        // ─────────────────────────────────────────
+        // CARGA INICIAL
+        // ─────────────────────────────────────────
+
+        private void FrmTransferencias_Load(object sender, EventArgs e)
+        {
             MostrarTransferencias();
         }
 
-        // =====================================
-        // PRODUCTOS
-        // =====================================
+        // ─────────────────────────────────────────
+        // MOSTRAR TRANSFERENCIAS
+        // ─────────────────────────────────────────
 
-        // METODO PARA CARGAR LOS PRODUCTOS EN EL COMBOBOX
-        private void CargarProductos()
-        {
-            // ASIGNA LOS DATOS AL COMBOBOX
-            cboProducto.DataSource =
-                lTransferencias.MostrarProductos();
-
-            // CAMPO QUE SE MOSTRARA
-            cboProducto.DisplayMember =
-                "Nombre";
-
-            // CAMPO QUE CONTENDRA EL VALOR
-            cboProducto.ValueMember =
-                "IdProducto";
-        }
-
-        // =====================================
-        // BODEGAS
-        // =====================================
-
-        // METODO PARA CARGAR LAS BODEGAS
-        private void CargarBodegas()
-        {
-            // ASIGNA LOS DATOS A LA BODEGA ORIGEN
-            cboBodegaOrigen.DataSource =
-                lTransferencias.MostrarBodegas();
-
-            // CAMPO A MOSTRAR
-            cboBodegaOrigen.DisplayMember =
-                "Nombre";
-
-            // CAMPO DEL VALOR
-            cboBodegaOrigen.ValueMember =
-                "IdBodega";
-
-            // ASIGNA LOS DATOS A LA BODEGA DESTINO
-            cboBodegaDestino.DataSource =
-                lTransferencias.MostrarBodegas().Copy();
-
-            // CAMPO A MOSTRAR
-            cboBodegaDestino.DisplayMember =
-                "Nombre";
-
-            // CAMPO DEL VALOR
-            cboBodegaDestino.ValueMember =
-                "IdBodega";
-        }
-
-        // =====================================
-        // GRID
-        // =====================================
-
-        // METODO PARA MOSTRAR LAS TRANSFERENCIAS
         private void MostrarTransferencias()
         {
-            // ASIGNA LOS DATOS AL DATAGRIDVIEW
-            dgvTransferencias.DataSource =
-                lTransferencias.MostrarTransferencias();
+            _tablaCompleta                = lTransferencias.MostrarTransferencias();
+            dgvTransferencias.DataSource  = _tablaCompleta;
+            txtBuscar.Clear();
         }
 
-        // =====================================
-        // LIMPIAR
-        // =====================================
+        // ─────────────────────────────────────────
+        // BOTON NUEVA TRANSFERENCIA
+        // ─────────────────────────────────────────
 
-        // METODO PARA LIMPIAR LOS CAMPOS DEL FORMULARIO
-        private void LimpiarCampos()
+        private void btnNuevo_Click(object sender, EventArgs e)
         {
-            // LIMPIA EL CAMPO CANTIDAD
-            txtCantidad.Clear();
-
-            // LIMPIA EL CAMPO OBSERVACION
-            txtObservacion.Clear();
-
-            // RESETEA EL COMBOBOX DE PRODUCTOS
-            cboProducto.SelectedIndex = 0;
-
-            // RESETEA EL COMBOBOX DE BODEGA ORIGEN
-            cboBodegaOrigen.SelectedIndex = 0;
-
-            // RESETEA EL COMBOBOX DE BODEGA DESTINO
-            cboBodegaDestino.SelectedIndex = 0;
+            using (var modal = new FrmTransferenciaModal())
+            {
+                if (modal.ShowDialog(this) == DialogResult.OK)
+                    MostrarTransferencias();
+            }
         }
 
-        // =====================================
-        // NUEVO
-        // =====================================
+        // ─────────────────────────────────────────
+        // BOTON FILTRAR
+        // ─────────────────────────────────────────
 
-        // EVENTO DEL BOTON NUEVO
-        private void btnNuevo_Click(
-            object sender,
-            EventArgs e)
+        private void btnFiltrar_Click(object sender, EventArgs e)
         {
-            // LIMPIA LOS CAMPOS
-            LimpiarCampos();
+            string texto = txtBuscar.Text.Trim().ToLower();
+
+            if (string.IsNullOrEmpty(texto))
+            {
+                dgvTransferencias.DataSource = _tablaCompleta;
+                return;
+            }
+
+            if (_tablaCompleta == null) return;
+
+            var filas = _tablaCompleta.AsEnumerable().Where(r =>
+                (r["Producto"]        .ToString().ToLower().Contains(texto)) ||
+                (r["BodegaOrigen"]    .ToString().ToLower().Contains(texto)) ||
+                (r["BodegaDestino"]   .ToString().ToLower().Contains(texto)) ||
+                (r["Observacion"]     .ToString().ToLower().Contains(texto))
+            );
+
+            dgvTransferencias.DataSource = filas.Any()
+                ? filas.CopyToDataTable()
+                : _tablaCompleta.Clone();
         }
 
-        // =====================================
-        // TRANSFERIR
-        // =====================================
+        // ─────────────────────────────────────────
+        // BOTON RECARGAR
+        // ─────────────────────────────────────────
 
-        // EVENTO DEL BOTON TRANSFERIR
-        private void btnTransferir_Click(
-            object sender,
-            EventArgs e)
+        private void btnRecargar_Click(object sender, EventArgs e)
+        {
+            MostrarTransferencias();
+        }
+
+        // ─────────────────────────────────────────
+        // BOTON EXPORTAR EXCEL
+        // ─────────────────────────────────────────
+
+        private void btnExportar_Click(object sender, EventArgs e)
         {
             try
             {
-                // VALIDA SI EL CAMPO CANTIDAD ESTA VACIO
-                if (txtCantidad.Text == "")
+                if (dgvTransferencias.Rows.Count == 0)
                 {
                     MessageBox.Show(
-                        "Ingrese la cantidad");
-
+                        "No hay datos para exportar.",
+                        "Información",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     return;
                 }
 
-                // EJECUTA LA TRANSFERENCIA DEL PRODUCTO
-                lTransferencias.TransferirProducto(
-                    Convert.ToInt32(
-                        cboProducto.SelectedValue),
+                ExportarExcel.Exportar(
+                    dgvTransferencias,
+                    "Reporte_Transferencias");
 
-                    Convert.ToInt32(
-                        cboBodegaOrigen.SelectedValue),
-
-                    Convert.ToInt32(
-                        cboBodegaDestino.SelectedValue),
-
-                    Convert.ToDecimal(
-                        txtCantidad.Text),
-
-                    txtObservacion.Text,
-
-                    SesionUsuario.Usuario);
-
-                // MENSAJE DE EXITO
                 MessageBox.Show(
-                    "Transferencia realizada correctamente");
-
-                // ACTUALIZA EL GRID
-                MostrarTransferencias();
-
-                // LIMPIA LOS CAMPOS
-                LimpiarCampos();
+                    "Reporte exportado correctamente.",
+                    "Exportación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                // MUESTRA EL ERROR
                 MessageBox.Show(
-                    ex.Message);
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
-        }
-
-        // EVENTO DEL BOTON EXPORTAR
-        private void btnExportar_Click(
-    object sender,
-    EventArgs e)
-        {
-            // EXPORTA EL DATAGRIDVIEW A EXCEL
-            ExportarExcel.Exportar(
-                dgvTransferencias,
-                "Reporte_Transferencias");
         }
     }
 }

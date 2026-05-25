@@ -716,7 +716,7 @@ namespace Sistema_Inventario.Presentacion
         }
 
         // METODO PARA ABRIR FORMULARIOS
-        private void AbrirFormulario(
+        internal void AbrirFormulario(
             Form frm)
         {
             // LIMPIA EL PANEL CONTENEDOR
