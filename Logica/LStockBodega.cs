@@ -22,5 +22,17 @@ namespace Sistema_Inventario.Logica
         {
             return dStock.MostrarStockBajo();
         }
+
+        // METODO PARA OBTENER LA LISTA DE PRODUCTOS
+        public DataTable MostrarProductos()
+        {
+            return dStock.MostrarProductos();
+        }
+
+        // METODO PARA FILTRAR EL STOCK POR PRODUCTO
+        public DataTable FiltrarPorProducto(int idProducto)
+        {
+            return dStock.FiltrarPorProducto(idProducto);
+        }
     }
 }

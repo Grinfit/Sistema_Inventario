@@ -1,207 +1,244 @@
-﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+// IMPORTACION DE LIBRERIAS NECESARIAS
 using System;
+using System.Drawing;
 using System.Windows.Forms;
-using Sistema_Inventario.Datos;
+using FontAwesome.Sharp;
 using Sistema_Inventario.Logica;
+using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
-    // FORMULARIO ENCARGADO DE LA GESTION DE BODEGAS
+    // FORMULARIO PRINCIPAL DE GESTION DE BODEGAS
     public partial class FrmBodegas : Form
     {
-        // OBJETO DE LA CAPA LOGICA DE BODEGAS
-        LBodegas lBodegas =
-            new LBodegas();
+        // CAPA LOGICA DE BODEGAS
+        LBodegas lBodegas = new LBodegas();
 
-        // VARIABLE PARA GUARDAR EL ID DE LA BODEGA
+        // ID DE LA BODEGA SELECCIONADA EN LA GRILLA
         int idBodega = 0;
 
-        // CONSTRUCTOR DEL FORMULARIO
+        // CONSTRUCTOR
         public FrmBodegas()
         {
-            // INICIALIZA LOS COMPONENTES
             InitializeComponent();
+            AplicarEstilos();
         }
 
-        // EVENTO LOAD DEL FORMULARIO
-        private void FrmBodegas_Load(
-            object sender,
-            EventArgs e)
+        // APLICA ESTILOS A BOTONES Y GRILLA
+        private void AplicarEstilos()
         {
-            // MUESTRA LAS BODEGAS REGISTRADAS
+            ConfigurarBoton(btnNuevo,    Color.FromArgb(52,  152, 219));
+            ConfigurarBoton(btnEditar,   Color.FromArgb(241, 196,  15));
+            ConfigurarBoton(btnEliminar, Color.FromArgb(231,  76,  60));
+            ConfigurarBoton(btnBuscar,   Color.FromArgb( 10,  31,  58));
+            ConfigurarBoton(btnExportar, Color.FromArgb( 39, 174,  96));
+            ConfigurarGrid();
+        }
+
+        // CONFIGURA ESTILO UNIFICADO DE BOTON
+        private void ConfigurarBoton(IconButton btn, Color color)
+        {
+            btn.BackColor                 = color;
+            btn.ForeColor                 = Color.White;
+            btn.FlatStyle                 = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Font                      = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btn.IconColor                 = Color.White;
+            btn.IconSize                  = 24;
+            btn.TextImageRelation         = TextImageRelation.ImageBeforeText;
+            btn.ImageAlign                = ContentAlignment.MiddleLeft;
+            btn.Padding                   = new Padding(12, 0, 0, 0);
+            btn.Cursor                    = Cursors.Hand;
+
+            btn.MouseEnter += (s, e) => { btn.BackColor = ControlPaint.Dark(color); };
+            btn.MouseLeave += (s, e) => { btn.BackColor = color; };
+        }
+
+        // CONFIGURA ESTILO DE LA GRILLA
+        private void ConfigurarGrid()
+        {
+            dgvBodegas.BorderStyle                               = BorderStyle.None;
+            dgvBodegas.BackgroundColor                           = Color.White;
+            dgvBodegas.EnableHeadersVisualStyles                 = false;
+            dgvBodegas.ColumnHeadersBorderStyle                  = DataGridViewHeaderBorderStyle.None;
+            dgvBodegas.ColumnHeadersDefaultCellStyle.BackColor   = Color.FromArgb(11, 31, 58);
+            dgvBodegas.ColumnHeadersDefaultCellStyle.ForeColor   = Color.White;
+            dgvBodegas.ColumnHeadersDefaultCellStyle.Font        = new Font("Segoe UI", 11F, FontStyle.Bold);
+            dgvBodegas.ColumnHeadersHeight                       = 45;
+            dgvBodegas.DefaultCellStyle.Font                     = new Font("Segoe UI", 10F);
+            dgvBodegas.DefaultCellStyle.SelectionBackColor       = Color.FromArgb(52, 152, 219);
+            dgvBodegas.DefaultCellStyle.SelectionForeColor       = Color.White;
+            dgvBodegas.RowsDefaultCellStyle.BackColor            = Color.White;
+            dgvBodegas.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
+            dgvBodegas.RowTemplate.Height                        = 38;
+            dgvBodegas.AutoSizeColumnsMode                       = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvBodegas.SelectionMode                             = DataGridViewSelectionMode.FullRowSelect;
+            dgvBodegas.MultiSelect                               = false;
+            dgvBodegas.RowHeadersVisible                         = false;
+            dgvBodegas.GridColor                                 = Color.LightGray;
+        }
+
+        // ─────────────────────────────────────────
+        // CARGA INICIAL
+        // ─────────────────────────────────────────
+
+        private void FrmBodegas_Load(object sender, EventArgs e)
+        {
             MostrarBodegas();
         }
 
-        // METODO PARA MOSTRAR LAS BODEGAS
+        // CARGA TODAS LAS BODEGAS EN LA GRILLA
         private void MostrarBodegas()
         {
-            dgvBodegas.DataSource =
-                lBodegas.MostrarBodegas();
+            try
+            {
+                dgvBodegas.DataSource = lBodegas.MostrarBodegas();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // METODO PARA LIMPIAR LOS CAMPOS
-        private void LimpiarCampos()
+        // ─────────────────────────────────────────
+        // SELECCION EN LA GRILLA
+        // ─────────────────────────────────────────
+
+        private void dgvBodegas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // LIMPIA EL TEXTBOX NOMBRE
-            txtNombre.Clear();
-
-            // LIMPIA EL TEXTBOX DIRECCION
-            txtDireccion.Clear();
-
-            // REINICIA EL ID
-            idBodega = 0;
-
-            // ENVIA EL FOCO AL TEXTBOX NOMBRE
-            txtNombre.Focus();
+            try
+            {
+                if (e.RowIndex >= 0)
+                {
+                    idBodega = Convert.ToInt32(
+                        dgvBodegas.Rows[e.RowIndex].Cells["IdBodega"].Value);
+                }
+            }
+            catch { }
         }
 
-        // EVENTO NUEVO
-        private void btnNuevo_Click(
-            object sender,
-            EventArgs e)
+        // ─────────────────────────────────────────
+        // BOTON NUEVO — abre modal en modo creación
+        // ─────────────────────────────────────────
+
+        private void btnNuevo_Click(object sender, EventArgs e)
         {
-            // LIMPIA LOS CAMPOS
-            LimpiarCampos();
+            using (FrmBodegaModal modal = new FrmBodegaModal())
+            {
+                if (modal.ShowDialog(this) == DialogResult.OK)
+                {
+                    MostrarBodegas();
+                    idBodega = 0;
+                }
+            }
         }
 
-        // EVENTO GUARDAR
-        private void btnGuardar_Click(
-            object sender,
-            EventArgs e)
+        // ─────────────────────────────────────────
+        // BOTON EDITAR — abre modal en modo edición
+        // ─────────────────────────────────────────
+
+        private void btnEditar_Click(object sender, EventArgs e)
         {
-            // VALIDA SI EL NOMBRE ESTA VACIO
-            if (txtNombre.Text == "")
+            if (idBodega == 0 || dgvBodegas.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
-                    "Ingrese el nombre");
-
+                    "Seleccione una bodega de la lista antes de editar.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            // INSERTA LA BODEGA
-            lBodegas.InsertarBodega(
-                txtNombre.Text,
-                txtDireccion.Text);
+            try
+            {
+                DataGridViewRow fila = dgvBodegas.SelectedRows[0];
 
-            // MENSAJE DE CONFIRMACION
-            MessageBox.Show(
-                "Bodega registrada correctamente");
-
-            // ACTUALIZA EL DATAGRIDVIEW
-            MostrarBodegas();
-
-            // LIMPIA LOS CAMPOS
-            LimpiarCampos();
+                using (FrmBodegaModal modal = new FrmBodegaModal(
+                    idBodega,
+                    fila.Cells["Nombre"].Value?.ToString()    ?? "",
+                    fila.Cells["Direccion"].Value?.ToString() ?? ""))
+                {
+                    if (modal.ShowDialog(this) == DialogResult.OK)
+                        MostrarBodegas();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // EVENTO EDITAR
-        private void btnEditar_Click(
-            object sender,
-            EventArgs e)
+        // ─────────────────────────────────────────
+        // BOTON ELIMINAR
+        // ─────────────────────────────────────────
+
+        private void btnEliminar_Click(object sender, EventArgs e)
         {
-            // VALIDA SI SELECCIONO UNA BODEGA
-            if (idBodega == 0)
+            if (idBodega == 0 || dgvBodegas.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
-                    "Seleccione una bodega");
-
+                    "Seleccione una bodega de la lista antes de eliminar.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            // ACTUALIZA LA BODEGA
-            lBodegas.EditarBodega(
-                idBodega,
-                txtNombre.Text,
-                txtDireccion.Text);
-
-            // MENSAJE DE CONFIRMACION
-            MessageBox.Show(
-                "Bodega actualizada");
-
-            // ACTUALIZA EL DATAGRIDVIEW
-            MostrarBodegas();
-
-            // LIMPIA LOS CAMPOS
-            LimpiarCampos();
-        }
-
-        // EVENTO ELIMINAR
-        private void btnEliminar_Click(
-            object sender,
-            EventArgs e)
-        {
-            // VALIDA SI SELECCIONO UNA BODEGA
-            if (idBodega == 0)
+            try
             {
-                MessageBox.Show(
-                    "Seleccione una bodega");
+                string nombre = "";
+                try { nombre = dgvBodegas.SelectedRows[0].Cells["Nombre"].Value?.ToString() ?? ""; }
+                catch { }
 
-                return;
-            }
-
-            // MENSAJE DE CONFIRMACION
-            DialogResult resultado =
-                MessageBox.Show(
-                    "¿Desea eliminar la bodega?",
-                    "Confirmación",
+                DialogResult resultado = MessageBox.Show(
+                    "¿Desea eliminar la bodega: " + nombre + "?",
+                    "Confirmar eliminación",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
 
-            // VALIDA SI EL USUARIO CONFIRMO
-            if (resultado == DialogResult.Yes)
+                if (resultado == DialogResult.Yes)
+                {
+                    lBodegas.EliminarBodega(idBodega);
+
+                    MessageBox.Show(
+                        "Bodega eliminada correctamente.",
+                        "Éxito",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    MostrarBodegas();
+                    idBodega = 0;
+                }
+            }
+            catch (Exception ex)
             {
-                // ELIMINA LA BODEGA
-                lBodegas.EliminarBodega(
-                    idBodega);
-
-                // MENSAJE DE CONFIRMACION
-                MessageBox.Show(
-                    "Bodega eliminada");
-
-                // ACTUALIZA EL DATAGRIDVIEW
-                MostrarBodegas();
-
-                // LIMPIA LOS CAMPOS
-                LimpiarCampos();
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // EVENTO BUSCAR
-        private void btnBuscar_Click(
-            object sender,
-            EventArgs e)
+        // ─────────────────────────────────────────
+        // BOTON BUSCAR
+        // ─────────────────────────────────────────
+
+        private void btnBuscar_Click(object sender, EventArgs e)
         {
-            // BUSCA LA BODEGA
-            dgvBodegas.DataSource =
-                lBodegas.BuscarBodega(
-                    txtBuscar.Text);
+            try
+            {
+                dgvBodegas.DataSource = lBodegas.BuscarBodega(txtBuscar.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // EVENTO SELECCIONAR FILA DEL DATAGRIDVIEW
-        private void dgvBodegas_CellClick(
-            object sender,
-            DataGridViewCellEventArgs e)
+        // ─────────────────────────────────────────
+        // BOTON EXPORTAR EXCEL
+        // ─────────────────────────────────────────
+
+        private void btnExportar_Click(object sender, EventArgs e)
         {
-            // VALIDA SI LA FILA ES VALIDA
-            if (e.RowIndex >= 0)
-            {
-                // OBTIENE LA FILA SELECCIONADA
-                DataGridViewRow fila =
-                    dgvBodegas.Rows[e.RowIndex];
-
-                // OBTIENE EL ID DE LA BODEGA
-                idBodega =
-                    Convert.ToInt32(
-                        fila.Cells["IdBodega"].Value);
-
-                // MUESTRA EL NOMBRE
-                txtNombre.Text =
-                    fila.Cells["Nombre"].Value.ToString();
-
-                // MUESTRA LA DIRECCION
-                txtDireccion.Text =
-                    fila.Cells["Direccion"].Value.ToString();
-            }
+            ExportarExcel.Exportar(dgvBodegas, "Reporte_Bodegas");
         }
     }
 }

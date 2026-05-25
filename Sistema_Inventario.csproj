@@ -146,6 +146,12 @@
     <Compile Include="Presentacion\FrmBitacora.Designer.cs">
       <DependentUpon>FrmBitacora.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentacion\FrmBodegaModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmBodegaModal.Designer.cs">
+      <DependentUpon>FrmBodegaModal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\FrmBodegas.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -188,11 +194,23 @@
     <Compile Include="Presentacion\FrmMovimientosInventario.Designer.cs">
       <DependentUpon>FrmMovimientosInventario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentacion\FrmProductoModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmProductoModal.Designer.cs">
+      <DependentUpon>FrmProductoModal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\FrmProductos.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Presentacion\FrmProductos.Designer.cs">
       <DependentUpon>FrmProductos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmProveedorModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmProveedorModal.Designer.cs">
+      <DependentUpon>FrmProveedorModal.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentacion\FrmProveedores.cs">
       <SubType>Form</SubType>
@@ -218,11 +236,23 @@
     <Compile Include="Presentacion\FrmTransferencias.Designer.cs">
       <DependentUpon>FrmTransferencias.cs</DependentUpon>
     </Compile>
+    <Compile Include="Presentacion\FrmTransferenciaModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmTransferenciaModal.Designer.cs">
+      <DependentUpon>FrmTransferenciaModal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Presentacion\FrmUsuarios.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Presentacion\FrmUsuarios.Designer.cs">
       <DependentUpon>FrmUsuarios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentacion\FrmUsuarioModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentacion\FrmUsuarioModal.Designer.cs">
+      <DependentUpon>FrmUsuarioModal.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -240,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Presentacion\FrmInicio.resx">
       <DependentUpon>FrmInicio.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Presentacion\FrmKardex.resx">
+      <DependentUpon>FrmKardex.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Presentacion\FrmLogs.resx">
       <DependentUpon>FrmLogs.cs</DependentUpon>

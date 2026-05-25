@@ -76,7 +76,7 @@ namespace Sistema_Inventario.Presentacion
                 false;
 
             dgvMovimientos.AutoSizeColumnsMode =
-                DataGridViewAutoSizeColumnsMode.None;
+                DataGridViewAutoSizeColumnsMode.Fill;
 
             dgvMovimientos.GridColor =
                 Color.LightGray;
