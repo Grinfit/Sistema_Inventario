@@ -134,13 +134,13 @@ namespace Sistema_Inventario.Presentacion
 
             // ANCHOS
             dgvKardex.Columns["IdMovimiento"].Width   = 80;
-            dgvKardex.Columns["TipoMovimiento"].Width = 150;
-            dgvKardex.Columns["Producto"].Width       = 230;
+            dgvKardex.Columns["TipoMovimiento"].Width = 200;
+            dgvKardex.Columns["Producto"].Width       = 330;
             dgvKardex.Columns["Bodega"].Width         = 200;
             dgvKardex.Columns["Cantidad"].Width       = 90;
             dgvKardex.Columns["Fecha"].Width          = 170;
-            dgvKardex.Columns["Observacion"].Width    = 250;
-            dgvKardex.Columns["UsuarioRegistro"].Width = 160;
+            dgvKardex.Columns["Observacion"].Width    = 350;
+            dgvKardex.Columns["UsuarioRegistro"].Width = 200;
 
             // ALINEACIONES
             dgvKardex.Columns["IdMovimiento"].DefaultCellStyle.Alignment =

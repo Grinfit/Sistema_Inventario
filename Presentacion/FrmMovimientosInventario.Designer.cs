@@ -28,34 +28,39 @@ namespace Sistema_Inventario.Presentacion
             DataGridViewCellStyle headerStyle = new DataGridViewCellStyle();
             DataGridViewCellStyle rowsStyle   = new DataGridViewCellStyle();
 
-            // CONTROLES
-            this.lblTitulo         = new System.Windows.Forms.Label();
-            this.pnlSep1           = new System.Windows.Forms.Panel();
-            this.pnlFormulario     = new System.Windows.Forms.Panel();
-            this.pnlSepV           = new System.Windows.Forms.Panel();
-            this.label1            = new System.Windows.Forms.Label();
-            this.label2            = new System.Windows.Forms.Label();
-            this.label3            = new System.Windows.Forms.Label();
-            this.label4            = new System.Windows.Forms.Label();
-            this.label5            = new System.Windows.Forms.Label();
-            this.cboTipoMovimiento = new System.Windows.Forms.ComboBox();
-            this.cboProducto       = new System.Windows.Forms.ComboBox();
-            this.cboBodega         = new System.Windows.Forms.ComboBox();
-            this.txtCantidad       = new System.Windows.Forms.TextBox();
-            this.txtObservacion    = new System.Windows.Forms.TextBox();
-            this.btnNuevo          = new FontAwesome.Sharp.IconButton();
-            this.btnGuardar        = new FontAwesome.Sharp.IconButton();
-            this.btnExportar       = new FontAwesome.Sharp.IconButton();
-            this.dgvMovimientos    = new System.Windows.Forms.DataGridView();
+            // COMPONENTES
+            this.components = new System.ComponentModel.Container();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+
+            // PANELES
+            this.pnlHeader   = new System.Windows.Forms.Panel();
+            this.pnlAcciones = new System.Windows.Forms.Panel();
+            this.pnlBusqueda = new System.Windows.Forms.Panel();
+            this.pnlSepH     = new System.Windows.Forms.Panel();
+
+            // LABELS DEL HEADER
+            this.lblTitulo      = new System.Windows.Forms.Label();
+            this.lblFechaHora   = new System.Windows.Forms.Label();
+            this.lblUsuarioInfo = new System.Windows.Forms.Label();
+
+            // BUSQUEDA Y BOTONES
+            this.txtBuscar           = new System.Windows.Forms.TextBox();
+            this.btnExportar         = new FontAwesome.Sharp.IconButton();
+            this.btnNuevoMovimiento  = new FontAwesome.Sharp.IconButton();
+
+            // GRID
+            this.dgvMovimientos = new System.Windows.Forms.DataGridView();
 
             ((System.ComponentModel.ISupportInitialize)(this.dgvMovimientos)).BeginInit();
-            this.pnlFormulario.SuspendLayout();
+            this.pnlHeader.SuspendLayout();
+            this.pnlAcciones.SuspendLayout();
+            this.pnlBusqueda.SuspendLayout();
             this.SuspendLayout();
 
             // ─────────────────────────────────────────
             // FORMULARIO
             // ─────────────────────────────────────────
-            this.BackColor       = System.Drawing.Color.FromArgb(236, 240, 245);
+            this.BackColor       = System.Drawing.Color.FromArgb(240, 242, 245);
             this.ClientSize      = new System.Drawing.Size(1350, 860);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name            = "FrmMovimientosInventario";
@@ -63,144 +68,84 @@ namespace Sistema_Inventario.Presentacion
             this.Load           += new System.EventHandler(this.FrmMovimientosInventario_Load);
 
             // ─────────────────────────────────────────
-            // TITULO PRINCIPAL
+            // TIMER — actualiza reloj cada segundo
             // ─────────────────────────────────────────
+            this.timer1.Interval = 1000;
+            this.timer1.Tick    += new System.EventHandler(this.timer1_Tick);
+
+            // ─────────────────────────────────────────
+            // PANEL HEADER (banda azul oscura)
+            // ─────────────────────────────────────────
+            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(10, 35, 66);
+            this.pnlHeader.Dock      = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Height    = 84;
+            this.pnlHeader.Name      = "pnlHeader";
+            this.pnlHeader.TabIndex  = 0;
+
+            // TITULO
             this.lblTitulo.AutoSize  = true;
             this.lblTitulo.Font      = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(10, 35, 66);
-            this.lblTitulo.Location  = new System.Drawing.Point(50, 20);
+            this.lblTitulo.ForeColor = System.Drawing.Color.White;
+            this.lblTitulo.Location  = new System.Drawing.Point(30, 22);
             this.lblTitulo.Name      = "lblTitulo";
-            this.lblTitulo.TabIndex  = 0;
             this.lblTitulo.Text      = "Movimientos de Inventario";
 
-            // SEPARADOR HORIZONTAL SUPERIOR
-            this.pnlSep1.BackColor = System.Drawing.Color.FromArgb(10, 35, 66);
-            this.pnlSep1.Location  = new System.Drawing.Point(30, 78);
-            this.pnlSep1.Name      = "pnlSep1";
-            this.pnlSep1.Size      = new System.Drawing.Size(1290, 2);
-            this.pnlSep1.TabIndex  = 1;
+            // FECHA Y HORA (derecha)
+            this.lblFechaHora.Anchor    = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            this.lblFechaHora.Font      = new System.Drawing.Font("Segoe UI", 11F);
+            this.lblFechaHora.ForeColor = System.Drawing.Color.FromArgb(180, 200, 230);
+            this.lblFechaHora.Location  = new System.Drawing.Point(680, 20);
+            this.lblFechaHora.Name      = "lblFechaHora";
+            this.lblFechaHora.Size      = new System.Drawing.Size(640, 26);
+            this.lblFechaHora.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+
+            // USUARIO Y ROL (derecha-abajo)
+            this.lblUsuarioInfo.Anchor    = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            this.lblUsuarioInfo.Font      = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.lblUsuarioInfo.ForeColor = System.Drawing.Color.White;
+            this.lblUsuarioInfo.Location  = new System.Drawing.Point(680, 50);
+            this.lblUsuarioInfo.Name      = "lblUsuarioInfo";
+            this.lblUsuarioInfo.Size      = new System.Drawing.Size(640, 24);
+            this.lblUsuarioInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+
+            this.pnlHeader.Controls.Add(this.lblTitulo);
+            this.pnlHeader.Controls.Add(this.lblFechaHora);
+            this.pnlHeader.Controls.Add(this.lblUsuarioInfo);
 
             // ─────────────────────────────────────────
-            // PANEL IZQUIERDO — CARD DE CAPTURA
+            // PANEL ACCIONES (barra de búsqueda + botones)
             // ─────────────────────────────────────────
-            this.pnlFormulario.BackColor = System.Drawing.Color.White;
-            this.pnlFormulario.Location  = new System.Drawing.Point(30, 100);
-            this.pnlFormulario.Name      = "pnlFormulario";
-            this.pnlFormulario.Size      = new System.Drawing.Size(455, 700);
-            this.pnlFormulario.TabIndex  = 2;
+            this.pnlAcciones.BackColor = System.Drawing.Color.White;
+            this.pnlAcciones.Dock      = System.Windows.Forms.DockStyle.Top;
+            this.pnlAcciones.Height    = 68;
+            this.pnlAcciones.Name      = "pnlAcciones";
+            this.pnlAcciones.TabIndex  = 1;
 
-            // SEPARADOR VERTICAL
-            this.pnlSepV.BackColor = System.Drawing.Color.FromArgb(210, 215, 220);
-            this.pnlSepV.Location  = new System.Drawing.Point(492, 100);
-            this.pnlSepV.Name      = "pnlSepV";
-            this.pnlSepV.Size      = new System.Drawing.Size(2, 700);
-            this.pnlSepV.TabIndex  = 3;
+            // CAJA DE BÚSQUEDA (panel contenedor)
+            this.pnlBusqueda.BackColor   = System.Drawing.Color.FromArgb(241, 243, 246);
+            this.pnlBusqueda.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.pnlBusqueda.Location    = new System.Drawing.Point(20, 14);
+            this.pnlBusqueda.Name        = "pnlBusqueda";
+            this.pnlBusqueda.Size        = new System.Drawing.Size(360, 40);
+            this.pnlBusqueda.TabIndex    = 0;
 
-            // ─────────────────────────────────────────
-            // LABELS (posición relativa al panel)
-            // ─────────────────────────────────────────
-            Label[]  labels  = { label1, label2, label3, label4, label5 };
-            string[] textos  = { "Tipo Movimiento", "Producto", "Bodega", "Cantidad", "Observación" };
-            int[]    labelY  = { 20, 104, 188, 272, 356 };
+            // TEXTBOX DE BÚSQUEDA (sin borde, dentro del panel)
+            this.txtBuscar.BackColor    = System.Drawing.Color.FromArgb(241, 243, 246);
+            this.txtBuscar.BorderStyle  = System.Windows.Forms.BorderStyle.None;
+            this.txtBuscar.Font         = new System.Drawing.Font("Segoe UI", 11F);
+            this.txtBuscar.ForeColor    = System.Drawing.Color.FromArgb(100, 100, 100);
+            this.txtBuscar.Location     = new System.Drawing.Point(10, 10);
+            this.txtBuscar.Name         = "txtBuscar";
+            this.txtBuscar.Size         = new System.Drawing.Size(340, 24);
+            this.txtBuscar.TabIndex     = 0;
+            this.txtBuscar.TextChanged += new System.EventHandler(this.txtBuscar_TextChanged);
+            this.txtBuscar.Enter       += new System.EventHandler(this.txtBuscar_Enter);
+            this.txtBuscar.Leave       += new System.EventHandler(this.txtBuscar_Leave);
 
-            for (int i = 0; i < labels.Length; i++)
-            {
-                labels[i].AutoSize  = true;
-                labels[i].Font      = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold);
-                labels[i].ForeColor = System.Drawing.Color.FromArgb(60, 60, 60);
-                labels[i].Location  = new System.Drawing.Point(20, labelY[i]);
-                labels[i].Name      = "label" + (i + 1);
-                labels[i].TabIndex  = 10 + i;
-                labels[i].Text      = textos[i];
-            }
+            this.pnlBusqueda.Controls.Add(this.txtBuscar);
 
-            // ─────────────────────────────────────────
-            // COMBOBOXES (posición relativa al panel)
-            // ─────────────────────────────────────────
-            ComboBox[] combos     = { cboTipoMovimiento, cboProducto, cboBodega };
-            int[]      comboY     = { 48, 132, 216 };
-            string[]   comboNames = { "cboTipoMovimiento", "cboProducto", "cboBodega" };
-
-            for (int i = 0; i < combos.Length; i++)
-            {
-                combos[i].DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-                combos[i].Font          = new System.Drawing.Font("Segoe UI", 11F);
-                combos[i].Location      = new System.Drawing.Point(20, comboY[i]);
-                combos[i].Name          = comboNames[i];
-                combos[i].Size          = new System.Drawing.Size(415, 32);
-                combos[i].TabIndex      = 20 + i;
-            }
-
-            // ─────────────────────────────────────────
-            // CANTIDAD
-            // ─────────────────────────────────────────
-            this.txtCantidad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCantidad.Font        = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtCantidad.Location    = new System.Drawing.Point(20, 300);
-            this.txtCantidad.Name        = "txtCantidad";
-            this.txtCantidad.Size        = new System.Drawing.Size(200, 32);
-            this.txtCantidad.TabIndex    = 30;
-            this.txtCantidad.KeyPress   += new System.Windows.Forms.KeyPressEventHandler(this.txtCantidad_KeyPress);
-
-            // ─────────────────────────────────────────
-            // OBSERVACION
-            // ─────────────────────────────────────────
-            this.txtObservacion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtObservacion.Font        = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtObservacion.Location    = new System.Drawing.Point(20, 384);
-            this.txtObservacion.Multiline   = true;
-            this.txtObservacion.Name        = "txtObservacion";
-            this.txtObservacion.ScrollBars  = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtObservacion.Size        = new System.Drawing.Size(415, 110);
-            this.txtObservacion.TabIndex    = 31;
-
-            // ─────────────────────────────────────────
-            // BTN NUEVO
-            // ─────────────────────────────────────────
-            this.btnNuevo.BackColor                 = System.Drawing.Color.FromArgb(59, 130, 246);
-            this.btnNuevo.Cursor                    = System.Windows.Forms.Cursors.Hand;
-            this.btnNuevo.FlatAppearance.BorderSize = 0;
-            this.btnNuevo.FlatStyle                 = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNuevo.Font                      = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.btnNuevo.ForeColor                 = System.Drawing.Color.White;
-            this.btnNuevo.IconChar                  = FontAwesome.Sharp.IconChar.CirclePlus;
-            this.btnNuevo.IconColor                 = System.Drawing.Color.White;
-            this.btnNuevo.IconFont                  = FontAwesome.Sharp.IconFont.Auto;
-            this.btnNuevo.IconSize                  = 20;
-            this.btnNuevo.Location                  = new System.Drawing.Point(20, 530);
-            this.btnNuevo.Name                      = "btnNuevo";
-            this.btnNuevo.Size                      = new System.Drawing.Size(120, 46);
-            this.btnNuevo.TabIndex                  = 40;
-            this.btnNuevo.Text                      = " Nuevo";
-            this.btnNuevo.TextImageRelation         = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnNuevo.UseVisualStyleBackColor   = false;
-            this.btnNuevo.Click                    += new System.EventHandler(this.btnNuevo_Click);
-
-            // ─────────────────────────────────────────
-            // BTN REGISTRAR
-            // ─────────────────────────────────────────
-            this.btnGuardar.BackColor                 = System.Drawing.Color.FromArgb(34, 197, 94);
-            this.btnGuardar.Cursor                    = System.Windows.Forms.Cursors.Hand;
-            this.btnGuardar.FlatAppearance.BorderSize = 0;
-            this.btnGuardar.FlatStyle                 = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGuardar.Font                      = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.btnGuardar.ForeColor                 = System.Drawing.Color.White;
-            this.btnGuardar.IconChar                  = FontAwesome.Sharp.IconChar.FloppyDisk;
-            this.btnGuardar.IconColor                 = System.Drawing.Color.White;
-            this.btnGuardar.IconFont                  = FontAwesome.Sharp.IconFont.Auto;
-            this.btnGuardar.IconSize                  = 20;
-            this.btnGuardar.Location                  = new System.Drawing.Point(148, 530);
-            this.btnGuardar.Name                      = "btnGuardar";
-            this.btnGuardar.Size                      = new System.Drawing.Size(140, 46);
-            this.btnGuardar.TabIndex                  = 41;
-            this.btnGuardar.Text                      = " Registrar";
-            this.btnGuardar.TextImageRelation         = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnGuardar.UseVisualStyleBackColor   = false;
-            this.btnGuardar.Click                    += new System.EventHandler(this.btnGuardar_Click);
-
-            // ─────────────────────────────────────────
-            // BTN EXPORTAR
-            // ─────────────────────────────────────────
+            // BTN EXPORTAR EXCEL (anclado derecha)
+            this.btnExportar.Anchor                    = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
             this.btnExportar.BackColor                 = System.Drawing.Color.FromArgb(39, 174, 96);
             this.btnExportar.Cursor                    = System.Windows.Forms.Cursors.Hand;
             this.btnExportar.FlatAppearance.BorderSize = 0;
@@ -211,47 +156,75 @@ namespace Sistema_Inventario.Presentacion
             this.btnExportar.IconColor                 = System.Drawing.Color.White;
             this.btnExportar.IconFont                  = FontAwesome.Sharp.IconFont.Auto;
             this.btnExportar.IconSize                  = 20;
-            this.btnExportar.Location                  = new System.Drawing.Point(296, 530);
+            this.btnExportar.Location                  = new System.Drawing.Point(942, 13);
             this.btnExportar.Name                      = "btnExportar";
-            this.btnExportar.Size                      = new System.Drawing.Size(175, 46);
-            this.btnExportar.TabIndex                  = 42;
+            this.btnExportar.Size                      = new System.Drawing.Size(170, 42);
+            this.btnExportar.TabIndex                  = 1;
             this.btnExportar.Text                      = " Exportar Excel";
             this.btnExportar.TextImageRelation         = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnExportar.UseVisualStyleBackColor   = false;
             this.btnExportar.Click                    += new System.EventHandler(this.btnExportar_Click);
 
+            // BTN NUEVO MOVIMIENTO (anclado derecha)
+            this.btnNuevoMovimiento.Anchor                    = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            this.btnNuevoMovimiento.BackColor                 = System.Drawing.Color.FromArgb(37, 99, 235);
+            this.btnNuevoMovimiento.Cursor                    = System.Windows.Forms.Cursors.Hand;
+            this.btnNuevoMovimiento.FlatAppearance.BorderSize = 0;
+            this.btnNuevoMovimiento.FlatStyle                 = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNuevoMovimiento.Font                      = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnNuevoMovimiento.ForeColor                 = System.Drawing.Color.White;
+            this.btnNuevoMovimiento.IconChar                  = FontAwesome.Sharp.IconChar.CirclePlus;
+            this.btnNuevoMovimiento.IconColor                 = System.Drawing.Color.White;
+            this.btnNuevoMovimiento.IconFont                  = FontAwesome.Sharp.IconFont.Auto;
+            this.btnNuevoMovimiento.IconSize                  = 22;
+            this.btnNuevoMovimiento.Location                  = new System.Drawing.Point(1120, 13);
+            this.btnNuevoMovimiento.Name                      = "btnNuevoMovimiento";
+            this.btnNuevoMovimiento.Size                      = new System.Drawing.Size(210, 42);
+            this.btnNuevoMovimiento.TabIndex                  = 2;
+            this.btnNuevoMovimiento.Text                      = " Nuevo Movimiento";
+            this.btnNuevoMovimiento.TextImageRelation         = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnNuevoMovimiento.UseVisualStyleBackColor   = false;
+            this.btnNuevoMovimiento.Click                    += new System.EventHandler(this.btnNuevoMovimiento_Click);
+
+            this.pnlAcciones.Controls.Add(this.pnlBusqueda);
+            this.pnlAcciones.Controls.Add(this.btnExportar);
+            this.pnlAcciones.Controls.Add(this.btnNuevoMovimiento);
+
             // ─────────────────────────────────────────
-            // DATAGRIDVIEW — protagonista visual derecho
+            // SEPARADOR HORIZONTAL
+            // ─────────────────────────────────────────
+            this.pnlSepH.BackColor = System.Drawing.Color.FromArgb(210, 215, 220);
+            this.pnlSepH.Dock      = System.Windows.Forms.DockStyle.Top;
+            this.pnlSepH.Height    = 1;
+            this.pnlSepH.Name      = "pnlSepH";
+            this.pnlSepH.TabIndex  = 2;
+
+            // ─────────────────────────────────────────
+            // DATAGRIDVIEW — elemento principal
             // ─────────────────────────────────────────
             this.dgvMovimientos.AllowUserToAddRows          = false;
             this.dgvMovimientos.AllowUserToDeleteRows       = false;
             this.dgvMovimientos.AllowUserToResizeRows       = false;
-            this.dgvMovimientos.Anchor                      = (System.Windows.Forms.AnchorStyles)(
-                System.Windows.Forms.AnchorStyles.Top    |
-                System.Windows.Forms.AnchorStyles.Bottom |
-                System.Windows.Forms.AnchorStyles.Left   |
-                System.Windows.Forms.AnchorStyles.Right);
             this.dgvMovimientos.AutoSizeColumnsMode         = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvMovimientos.BackgroundColor             = System.Drawing.Color.White;
             this.dgvMovimientos.BorderStyle                 = System.Windows.Forms.BorderStyle.None;
             this.dgvMovimientos.CellBorderStyle             = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.dgvMovimientos.ColumnHeadersHeight         = 45;
+            this.dgvMovimientos.ColumnHeadersHeight         = 48;
             this.dgvMovimientos.ColumnHeadersHeightSizeMode =
                 System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvMovimientos.Dock                        = System.Windows.Forms.DockStyle.Fill;
             this.dgvMovimientos.EnableHeadersVisualStyles   = false;
             this.dgvMovimientos.GridColor                   = System.Drawing.Color.FromArgb(225, 225, 225);
-            this.dgvMovimientos.Location                    = new System.Drawing.Point(502, 100);
             this.dgvMovimientos.MultiSelect                 = false;
             this.dgvMovimientos.Name                        = "dgvMovimientos";
             this.dgvMovimientos.ReadOnly                    = true;
             this.dgvMovimientos.RowHeadersVisible           = false;
             this.dgvMovimientos.RowHeadersWidth             = 51;
-            this.dgvMovimientos.RowTemplate.Height          = 38;
+            this.dgvMovimientos.RowTemplate.Height          = 40;
             this.dgvMovimientos.SelectionMode               = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMovimientos.Size                        = new System.Drawing.Size(818, 700);
-            this.dgvMovimientos.TabIndex                    = 50;
+            this.dgvMovimientos.TabIndex                    = 3;
 
-            // ESTILO CABECERA
+            // ESTILO CABECERA (azul oscuro ERP)
             headerStyle.BackColor = System.Drawing.Color.FromArgb(10, 35, 66);
             headerStyle.ForeColor = System.Drawing.Color.White;
             headerStyle.Font      = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
@@ -266,71 +239,48 @@ namespace Sistema_Inventario.Presentacion
             this.dgvMovimientos.AlternatingRowsDefaultCellStyle.BackColor =
                 System.Drawing.Color.FromArgb(245, 247, 250);
             this.dgvMovimientos.DefaultCellStyle.Padding =
-                new System.Windows.Forms.Padding(5);
-
-            // ─────────────────────────────────────────
-            // AGREGAR CONTROLES AL CARD IZQUIERDO
-            // ─────────────────────────────────────────
-            this.pnlFormulario.Controls.Add(this.label1);
-            this.pnlFormulario.Controls.Add(this.cboTipoMovimiento);
-            this.pnlFormulario.Controls.Add(this.label2);
-            this.pnlFormulario.Controls.Add(this.cboProducto);
-            this.pnlFormulario.Controls.Add(this.label3);
-            this.pnlFormulario.Controls.Add(this.cboBodega);
-            this.pnlFormulario.Controls.Add(this.label4);
-            this.pnlFormulario.Controls.Add(this.txtCantidad);
-            this.pnlFormulario.Controls.Add(this.label5);
-            this.pnlFormulario.Controls.Add(this.txtObservacion);
-            this.pnlFormulario.Controls.Add(this.btnNuevo);
-            this.pnlFormulario.Controls.Add(this.btnGuardar);
-            this.pnlFormulario.Controls.Add(this.btnExportar);
+                new System.Windows.Forms.Padding(5, 0, 5, 0);
 
             // ─────────────────────────────────────────
             // AGREGAR CONTROLES AL FORMULARIO
+            // (orden: primero = procesado primero por dock engine)
             // ─────────────────────────────────────────
-            this.Controls.Add(this.lblTitulo);
-            this.Controls.Add(this.pnlSep1);
-            this.Controls.Add(this.pnlFormulario);
-            this.Controls.Add(this.pnlSepV);
-            this.Controls.Add(this.dgvMovimientos);
+            this.Controls.Add(this.dgvMovimientos);  // Fill — debe ir al final del z-order
+            this.Controls.Add(this.pnlSepH);
+            this.Controls.Add(this.pnlAcciones);
+            this.Controls.Add(this.pnlHeader);
 
             ((System.ComponentModel.ISupportInitialize)(this.dgvMovimientos)).EndInit();
-            this.pnlFormulario.ResumeLayout(false);
-            this.pnlFormulario.PerformLayout();
+            this.pnlBusqueda.ResumeLayout(false);
+            this.pnlBusqueda.PerformLayout();
+            this.pnlAcciones.ResumeLayout(false);
+            this.pnlHeader.ResumeLayout(false);
+            this.pnlHeader.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
         }
 
         #endregion
 
-        // TITULO Y SEPARADORES
+        // COMPONENTES
+        private System.Windows.Forms.Timer timer1;
+
+        // PANELES
+        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Panel pnlAcciones;
+        private System.Windows.Forms.Panel pnlBusqueda;
+        private System.Windows.Forms.Panel pnlSepH;
+
+        // LABELS HEADER
         private System.Windows.Forms.Label lblTitulo;
-        private System.Windows.Forms.Panel pnlSep1;
-        private System.Windows.Forms.Panel pnlFormulario;
-        private System.Windows.Forms.Panel pnlSepV;
+        private System.Windows.Forms.Label lblFechaHora;
+        private System.Windows.Forms.Label lblUsuarioInfo;
 
-        // LABELS
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        // BUSQUEDA Y BOTONES
+        private System.Windows.Forms.TextBox     txtBuscar;
+        private FontAwesome.Sharp.IconButton     btnExportar;
+        private FontAwesome.Sharp.IconButton     btnNuevoMovimiento;
 
-        // COMBOBOXES
-        private System.Windows.Forms.ComboBox cboTipoMovimiento;
-        private System.Windows.Forms.ComboBox cboProducto;
-        private System.Windows.Forms.ComboBox cboBodega;
-
-        // TEXTBOXES
-        private System.Windows.Forms.TextBox txtCantidad;
-        private System.Windows.Forms.TextBox txtObservacion;
-
-        // BOTONES
-        private FontAwesome.Sharp.IconButton btnNuevo;
-        private FontAwesome.Sharp.IconButton btnGuardar;
-        private FontAwesome.Sharp.IconButton btnExportar;
-
-        // DATAGRIDVIEW
+        // GRID PRINCIPAL
         private System.Windows.Forms.DataGridView dgvMovimientos;
     }
 }
