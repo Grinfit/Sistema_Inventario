@@ -196,23 +196,32 @@ namespace Sistema_Inventario.Datos
 
             try
             {
-                // VERIFICA SI EL MOVIMIENTO ES UNA SALIDA
+                // VERIFICA STOCK PARA SALIDA — usa la misma conexión y
+                // transacción activa para no cerrar la conexión compartida
                 if (idTipoMovimiento == 2)
                 {
-                    // OBTIENE EL STOCK ACTUAL
-                    decimal stockActual =
-                        ObtenerStockActual(
-                            idProducto,
-                            idBodega);
+                    SqlCommand cmdStock =
+                        new SqlCommand(
+                            @"SELECT ISNULL(StockActual, 0)
+                              FROM StockBodega
+                              WHERE IdProducto = @IdProducto
+                              AND   IdBodega   = @IdBodega",
+                            conexion,
+                            transaccion);
 
-                    // VALIDA SI LA CANTIDAD ES MAYOR AL STOCK
+                    cmdStock.Parameters.AddWithValue(
+                        "@IdProducto", idProducto);
+                    cmdStock.Parameters.AddWithValue(
+                        "@IdBodega", idBodega);
+
+                    object res = cmdStock.ExecuteScalar();
+                    decimal stockActual =
+                        res != null ? Convert.ToDecimal(res) : 0m;
+
                     if (cantidad > stockActual)
-                    {
-                        // GENERA ERROR DE STOCK INSUFICIENTE
                         throw new Exception(
                             $"Stock insuficiente.\n\n" +
-                            $"Stock actual: {stockActual}");
-                    }
+                            $"Stock actual en bodega: {stockActual}");
                 }
 
                 // CONSULTA SQL PARA INSERTAR EL MOVIMIENTO
@@ -301,26 +310,24 @@ namespace Sistema_Inventario.Datos
                 // EJECUTA LA CONSULTA
                 cmdDetalle.ExecuteNonQuery();
 
-                // VARIABLE PARA DEFINIR LA OPERACION DEL STOCK
-                string operacion = "+";
+                // OBTIENE EL NOMBRE DEL TIPO PARA NO DEPENDER DE IDS HARDCODEADOS
+                SqlCommand cmdNombreTipo =
+                    new SqlCommand(
+                        @"SELECT UPPER(LTRIM(RTRIM(Nombre)))
+                          FROM TiposMovimiento
+                          WHERE IdTipoMovimiento = @Id",
+                        conexion,
+                        transaccion);
 
-                // SI ES SALIDA RESTA EL STOCK
-                if (idTipoMovimiento == 2)
-                {
-                    operacion = "-";
-                }
+                cmdNombreTipo.Parameters.AddWithValue(
+                    "@Id", idTipoMovimiento);
 
-                // SI ES AJUSTE SUMA EL STOCK
-                if (idTipoMovimiento == 3)
-                {
-                    operacion = "+";
-                }
+                string nombreTipo =
+                    cmdNombreTipo.ExecuteScalar()?.ToString() ?? "";
 
-                // SI ES TRANSFERENCIA SUMA EL STOCK
-                if (idTipoMovimiento == 4)
-                {
-                    operacion = "+";
-                }
+                // SALIDAS Y DEVOLUCIONES RESTAN STOCK; EL RESTO SUMA
+                string operacion =
+                    nombreTipo.Contains("SALIDA") ? "-" : "+";
 
                 // CONSULTA SQL PARA ACTUALIZAR EL STOCK DEL PRODUCTO
                 SqlCommand cmdProducto =
@@ -393,26 +400,10 @@ namespace Sistema_Inventario.Datos
                             conexion,
                             transaccion);
 
-                    // VARIABLE PARA EL STOCK INICIAL
-                    decimal stockInicial = 0;
-
-                    // SI ES ENTRADA EL STOCK SERA IGUAL A LA CANTIDAD
-                    if (idTipoMovimiento == 1)
-                    {
-                        stockInicial = cantidad;
-                    }
-
-                    // SI ES AJUSTE EL STOCK SERA IGUAL A LA CANTIDAD
-                    if (idTipoMovimiento == 3)
-                    {
-                        stockInicial = cantidad;
-                    }
-
-                    // SI ES TRANSFERENCIA EL STOCK SERA IGUAL A LA CANTIDAD
-                    if (idTipoMovimiento == 4)
-                    {
-                        stockInicial = cantidad;
-                    }
+                    // STOCK INICIAL: si la operación es suma usa la cantidad,
+                    // si es resta (SALIDA) el registro de bodega aún no existe
+                    // por lo que el stock inicial queda en 0
+                    decimal stockInicial = operacion == "+" ? cantidad : 0m;
 
                     // PARAMETRO DEL PRODUCTO
                     cmdInsert.Parameters.AddWithValue(
@@ -466,37 +457,10 @@ namespace Sistema_Inventario.Datos
                     cmdUpdate.ExecuteNonQuery();
                 }
 
-                // VARIABLE PARA GUARDAR EL TIPO DE LOG
-                string tipoMovimientoLog =
-                    "INVENTARIO";
-
-                // SI ES ENTRADA CAMBIA EL TIPO DE LOG
-                if (idTipoMovimiento == 1)
-                {
-                    tipoMovimientoLog =
-                        "INVENTARIO_ENTRADA";
-                }
-
-                // SI ES SALIDA CAMBIA EL TIPO DE LOG
-                if (idTipoMovimiento == 2)
-                {
-                    tipoMovimientoLog =
-                        "INVENTARIO_SALIDA";
-                }
-
-                // SI ES AJUSTE CAMBIA EL TIPO DE LOG
-                if (idTipoMovimiento == 3)
-                {
-                    tipoMovimientoLog =
-                        "INVENTARIO_AJUSTE";
-                }
-
-                // SI ES TRANSFERENCIA CAMBIA EL TIPO DE LOG
-                if (idTipoMovimiento == 4)
-                {
-                    tipoMovimientoLog =
-                        "INVENTARIO_TRANSFERENCIA";
-                }
+                // TIPO DE LOG DERIVADO DEL NOMBRE REAL DEL TIPO (sin IDs fijos)
+                string tipoMovimientoLog = string.IsNullOrEmpty(nombreTipo)
+                    ? "INVENTARIO"
+                    : "INVENTARIO_" + nombreTipo.Replace(" ", "_");
 
                 // REGISTRA EL LOG DEL MOVIMIENTO
                 log.RegistrarLog(
