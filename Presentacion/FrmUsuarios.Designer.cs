@@ -1,695 +1,375 @@
-﻿namespace Sistema_Inventario.Presentacion
+// IMPORTACION DE LIBRERIAS NECESARIAS
+using FontAwesome.Sharp;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Sistema_Inventario.Presentacion
 {
     // CLASE PARCIAL DEL FORMULARIO DE USUARIOS
     partial class FrmUsuarios
     {
-        // CONTENEDOR DE COMPONENTES DEL FORMULARIO
+        // CONTENEDOR DE COMPONENTES
         private System.ComponentModel.IContainer components = null;
 
         // METODO PARA LIBERAR RECURSOS
-        protected override void Dispose(
-            bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            // VERIFICA SI SE DEBEN LIBERAR LOS COMPONENTES
-            if (disposing &&
-                (components != null))
-            {
-                // LIBERA LOS COMPONENTES
+            if (disposing && (components != null))
                 components.Dispose();
-            }
-
-            // EJECUTA EL METODO BASE
             base.Dispose(disposing);
         }
 
-        #region Código generado por el Diseñador
+        #region Windows Form Designer generated code
 
-        // METODO DONDE SE INICIALIZAN LOS COMPONENTES
+        // METODO PARA INICIALIZAR COMPONENTES
         private void InitializeComponent()
         {
-            // CREACION DEL LABEL TITULO
-            this.lblTitulo =
-                new System.Windows.Forms.Label();
-
-            // CREACION DEL LABEL BUSCAR
-            this.lblBuscar =
-                new System.Windows.Forms.Label();
-
-            // CREACION DEL TEXTBOX BUSCAR
-            this.txtBuscar =
-                new System.Windows.Forms.TextBox();
-
-            // CREACION DEL LABEL USUARIO
-            this.lblUsuario =
-                new System.Windows.Forms.Label();
-
-            // CREACION DEL TEXTBOX USUARIO
-            this.txtUsuario =
-                new System.Windows.Forms.TextBox();
-
-            // CREACION DEL LABEL CLAVE
-            this.lblClave =
-                new System.Windows.Forms.Label();
-
-            // CREACION DEL TEXTBOX CLAVE
-            this.txtClave =
-                new System.Windows.Forms.TextBox();
-
-            // CREACION DEL LABEL CONFIRMAR
-            this.lblConfirmar =
-                new System.Windows.Forms.Label();
-
-            // CREACION DEL TEXTBOX CONFIRMAR
-            this.txtConfirmar =
-                new System.Windows.Forms.TextBox();
-
-            // CREACION DEL LABEL ROL
-            this.lblRol =
-                new System.Windows.Forms.Label();
-
-            // CREACION DEL COMBOBOX ROLES
-            this.cboRoles =
-                new System.Windows.Forms.ComboBox();
-
-            // CREACION DEL CHECKBOX ESTADO
-            this.chkEstado =
-                new System.Windows.Forms.CheckBox();
-
-            // CREACION DEL DATAGRIDVIEW
-            this.dgvUsuarios =
-                new System.Windows.Forms.DataGridView();
-
-            // CREACION DEL BOTON NUEVO
-            this.btnNuevo =
-                new FontAwesome.Sharp.IconButton();
-
-            // CREACION DEL BOTON GUARDAR
-            this.btnGuardar =
-                new FontAwesome.Sharp.IconButton();
-
-            // CREACION DEL BOTON EDITAR
-            this.btnEditar =
-                new FontAwesome.Sharp.IconButton();
-
-            // CREACION DEL BOTON ELIMINAR
-            this.btnEliminar =
-                new FontAwesome.Sharp.IconButton();
-
-            ((System.ComponentModel.ISupportInitialize)
-                (this.dgvUsuarios)).BeginInit();
-
+            this.lblTitulo      = new System.Windows.Forms.Label();
+            this.lblSubtitulo   = new System.Windows.Forms.Label();
+            this.pnlSep1        = new System.Windows.Forms.Panel();
+            this.pnlCard1       = new System.Windows.Forms.Panel();
+            this.lblCard1Titulo = new System.Windows.Forms.Label();
+            this.lblCard1Valor  = new System.Windows.Forms.Label();
+            this.pnlCard2       = new System.Windows.Forms.Panel();
+            this.lblCard2Titulo = new System.Windows.Forms.Label();
+            this.lblCard2Valor  = new System.Windows.Forms.Label();
+            this.pnlCard3       = new System.Windows.Forms.Panel();
+            this.lblCard3Titulo = new System.Windows.Forms.Label();
+            this.lblCard3Valor  = new System.Windows.Forms.Label();
+            this.pnlSep2        = new System.Windows.Forms.Panel();
+            this.txtBuscar      = new System.Windows.Forms.TextBox();
+            this.btnNuevo       = new FontAwesome.Sharp.IconButton();
+            this.btnEditar      = new FontAwesome.Sharp.IconButton();
+            this.btnEliminar    = new FontAwesome.Sharp.IconButton();
+            this.btnActualizar  = new FontAwesome.Sharp.IconButton();
+            this.dgvUsuarios    = new System.Windows.Forms.DataGridView();
+            this.lblResumen     = new System.Windows.Forms.Label();
+            this.pnlCard1.SuspendLayout();
+            this.pnlCard2.SuspendLayout();
+            this.pnlCard3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.SuspendLayout();
 
-            // =====================================
-            // FORM
-            // =====================================
+            //
+            // lblTitulo
+            //
+            this.lblTitulo.AutoSize  = true;
+            this.lblTitulo.Font      = new System.Drawing.Font("Segoe UI", 26F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(35)))), ((int)(((byte)(66)))));
+            this.lblTitulo.Location  = new System.Drawing.Point(50, 22);
+            this.lblTitulo.Name      = "lblTitulo";
+            this.lblTitulo.TabIndex  = 0;
+            this.lblTitulo.Text      = "Usuarios";
 
-            // COLOR DE FONDO DEL FORMULARIO
-            this.BackColor =
-                System.Drawing.Color.FromArgb(
-                    243,
-                    244,
-                    246);
+            //
+            // lblSubtitulo
+            //
+            this.lblSubtitulo.AutoSize  = true;
+            this.lblSubtitulo.Font      = new System.Drawing.Font("Segoe UI", 11F);
+            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.lblSubtitulo.Location  = new System.Drawing.Point(52, 70);
+            this.lblSubtitulo.Name      = "lblSubtitulo";
+            this.lblSubtitulo.TabIndex  = 1;
+            this.lblSubtitulo.Text      = "Gestión de usuarios del sistema";
 
-            // TAMAÑO DEL FORMULARIO
-            this.ClientSize =
-                new System.Drawing.Size(1400, 850);
+            //
+            // pnlSep1
+            //
+            this.pnlSep1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(35)))), ((int)(((byte)(66)))));
+            this.pnlSep1.Location  = new System.Drawing.Point(30, 100);
+            this.pnlSep1.Name      = "pnlSep1";
+            this.pnlSep1.Size      = new System.Drawing.Size(1290, 2);
+            this.pnlSep1.TabIndex  = 2;
 
-            // TITULO DEL FORMULARIO
-            this.Text =
-                "Usuarios";
+            //
+            // pnlCard1  —  Usuarios Activos (azul)
+            //
+            this.pnlCard1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
+            this.pnlCard1.Controls.Add(this.lblCard1Titulo);
+            this.pnlCard1.Controls.Add(this.lblCard1Valor);
+            this.pnlCard1.Location  = new System.Drawing.Point(30, 112);
+            this.pnlCard1.Name      = "pnlCard1";
+            this.pnlCard1.Size      = new System.Drawing.Size(390, 68);
+            this.pnlCard1.TabIndex  = 3;
 
-            // =====================================
-            // TITULO
-            // =====================================
+            this.lblCard1Titulo.AutoSize  = true;
+            this.lblCard1Titulo.Font      = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCard1Titulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(220)))), ((int)(((byte)(255)))));
+            this.lblCard1Titulo.Location  = new System.Drawing.Point(14, 8);
+            this.lblCard1Titulo.Name      = "lblCard1Titulo";
+            this.lblCard1Titulo.TabIndex  = 0;
+            this.lblCard1Titulo.Text      = "Usuarios Activos";
 
-            // AJUSTE AUTOMATICO DEL LABEL
-            this.lblTitulo.AutoSize = true;
+            this.lblCard1Valor.AutoSize  = true;
+            this.lblCard1Valor.Font      = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold);
+            this.lblCard1Valor.ForeColor = System.Drawing.Color.White;
+            this.lblCard1Valor.Location  = new System.Drawing.Point(12, 24);
+            this.lblCard1Valor.Name      = "lblCard1Valor";
+            this.lblCard1Valor.TabIndex  = 1;
+            this.lblCard1Valor.Text      = "0";
 
-            // CONFIGURACION DE FUENTE
-            this.lblTitulo.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    28F,
-                    System.Drawing.FontStyle.Bold);
+            //
+            // pnlCard2  —  Administradores (morado)
+            //
+            this.pnlCard2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(139)))), ((int)(((byte)(92)))), ((int)(((byte)(246)))));
+            this.pnlCard2.Controls.Add(this.lblCard2Titulo);
+            this.pnlCard2.Controls.Add(this.lblCard2Valor);
+            this.pnlCard2.Location  = new System.Drawing.Point(440, 112);
+            this.pnlCard2.Name      = "pnlCard2";
+            this.pnlCard2.Size      = new System.Drawing.Size(390, 68);
+            this.pnlCard2.TabIndex  = 4;
 
-            // COLOR DEL TEXTO
-            this.lblTitulo.ForeColor =
-                System.Drawing.Color.FromArgb(
-                    11,
-                    31,
-                    58);
+            this.lblCard2Titulo.AutoSize  = true;
+            this.lblCard2Titulo.Font      = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCard2Titulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(210)))), ((int)(((byte)(255)))));
+            this.lblCard2Titulo.Location  = new System.Drawing.Point(14, 8);
+            this.lblCard2Titulo.Name      = "lblCard2Titulo";
+            this.lblCard2Titulo.TabIndex  = 0;
+            this.lblCard2Titulo.Text      = "Administradores";
 
-            // POSICION DEL LABEL
-            this.lblTitulo.Location =
-                new System.Drawing.Point(45, 25);
+            this.lblCard2Valor.AutoSize  = true;
+            this.lblCard2Valor.Font      = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold);
+            this.lblCard2Valor.ForeColor = System.Drawing.Color.White;
+            this.lblCard2Valor.Location  = new System.Drawing.Point(12, 24);
+            this.lblCard2Valor.Name      = "lblCard2Valor";
+            this.lblCard2Valor.TabIndex  = 1;
+            this.lblCard2Valor.Text      = "0";
 
-            // TEXTO DEL LABEL
-            this.lblTitulo.Text =
-                "Gestión de Usuarios";
+            //
+            // pnlCard3  —  Inactivos (rojo)
+            //
+            this.pnlCard3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.pnlCard3.Controls.Add(this.lblCard3Titulo);
+            this.pnlCard3.Controls.Add(this.lblCard3Valor);
+            this.pnlCard3.Location  = new System.Drawing.Point(850, 112);
+            this.pnlCard3.Name      = "pnlCard3";
+            this.pnlCard3.Size      = new System.Drawing.Size(470, 68);
+            this.pnlCard3.TabIndex  = 5;
 
-            // =====================================
-            // BUSCAR
-            // =====================================
+            this.lblCard3Titulo.AutoSize  = true;
+            this.lblCard3Titulo.Font      = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblCard3Titulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.lblCard3Titulo.Location  = new System.Drawing.Point(14, 8);
+            this.lblCard3Titulo.Name      = "lblCard3Titulo";
+            this.lblCard3Titulo.TabIndex  = 0;
+            this.lblCard3Titulo.Text      = "Inactivos / Bloqueados";
 
-            // AJUSTE AUTOMATICO DEL LABEL
-            this.lblBuscar.AutoSize = true;
+            this.lblCard3Valor.AutoSize  = true;
+            this.lblCard3Valor.Font      = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold);
+            this.lblCard3Valor.ForeColor = System.Drawing.Color.White;
+            this.lblCard3Valor.Location  = new System.Drawing.Point(12, 24);
+            this.lblCard3Valor.Name      = "lblCard3Valor";
+            this.lblCard3Valor.TabIndex  = 1;
+            this.lblCard3Valor.Text      = "0";
 
-            // CONFIGURACION DE FUENTE
-            this.lblBuscar.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F,
-                    System.Drawing.FontStyle.Bold);
+            //
+            // pnlSep2
+            //
+            this.pnlSep2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(215)))), ((int)(((byte)(220)))));
+            this.pnlSep2.Location  = new System.Drawing.Point(30, 192);
+            this.pnlSep2.Name      = "pnlSep2";
+            this.pnlSep2.Size      = new System.Drawing.Size(1290, 1);
+            this.pnlSep2.TabIndex  = 6;
 
-            // POSICION DEL LABEL
-            this.lblBuscar.Location =
-                new System.Drawing.Point(55, 110);
+            //
+            // txtBuscar
+            //
+            this.txtBuscar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBuscar.Font        = new System.Drawing.Font("Segoe UI", 11F);
+            this.txtBuscar.Location    = new System.Drawing.Point(30, 206);
+            this.txtBuscar.Name        = "txtBuscar";
+            this.txtBuscar.Size        = new System.Drawing.Size(330, 32);
+            this.txtBuscar.TabIndex    = 7;
 
-            // TEXTO DEL LABEL
-            this.lblBuscar.Text =
-                "Buscar Usuario";
-
-            // CONFIGURACION DE FUENTE
-            this.txtBuscar.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F);
-
-            // POSICION DEL TEXTBOX
-            this.txtBuscar.Location =
-                new System.Drawing.Point(60, 145);
-
-            // TAMAÑO DEL TEXTBOX
-            this.txtBuscar.Size =
-                new System.Drawing.Size(350, 34);
-
-            // =====================================
-            // USUARIO
-            // =====================================
-
-            // AJUSTE AUTOMATICO DEL LABEL
-            this.lblUsuario.AutoSize = true;
-
-            // CONFIGURACION DE FUENTE
-            this.lblUsuario.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F,
-                    System.Drawing.FontStyle.Bold);
-
-            // POSICION DEL LABEL
-            this.lblUsuario.Location =
-                new System.Drawing.Point(55, 220);
-
-            // TEXTO DEL LABEL
-            this.lblUsuario.Text =
-                "Usuario";
-
-            // CONFIGURACION DE FUENTE
-            this.txtUsuario.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F);
-
-            // POSICION DEL TEXTBOX
-            this.txtUsuario.Location =
-                new System.Drawing.Point(60, 255);
-
-            // TAMAÑO DEL TEXTBOX
-            this.txtUsuario.Size =
-                new System.Drawing.Size(350, 34);
-
-            // =====================================
-            // CLAVE
-            // =====================================
-
-            // AJUSTE AUTOMATICO DEL LABEL
-            this.lblClave.AutoSize = true;
-
-            // CONFIGURACION DE FUENTE
-            this.lblClave.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F,
-                    System.Drawing.FontStyle.Bold);
-
-            // POSICION DEL LABEL
-            this.lblClave.Location =
-                new System.Drawing.Point(55, 320);
-
-            // TEXTO DEL LABEL
-            this.lblClave.Text =
-                "Contraseña";
-
-            // CONFIGURACION DE FUENTE
-            this.txtClave.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F);
-
-            // POSICION DEL TEXTBOX
-            this.txtClave.Location =
-                new System.Drawing.Point(60, 355);
-
-            // TAMAÑO DEL TEXTBOX
-            this.txtClave.Size =
-                new System.Drawing.Size(350, 34);
-
-            // OCULTA LA CONTRASEÑA
-            this.txtClave.UseSystemPasswordChar =
-                true;
-
-            // =====================================
-            // CONFIRMAR
-            // =====================================
-
-            // AJUSTE AUTOMATICO DEL LABEL
-            this.lblConfirmar.AutoSize = true;
-
-            // CONFIGURACION DE FUENTE
-            this.lblConfirmar.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F,
-                    System.Drawing.FontStyle.Bold);
-
-            // POSICION DEL LABEL
-            this.lblConfirmar.Location =
-                new System.Drawing.Point(55, 420);
-
-            // TEXTO DEL LABEL
-            this.lblConfirmar.Text =
-                "Confirmar Contraseña";
-
-            // CONFIGURACION DE FUENTE
-            this.txtConfirmar.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F);
-
-            // POSICION DEL TEXTBOX
-            this.txtConfirmar.Location =
-                new System.Drawing.Point(60, 455);
-
-            // TAMAÑO DEL TEXTBOX
-            this.txtConfirmar.Size =
-                new System.Drawing.Size(350, 34);
-
-            // OCULTA LA CONTRASEÑA
-            this.txtConfirmar.UseSystemPasswordChar =
-                true;
-
-            // =====================================
-            // ROLES
-            // =====================================
-
-            // AJUSTE AUTOMATICO DEL LABEL
-            this.lblRol.AutoSize = true;
-
-            // CONFIGURACION DE FUENTE
-            this.lblRol.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F,
-                    System.Drawing.FontStyle.Bold);
-
-            // POSICION DEL LABEL
-            this.lblRol.Location =
-                new System.Drawing.Point(55, 520);
-
-            // TEXTO DEL LABEL
-            this.lblRol.Text =
-                "Rol";
-
-            // CONFIGURACION DE FUENTE
-            this.cboRoles.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    12F);
-
-            // CONFIGURA EL ESTILO DEL COMBOBOX
-            this.cboRoles.DropDownStyle =
-                System.Windows.Forms.ComboBoxStyle.DropDownList;
-
-            // POSICION DEL COMBOBOX
-            this.cboRoles.Location =
-                new System.Drawing.Point(60, 555);
-
-            // TAMAÑO DEL COMBOBOX
-            this.cboRoles.Size =
-                new System.Drawing.Size(350, 36);
-
-            // =====================================
-            // ESTADO
-            // =====================================
-
-            // AJUSTE AUTOMATICO DEL CHECKBOX
-            this.chkEstado.AutoSize = true;
-
-            // ACTIVA EL CHECKBOX
-            this.chkEstado.Checked = true;
-
-            // ESTADO MARCADO
-            this.chkEstado.CheckState =
-                System.Windows.Forms.CheckState.Checked;
-
-            // CONFIGURACION DE FUENTE
-            this.chkEstado.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    11F,
-                    System.Drawing.FontStyle.Bold);
-
-            // POSICION DEL CHECKBOX
-            this.chkEstado.Location =
-                new System.Drawing.Point(60, 620);
-
-            // TEXTO DEL CHECKBOX
-            this.chkEstado.Text =
-                "Usuario Activo";
-
-            // =====================================
-            // BOTONES
-            // =====================================
-
-            // COLOR DE FONDO DEL BOTON NUEVO
-            this.btnNuevo.BackColor =
-                System.Drawing.Color.FromArgb(
-                    59,
-                    130,
-                    246);
-
-            // ESTILO FLAT
-            this.btnNuevo.FlatStyle =
-                System.Windows.Forms.FlatStyle.Flat;
-
-            // ELIMINA EL BORDE
+            //
+            // btnNuevo
+            //
+            this.btnNuevo.BackColor                 = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
+            this.btnNuevo.Cursor                    = System.Windows.Forms.Cursors.Hand;
             this.btnNuevo.FlatAppearance.BorderSize = 0;
+            this.btnNuevo.FlatStyle                 = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNuevo.Font                      = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnNuevo.ForeColor                 = System.Drawing.Color.White;
+            this.btnNuevo.IconChar                  = FontAwesome.Sharp.IconChar.CirclePlus;
+            this.btnNuevo.IconColor                 = System.Drawing.Color.White;
+            this.btnNuevo.IconFont                  = FontAwesome.Sharp.IconFont.Auto;
+            this.btnNuevo.IconSize                  = 22;
+            this.btnNuevo.Location                  = new System.Drawing.Point(378, 200);
+            this.btnNuevo.Name                      = "btnNuevo";
+            this.btnNuevo.Size                      = new System.Drawing.Size(130, 44);
+            this.btnNuevo.TabIndex                  = 8;
+            this.btnNuevo.Text                      = " Nuevo";
+            this.btnNuevo.TextImageRelation         = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnNuevo.UseVisualStyleBackColor   = false;
 
-            // CONFIGURACION DE FUENTE
-            this.btnNuevo.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    11F,
-                    System.Drawing.FontStyle.Bold);
-
-            // COLOR DEL TEXTO
-            this.btnNuevo.ForeColor =
-                System.Drawing.Color.White;
-
-            // CONFIGURACION DEL ICONO
-            this.btnNuevo.IconChar =
-                FontAwesome.Sharp.IconChar.PlusCircle;
-
-            // COLOR DEL ICONO
-            this.btnNuevo.IconColor =
-                System.Drawing.Color.White;
-
-            // FUENTE DEL ICONO
-            this.btnNuevo.IconFont =
-                FontAwesome.Sharp.IconFont.Auto;
-
-            // POSICION DEL BOTON
-            this.btnNuevo.Location =
-                new System.Drawing.Point(60, 690);
-
-            // TAMAÑO DEL BOTON
-            this.btnNuevo.Size =
-                new System.Drawing.Size(160, 55);
-
-            // TEXTO DEL BOTON
-            this.btnNuevo.Text =
-                " Nuevo";
-
-            // RELACION ENTRE TEXTO E IMAGEN
-            this.btnNuevo.TextImageRelation =
-                System.Windows.Forms.TextImageRelation.ImageBeforeText;
-
-            // =====================================
-
-            // COLOR DE FONDO DEL BOTON GUARDAR
-            this.btnGuardar.BackColor =
-                System.Drawing.Color.FromArgb(
-                    34,
-                    197,
-                    94);
-
-            // ESTILO FLAT
-            this.btnGuardar.FlatStyle =
-                System.Windows.Forms.FlatStyle.Flat;
-
-            // ELIMINA EL BORDE
-            this.btnGuardar.FlatAppearance.BorderSize = 0;
-
-            // CONFIGURACION DE FUENTE
-            this.btnGuardar.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    11F,
-                    System.Drawing.FontStyle.Bold);
-
-            // COLOR DEL TEXTO
-            this.btnGuardar.ForeColor =
-                System.Drawing.Color.White;
-
-            // CONFIGURACION DEL ICONO
-            this.btnGuardar.IconChar =
-                FontAwesome.Sharp.IconChar.FloppyDisk;
-
-            // COLOR DEL ICONO
-            this.btnGuardar.IconColor =
-                System.Drawing.Color.White;
-
-            // FUENTE DEL ICONO
-            this.btnGuardar.IconFont =
-                FontAwesome.Sharp.IconFont.Auto;
-
-            // POSICION DEL BOTON
-            this.btnGuardar.Location =
-                new System.Drawing.Point(250, 690);
-
-            // TAMAÑO DEL BOTON
-            this.btnGuardar.Size =
-                new System.Drawing.Size(160, 55);
-
-            // TEXTO DEL BOTON
-            this.btnGuardar.Text =
-                " Guardar";
-
-            // RELACION ENTRE TEXTO E IMAGEN
-            this.btnGuardar.TextImageRelation =
-                System.Windows.Forms.TextImageRelation.ImageBeforeText;
-
-            // =====================================
-
-            // COLOR DE FONDO DEL BOTON EDITAR
-            this.btnEditar.BackColor =
-                System.Drawing.Color.FromArgb(
-                    234,
-                    179,
-                    8);
-
-            // ESTILO FLAT
-            this.btnEditar.FlatStyle =
-                System.Windows.Forms.FlatStyle.Flat;
-
-            // ELIMINA EL BORDE
+            //
+            // btnEditar
+            //
+            this.btnEditar.BackColor                 = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(179)))), ((int)(((byte)(8)))));
+            this.btnEditar.Cursor                    = System.Windows.Forms.Cursors.Hand;
             this.btnEditar.FlatAppearance.BorderSize = 0;
+            this.btnEditar.FlatStyle                 = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEditar.Font                      = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnEditar.ForeColor                 = System.Drawing.Color.White;
+            this.btnEditar.IconChar                  = FontAwesome.Sharp.IconChar.PenToSquare;
+            this.btnEditar.IconColor                 = System.Drawing.Color.White;
+            this.btnEditar.IconFont                  = FontAwesome.Sharp.IconFont.Auto;
+            this.btnEditar.IconSize                  = 22;
+            this.btnEditar.Location                  = new System.Drawing.Point(516, 200);
+            this.btnEditar.Name                      = "btnEditar";
+            this.btnEditar.Size                      = new System.Drawing.Size(130, 44);
+            this.btnEditar.TabIndex                  = 9;
+            this.btnEditar.Text                      = " Editar";
+            this.btnEditar.TextImageRelation         = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnEditar.UseVisualStyleBackColor   = false;
 
-            // CONFIGURACION DE FUENTE
-            this.btnEditar.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    11F,
-                    System.Drawing.FontStyle.Bold);
-
-            // COLOR DEL TEXTO
-            this.btnEditar.ForeColor =
-                System.Drawing.Color.White;
-
-            // CONFIGURACION DEL ICONO
-            this.btnEditar.IconChar =
-                FontAwesome.Sharp.IconChar.PenToSquare;
-
-            // COLOR DEL ICONO
-            this.btnEditar.IconColor =
-                System.Drawing.Color.White;
-
-            // FUENTE DEL ICONO
-            this.btnEditar.IconFont =
-                FontAwesome.Sharp.IconFont.Auto;
-
-            // POSICION DEL BOTON
-            this.btnEditar.Location =
-                new System.Drawing.Point(60, 765);
-
-            // TAMAÑO DEL BOTON
-            this.btnEditar.Size =
-                new System.Drawing.Size(160, 55);
-
-            // TEXTO DEL BOTON
-            this.btnEditar.Text =
-                " Editar";
-
-            // RELACION ENTRE TEXTO E IMAGEN
-            this.btnEditar.TextImageRelation =
-                System.Windows.Forms.TextImageRelation.ImageBeforeText;
-
-            // =====================================
-
-            // COLOR DE FONDO DEL BOTON ELIMINAR
-            this.btnEliminar.BackColor =
-                System.Drawing.Color.FromArgb(
-                    239,
-                    68,
-                    68);
-
-            // ESTILO FLAT
-            this.btnEliminar.FlatStyle =
-                System.Windows.Forms.FlatStyle.Flat;
-
-            // ELIMINA EL BORDE
+            //
+            // btnEliminar
+            //
+            this.btnEliminar.BackColor                 = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnEliminar.Cursor                    = System.Windows.Forms.Cursors.Hand;
             this.btnEliminar.FlatAppearance.BorderSize = 0;
+            this.btnEliminar.FlatStyle                 = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEliminar.Font                      = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnEliminar.ForeColor                 = System.Drawing.Color.White;
+            this.btnEliminar.IconChar                  = FontAwesome.Sharp.IconChar.Trash;
+            this.btnEliminar.IconColor                 = System.Drawing.Color.White;
+            this.btnEliminar.IconFont                  = FontAwesome.Sharp.IconFont.Auto;
+            this.btnEliminar.IconSize                  = 22;
+            this.btnEliminar.Location                  = new System.Drawing.Point(654, 200);
+            this.btnEliminar.Name                      = "btnEliminar";
+            this.btnEliminar.Size                      = new System.Drawing.Size(145, 44);
+            this.btnEliminar.TabIndex                  = 10;
+            this.btnEliminar.Text                      = " Eliminar";
+            this.btnEliminar.TextImageRelation         = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnEliminar.UseVisualStyleBackColor   = false;
 
-            // CONFIGURACION DE FUENTE
-            this.btnEliminar.Font =
-                new System.Drawing.Font(
-                    "Segoe UI",
-                    11F,
-                    System.Drawing.FontStyle.Bold);
+            //
+            // btnActualizar
+            //
+            this.btnActualizar.BackColor                 = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnActualizar.Cursor                    = System.Windows.Forms.Cursors.Hand;
+            this.btnActualizar.FlatAppearance.BorderSize = 0;
+            this.btnActualizar.FlatStyle                 = System.Windows.Forms.FlatStyle.Flat;
+            this.btnActualizar.Font                      = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnActualizar.ForeColor                 = System.Drawing.Color.White;
+            this.btnActualizar.IconChar                  = FontAwesome.Sharp.IconChar.SyncAlt;
+            this.btnActualizar.IconColor                 = System.Drawing.Color.White;
+            this.btnActualizar.IconFont                  = FontAwesome.Sharp.IconFont.Auto;
+            this.btnActualizar.IconSize                  = 22;
+            this.btnActualizar.Location                  = new System.Drawing.Point(807, 200);
+            this.btnActualizar.Name                      = "btnActualizar";
+            this.btnActualizar.Size                      = new System.Drawing.Size(175, 44);
+            this.btnActualizar.TabIndex                  = 11;
+            this.btnActualizar.Text                      = " Mostrar Todo";
+            this.btnActualizar.TextImageRelation         = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnActualizar.UseVisualStyleBackColor   = false;
 
-            // COLOR DEL TEXTO
-            this.btnEliminar.ForeColor =
-                System.Drawing.Color.White;
+            //
+            // dgvUsuarios
+            //
+            this.dgvUsuarios.AllowUserToAddRows    = false;
+            this.dgvUsuarios.AllowUserToDeleteRows = false;
+            this.dgvUsuarios.AllowUserToResizeRows = false;
+            this.dgvUsuarios.Anchor = ((System.Windows.Forms.AnchorStyles)(
+                (System.Windows.Forms.AnchorStyles.Top    |
+                 System.Windows.Forms.AnchorStyles.Bottom |
+                 System.Windows.Forms.AnchorStyles.Left   |
+                 System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvUsuarios.AutoSizeColumnsMode         = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvUsuarios.BackgroundColor             = System.Drawing.Color.White;
+            this.dgvUsuarios.BorderStyle                 = System.Windows.Forms.BorderStyle.None;
+            this.dgvUsuarios.ColumnHeadersHeight         = 45;
+            this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvUsuarios.Location                    = new System.Drawing.Point(30, 258);
+            this.dgvUsuarios.MultiSelect                 = false;
+            this.dgvUsuarios.Name                        = "dgvUsuarios";
+            this.dgvUsuarios.ReadOnly                    = true;
+            this.dgvUsuarios.RowHeadersVisible           = false;
+            this.dgvUsuarios.RowHeadersWidth             = 51;
+            this.dgvUsuarios.RowTemplate.Height          = 38;
+            this.dgvUsuarios.SelectionMode               = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvUsuarios.Size                        = new System.Drawing.Size(1290, 556);
+            this.dgvUsuarios.TabIndex                    = 12;
 
-            // CONFIGURACION DEL ICONO
-            this.btnEliminar.IconChar =
-                FontAwesome.Sharp.IconChar.Trash;
+            //
+            // lblResumen
+            //
+            this.lblResumen.Anchor    = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblResumen.AutoSize  = true;
+            this.lblResumen.Font      = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblResumen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.lblResumen.Location  = new System.Drawing.Point(30, 824);
+            this.lblResumen.Name      = "lblResumen";
+            this.lblResumen.TabIndex  = 13;
+            this.lblResumen.Text      = "Mostrando 0 registros";
 
-            // COLOR DEL ICONO
-            this.btnEliminar.IconColor =
-                System.Drawing.Color.White;
-
-            // FUENTE DEL ICONO
-            this.btnEliminar.IconFont =
-                FontAwesome.Sharp.IconFont.Auto;
-
-            // POSICION DEL BOTON
-            this.btnEliminar.Location =
-                new System.Drawing.Point(250, 765);
-
-            // TAMAÑO DEL BOTON
-            this.btnEliminar.Size =
-                new System.Drawing.Size(160, 55);
-
-            // TEXTO DEL BOTON
-            this.btnEliminar.Text =
-                " Eliminar";
-
-            // RELACION ENTRE TEXTO E IMAGEN
-            this.btnEliminar.TextImageRelation =
-                System.Windows.Forms.TextImageRelation.ImageBeforeText;
-
-            // =====================================
-            // DATAGRID
-            // =====================================
-
-            // DESHABILITA AGREGAR FILAS
-            this.dgvUsuarios.AllowUserToAddRows =
-                false;
-
-            // DESHABILITA ELIMINAR FILAS
-            this.dgvUsuarios.AllowUserToDeleteRows =
-                false;
-
-            // AJUSTE AUTOMATICO DE COLUMNAS
-            this.dgvUsuarios.AutoSizeColumnsMode =
-                System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-
-            // COLOR DE FONDO DEL GRID
-            this.dgvUsuarios.BackgroundColor =
-                System.Drawing.Color.White;
-
-            // ESTILO DEL BORDE
-            this.dgvUsuarios.BorderStyle =
-                System.Windows.Forms.BorderStyle.None;
-
-            // ALTURA DEL HEADER
-            this.dgvUsuarios.ColumnHeadersHeight = 40;
-
-            // POSICION DEL GRID
-            this.dgvUsuarios.Location =
-                new System.Drawing.Point(500, 110);
-
-            // DESHABILITA MULTISELECCION
-            this.dgvUsuarios.MultiSelect = false;
-
-            // SOLO LECTURA
-            this.dgvUsuarios.ReadOnly = true;
-
-            // OCULTA HEADERS DE FILAS
-            this.dgvUsuarios.RowHeadersVisible = false;
-
-            // SELECCION COMPLETA DE FILA
-            this.dgvUsuarios.SelectionMode =
-                System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-
-            // TAMAÑO DEL GRID
-            this.dgvUsuarios.Size =
-                new System.Drawing.Size(850, 710);
-
-            // =====================================
-            // ADD CONTROLS
-            // =====================================
-
-            // AGREGA CONTROLES AL FORMULARIO
+            //
+            // FrmUsuarios
+            //
+            this.BackColor       = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(240)))), ((int)(((byte)(245)))));
+            this.ClientSize      = new System.Drawing.Size(1350, 860);
             this.Controls.Add(this.lblTitulo);
-            this.Controls.Add(this.lblBuscar);
+            this.Controls.Add(this.lblSubtitulo);
+            this.Controls.Add(this.pnlSep1);
+            this.Controls.Add(this.pnlCard1);
+            this.Controls.Add(this.pnlCard2);
+            this.Controls.Add(this.pnlCard3);
+            this.Controls.Add(this.pnlSep2);
             this.Controls.Add(this.txtBuscar);
-            this.Controls.Add(this.lblUsuario);
-            this.Controls.Add(this.txtUsuario);
-            this.Controls.Add(this.lblClave);
-            this.Controls.Add(this.txtClave);
-            this.Controls.Add(this.lblConfirmar);
-            this.Controls.Add(this.txtConfirmar);
-            this.Controls.Add(this.lblRol);
-            this.Controls.Add(this.cboRoles);
-            this.Controls.Add(this.chkEstado);
             this.Controls.Add(this.btnNuevo);
-            this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.btnEditar);
             this.Controls.Add(this.btnEliminar);
+            this.Controls.Add(this.btnActualizar);
             this.Controls.Add(this.dgvUsuarios);
+            this.Controls.Add(this.lblResumen);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name            = "FrmUsuarios";
+            this.Text            = "FrmUsuarios";
 
-            ((System.ComponentModel.ISupportInitialize)
-                (this.dgvUsuarios)).EndInit();
-
+            this.pnlCard1.ResumeLayout(false);
+            this.pnlCard1.PerformLayout();
+            this.pnlCard2.ResumeLayout(false);
+            this.pnlCard2.PerformLayout();
+            this.pnlCard3.ResumeLayout(false);
+            this.pnlCard3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
 
         #endregion
 
-        // DECLARACION DE CONTROLES
+        // TITULO Y SUBTITULO
         private System.Windows.Forms.Label lblTitulo;
-        private System.Windows.Forms.Label lblBuscar;
-        private System.Windows.Forms.TextBox txtBuscar;
-        private System.Windows.Forms.Label lblUsuario;
-        private System.Windows.Forms.TextBox txtUsuario;
-        private System.Windows.Forms.Label lblClave;
-        private System.Windows.Forms.TextBox txtClave;
-        private System.Windows.Forms.Label lblConfirmar;
-        private System.Windows.Forms.TextBox txtConfirmar;
-        private System.Windows.Forms.Label lblRol;
-        private System.Windows.Forms.ComboBox cboRoles;
-        private System.Windows.Forms.CheckBox chkEstado;
+        private System.Windows.Forms.Label lblSubtitulo;
+
+        // SEPARADORES
+        private System.Windows.Forms.Panel pnlSep1;
+        private System.Windows.Forms.Panel pnlSep2;
+
+        // CARDS ESTADISTICAS
+        private System.Windows.Forms.Panel pnlCard1;
+        private System.Windows.Forms.Label lblCard1Titulo;
+        private System.Windows.Forms.Label lblCard1Valor;
+        private System.Windows.Forms.Panel pnlCard2;
+        private System.Windows.Forms.Label lblCard2Titulo;
+        private System.Windows.Forms.Label lblCard2Valor;
+        private System.Windows.Forms.Panel pnlCard3;
+        private System.Windows.Forms.Label lblCard3Titulo;
+        private System.Windows.Forms.Label lblCard3Valor;
+
+        // BARRA DE ACCIONES
+        private System.Windows.Forms.TextBox         txtBuscar;
+        private FontAwesome.Sharp.IconButton         btnNuevo;
+        private FontAwesome.Sharp.IconButton         btnEditar;
+        private FontAwesome.Sharp.IconButton         btnEliminar;
+        private FontAwesome.Sharp.IconButton         btnActualizar;
+
+        // DATAGRIDVIEW
         private System.Windows.Forms.DataGridView dgvUsuarios;
 
-        // DECLARACION DE BOTONES
-        private FontAwesome.Sharp.IconButton btnNuevo;
-        private FontAwesome.Sharp.IconButton btnGuardar;
-        private FontAwesome.Sharp.IconButton btnEditar;
-        private FontAwesome.Sharp.IconButton btnEliminar;
+        // RESUMEN
+        private System.Windows.Forms.Label lblResumen;
     }
 }

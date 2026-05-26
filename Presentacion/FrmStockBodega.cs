@@ -1,10 +1,11 @@
-﻿// IMPORTACION DE LA CAPA LOGICA DEL SISTEMA
+// IMPORTACION DE LA CAPA LOGICA DEL SISTEMA
 using Sistema_Inventario.Logica;
 
 // IMPORTACION DE LIBRERIAS NECESARIAS
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using FontAwesome.Sharp;
 using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
@@ -13,116 +14,213 @@ namespace Sistema_Inventario.Presentacion
     public partial class FrmStockBodega : Form
     {
         // OBJETO DE LA CAPA LOGICA PARA EL MANEJO DEL STOCK
-        LStockBodega lStock =
-            new LStockBodega();
+        LStockBodega lStock = new LStockBodega();
 
         // CONSTRUCTOR DEL FORMULARIO
         public FrmStockBodega()
         {
-            // INICIALIZA LOS COMPONENTES DEL FORMULARIO
             InitializeComponent();
+            AplicarEstilos();
+            ConfigurarGrid();
         }
 
-        // =====================================
-        // LOAD
-        // =====================================
+        // ─────────────────────────────────────────
+        // ESTILOS
+        // ─────────────────────────────────────────
 
-        // EVENTO QUE SE EJECUTA AL CARGAR EL FORMULARIO
-        private void FrmStockBodega_Load(
-            object sender,
-            EventArgs e)
+        private void AplicarEstilos()
         {
-            // MUESTRA EL STOCK EN EL DATAGRIDVIEW
-            MostrarStock();
+            ConfigurarBoton(btnBuscar,    Color.FromArgb(52,  152, 219));
+            ConfigurarBoton(btnRecargar,  Color.FromArgb(46,  204, 113));
+            ConfigurarBoton(btnStockBajo, Color.FromArgb(231,  76,  60));
+            ConfigurarBoton(btnExportar,  Color.FromArgb(39,  174,  96));
+        }
 
-            // PINTA LOS PRODUCTOS CON STOCK BAJO
+        private void ConfigurarBoton(IconButton btn, Color color)
+        {
+            btn.BackColor                 = color;
+            btn.ForeColor                 = Color.White;
+            btn.FlatStyle                 = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Font                      = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btn.IconColor                 = Color.White;
+            btn.IconSize                  = 24;
+            btn.TextImageRelation         = TextImageRelation.ImageBeforeText;
+            btn.Cursor                    = Cursors.Hand;
+
+            btn.MouseEnter += (s, e) => { btn.BackColor = ControlPaint.Dark(color); };
+            btn.MouseLeave += (s, e) => { btn.BackColor = color; };
+        }
+
+        // ─────────────────────────────────────────
+        // CONFIGURAR GRID
+        // ─────────────────────────────────────────
+
+        private void ConfigurarGrid()
+        {
+            dgvStock.EnableHeadersVisualStyles = false;
+            dgvStock.BorderStyle               = BorderStyle.None;
+            dgvStock.CellBorderStyle           = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvStock.BackgroundColor           = Color.White;
+            dgvStock.RowHeadersVisible         = false;
+            dgvStock.SelectionMode             = DataGridViewSelectionMode.FullRowSelect;
+            dgvStock.MultiSelect               = false;
+            dgvStock.AllowUserToAddRows        = false;
+            dgvStock.AllowUserToResizeRows     = false;
+            dgvStock.AutoSizeColumnsMode       = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvStock.GridColor                 = Color.LightGray;
+
+            dgvStock.ColumnHeadersBorderStyle                = DataGridViewHeaderBorderStyle.None;
+            dgvStock.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(11, 31, 58);
+            dgvStock.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvStock.ColumnHeadersDefaultCellStyle.Font      = new Font("Segoe UI", 11, FontStyle.Bold);
+            dgvStock.ColumnHeadersHeight                     = 45;
+
+            dgvStock.DefaultCellStyle.Font               = new Font("Segoe UI", 10);
+            dgvStock.DefaultCellStyle.Padding            = new Padding(4);
+            dgvStock.DefaultCellStyle.SelectionBackColor = Color.FromArgb(52, 152, 219);
+            dgvStock.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgvStock.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
+            dgvStock.RowTemplate.Height = 38;
+        }
+
+        // ─────────────────────────────────────────
+        // CARGA INICIAL
+        // ─────────────────────────────────────────
+
+        private void FrmStockBodega_Load(object sender, EventArgs e)
+        {
+            CargarProductos();
+            MostrarStock();
             PintarStockBajo();
         }
 
-        // =====================================
-        // MOSTRAR
-        // =====================================
+        // ─────────────────────────────────────────
+        // CARGAR PRODUCTOS EN COMBOBOX
+        // ─────────────────────────────────────────
 
-        // METODO PARA MOSTRAR EL STOCK
-        private void MostrarStock()
+        private void CargarProductos()
         {
-            // ASIGNA LOS DATOS AL DATAGRIDVIEW
-            dgvStock.DataSource =
-                lStock.MostrarStock();
+            try
+            {
+                cboProducto.DataSource    = lStock.MostrarProductos();
+                cboProducto.DisplayMember = "Nombre";
+                cboProducto.ValueMember   = "IdProducto";
+                cboProducto.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // =====================================
-        // STOCK BAJO
-        // =====================================
+        // ─────────────────────────────────────────
+        // MOSTRAR TODO EL STOCK
+        // ─────────────────────────────────────────
 
-        // METODO PARA RESALTAR LOS PRODUCTOS CON STOCK BAJO
+        private void MostrarStock()
+        {
+            dgvStock.DataSource = lStock.MostrarStock();
+        }
+
+        // ─────────────────────────────────────────
+        // PINTAR FILAS CON STOCK BAJO
+        // ─────────────────────────────────────────
+
         private void PintarStockBajo()
         {
-            // RECORRE TODAS LAS FILAS DEL DATAGRIDVIEW
-            foreach (DataGridViewRow fila
-                in dgvStock.Rows)
+            foreach (DataGridViewRow fila in dgvStock.Rows)
             {
-                // OBTIENE EL STOCK ACTUAL
-                decimal stock =
-                    Convert.ToDecimal(
-                        fila.Cells["StockActual"].Value);
+                decimal stock = Convert.ToDecimal(fila.Cells["StockActual"].Value);
 
-                // VERIFICA SI EL STOCK ES MENOR O IGUAL A 5
                 if (stock <= 5)
                 {
-                    // CAMBIA EL COLOR DE FONDO DE LA FILA
-                    fila.DefaultCellStyle.BackColor =
-                        Color.FromArgb(255, 235, 238);
-
-                    // CAMBIA EL COLOR DEL TEXTO
-                    fila.DefaultCellStyle.ForeColor =
-                        Color.DarkRed;
+                    fila.DefaultCellStyle.BackColor = Color.FromArgb(255, 235, 238);
+                    fila.DefaultCellStyle.ForeColor = Color.DarkRed;
                 }
             }
         }
 
-        // =====================================
-        // RECARGAR
-        // =====================================
+        // ─────────────────────────────────────────
+        // BOTON FILTRAR
+        // ─────────────────────────────────────────
 
-        // EVENTO DEL BOTON RECARGAR
-        private void btnRecargar_Click(
-            object sender,
-            EventArgs e)
+        private void btnBuscar_Click(object sender, EventArgs e)
         {
-            // MUESTRA NUEVAMENTE EL STOCK
+            try
+            {
+                if (cboProducto.SelectedIndex == -1)
+                {
+                    MessageBox.Show(
+                        "Seleccione un producto para filtrar.",
+                        "Validación",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                dgvStock.DataSource = lStock.FiltrarPorProducto(
+                    Convert.ToInt32(cboProducto.SelectedValue));
+
+                PintarStockBajo();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ─────────────────────────────────────────
+        // BOTON MOSTRAR TODO
+        // ─────────────────────────────────────────
+
+        private void btnRecargar_Click(object sender, EventArgs e)
+        {
             MostrarStock();
+            PintarStockBajo();
+            cboProducto.SelectedIndex = -1;
+        }
 
-            // PINTA LOS PRODUCTOS CON STOCK BAJO
+        // ─────────────────────────────────────────
+        // BOTON STOCK BAJO
+        // ─────────────────────────────────────────
+
+        private void btnStockBajo_Click(object sender, EventArgs e)
+        {
+            dgvStock.DataSource = lStock.MostrarStockBajo();
             PintarStockBajo();
         }
 
-        // =====================================
-        // SOLO STOCK BAJO
-        // =====================================
+        // ─────────────────────────────────────────
+        // BOTON EXPORTAR EXCEL
+        // ─────────────────────────────────────────
 
-        // EVENTO DEL BOTON STOCK BAJO
-        private void btnStockBajo_Click(
-            object sender,
-            EventArgs e)
+        private void btnExportar_Click(object sender, EventArgs e)
         {
-            // MUESTRA SOLO LOS PRODUCTOS CON STOCK BAJO
-            dgvStock.DataSource =
-                lStock.MostrarStockBajo();
+            try
+            {
+                if (dgvStock.Rows.Count == 0)
+                {
+                    MessageBox.Show(
+                        "No hay datos para exportar.",
+                        "Información",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    return;
+                }
 
-            // PINTA LOS PRODUCTOS CON STOCK BAJO
-            PintarStockBajo();
-        }
+                ExportarExcel.Exportar(dgvStock, "Reporte_Stock");
 
-        // EVENTO DEL BOTON EXPORTAR
-        private void btnExportar_Click(
-    object sender,
-    EventArgs e)
-        {
-            // EXPORTA LOS DATOS DEL DATAGRIDVIEW A EXCEL
-            ExportarExcel.Exportar(
-                dgvStock,
-                "Reporte_Stock");
+                MessageBox.Show(
+                    "Reporte exportado correctamente.",
+                    "Exportación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

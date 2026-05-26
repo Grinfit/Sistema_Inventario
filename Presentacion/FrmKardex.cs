@@ -1,10 +1,10 @@
-﻿// IMPORTACION DE LIBRERIAS NECESARIAS
+// IMPORTACION DE LIBRERIAS NECESARIAS
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Sistema_Inventario.Utilidades;
-using Sistema_Inventario.Datos;
+using FontAwesome.Sharp;
 using Sistema_Inventario.Logica;
+using Sistema_Inventario.Utilidades;
 
 namespace Sistema_Inventario.Presentacion
 {
@@ -12,320 +12,228 @@ namespace Sistema_Inventario.Presentacion
     public partial class FrmKardex : Form
     {
         // OBJETO DE LA CAPA LOGICA KARDEX
-        LKardex lKardex =
-            new LKardex();
+        LKardex lKardex = new LKardex();
 
         // CONSTRUCTOR DEL FORMULARIO
         public FrmKardex()
         {
             InitializeComponent();
+            AplicarEstilos();
+        }
 
-            // CONFIGURA EL GRID
+        // APLICA ESTILOS A BOTONES Y GRILLA
+        private void AplicarEstilos()
+        {
+            ConfigurarBoton(btnBuscar,   Color.FromArgb(52,  152, 219));
+            ConfigurarBoton(btnRecargar, Color.FromArgb(46,  204, 113));
+            ConfigurarBoton(btnExportar, Color.FromArgb(39,  174,  96));
             ConfigurarGrid();
         }
 
-        // LOAD
-
-        private void FrmKardex_Load(
-            object sender,
-            EventArgs e)
+        // CONFIGURA ESTILO UNIFICADO DE BOTON
+        private void ConfigurarBoton(IconButton btn, Color color)
         {
-            // CARGA LOS PRODUCTOS
-            CargarProductos();
+            btn.BackColor                 = color;
+            btn.ForeColor                 = Color.White;
+            btn.FlatStyle                 = FlatStyle.Flat;
+            btn.FlatAppearance.BorderSize = 0;
+            btn.Font                      = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btn.IconColor                 = Color.White;
+            btn.IconSize                  = 24;
+            btn.TextImageRelation         = TextImageRelation.ImageBeforeText;
+            btn.ImageAlign                = ContentAlignment.MiddleLeft;
+            btn.Padding                   = new Padding(10, 0, 0, 0);
+            btn.Cursor                    = Cursors.Hand;
 
-            // MUESTRA EL KARDEX
+            btn.MouseEnter += (s, e) => { btn.BackColor = ControlPaint.Dark(color); };
+            btn.MouseLeave += (s, e) => { btn.BackColor = color; };
+        }
+
+        // ─────────────────────────────────────────
+        // CONFIGURA EL ESTILO DE LA GRILLA
+        // ─────────────────────────────────────────
+        private void ConfigurarGrid()
+        {
+            dgvKardex.EnableHeadersVisualStyles = false;
+            dgvKardex.BorderStyle               = BorderStyle.None;
+            dgvKardex.CellBorderStyle           = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvKardex.BackgroundColor           = Color.White;
+            dgvKardex.RowHeadersVisible         = false;
+            dgvKardex.SelectionMode             = DataGridViewSelectionMode.FullRowSelect;
+            dgvKardex.MultiSelect               = false;
+            dgvKardex.AllowUserToAddRows        = false;
+            dgvKardex.AllowUserToResizeRows     = false;
+            dgvKardex.AutoSizeColumnsMode       = DataGridViewAutoSizeColumnsMode.None;
+            dgvKardex.GridColor                 = Color.LightGray;
+
+            // CABECERA
+            dgvKardex.ColumnHeadersBorderStyle                  = DataGridViewHeaderBorderStyle.None;
+            dgvKardex.ColumnHeadersDefaultCellStyle.BackColor   = Color.FromArgb(11, 31, 58);
+            dgvKardex.ColumnHeadersDefaultCellStyle.ForeColor   = Color.White;
+            dgvKardex.ColumnHeadersDefaultCellStyle.Font        = new Font("Segoe UI", 11, FontStyle.Bold);
+            dgvKardex.ColumnHeadersHeight                       = 45;
+
+            // FILAS
+            dgvKardex.DefaultCellStyle.Font                 = new Font("Segoe UI", 10);
+            dgvKardex.DefaultCellStyle.Padding              = new Padding(4);
+            dgvKardex.DefaultCellStyle.SelectionBackColor   = Color.FromArgb(52, 152, 219);
+            dgvKardex.DefaultCellStyle.SelectionForeColor   = Color.White;
+            dgvKardex.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 247, 250);
+            dgvKardex.RowTemplate.Height                    = 38;
+        }
+
+        // ─────────────────────────────────────────
+        // CARGA INICIAL
+        // ─────────────────────────────────────────
+
+        private void FrmKardex_Load(object sender, EventArgs e)
+        {
+            CargarProductos();
             MostrarKardex();
         }
 
-        // CONFIGURAR GRID
-
-        private void ConfigurarGrid()
-        {
-            // CONFIG GENERAL
-
-            dgvKardex.EnableHeadersVisualStyles =
-                false;
-
-            dgvKardex.BorderStyle =
-                BorderStyle.None;
-
-            dgvKardex.CellBorderStyle =
-                DataGridViewCellBorderStyle.SingleHorizontal;
-
-            dgvKardex.BackgroundColor =
-                Color.White;
-
-            dgvKardex.RowHeadersVisible =
-                false;
-
-            dgvKardex.SelectionMode =
-                DataGridViewSelectionMode.FullRowSelect;
-
-            dgvKardex.MultiSelect =
-                false;
-
-            dgvKardex.AllowUserToAddRows =
-                false;
-
-            dgvKardex.AllowUserToResizeRows =
-                false;
-
-            dgvKardex.AutoSizeColumnsMode =
-                DataGridViewAutoSizeColumnsMode.None;
-
-            dgvKardex.GridColor =
-                Color.LightGray;
-
-            // HEADER
-
-            dgvKardex.ColumnHeadersBorderStyle =
-                DataGridViewHeaderBorderStyle.None;
-
-            dgvKardex.ColumnHeadersDefaultCellStyle.BackColor =
-                Color.FromArgb(11, 31, 58);
-
-            dgvKardex.ColumnHeadersDefaultCellStyle.ForeColor =
-                Color.White;
-
-            dgvKardex.ColumnHeadersDefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    11,
-                    FontStyle.Bold);
-
-            dgvKardex.ColumnHeadersHeight =
-                45;
-
-            // FILAS
-
-            dgvKardex.DefaultCellStyle.Font =
-                new Font(
-                    "Segoe UI",
-                    10);
-
-            dgvKardex.DefaultCellStyle.Padding =
-                new Padding(3);
-
-            dgvKardex.DefaultCellStyle.SelectionBackColor =
-                Color.FromArgb(52, 152, 219);
-
-            dgvKardex.DefaultCellStyle.SelectionForeColor =
-                Color.White;
-
-            dgvKardex.AlternatingRowsDefaultCellStyle.BackColor =
-                Color.FromArgb(245, 247, 250);
-
-            dgvKardex.RowTemplate.Height =
-                35;
-        }
-
-        // PRODUCTOS
-
+        // CARGA LOS PRODUCTOS EN EL COMBOBOX
         private void CargarProductos()
         {
             try
             {
-                // ASIGNA LOS PRODUCTOS AL COMBOBOX
-                cboProducto.DataSource =
-                    lKardex.MostrarProductos();
-
-                // MUESTRA EL NOMBRE DEL PRODUCTO
-                cboProducto.DisplayMember =
-                    "Nombre";
-
-                // ASIGNA EL ID DEL PRODUCTO
-                cboProducto.ValueMember =
-                    "IdProducto";
-
-                // DEJA EL COMBOBOX VACIO
+                cboProducto.DataSource    = lKardex.MostrarProductos();
+                cboProducto.DisplayMember = "Nombre";
+                cboProducto.ValueMember   = "IdProducto";
                 cboProducto.SelectedIndex = -1;
             }
             catch (Exception ex)
             {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // MOSTRAR
+        // ─────────────────────────────────────────
+        // MOSTRAR KARDEX COMPLETO
+        // ─────────────────────────────────────────
 
         private void MostrarKardex()
         {
             try
             {
-                // MUESTRA LOS DATOS DEL KARDEX
-                dgvKardex.DataSource =
-                    lKardex.MostrarKardex();
-
-                // FORMATEA LAS COLUMNAS
+                dgvKardex.DataSource = lKardex.MostrarKardex();
                 FormatearColumnas();
             }
             catch (Exception ex)
             {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // FORMATEAR COLUMNAS
-
+        // ─────────────────────────────────────────
+        // FORMATEAR COLUMNAS (anchos y alineaciones)
+        // ─────────────────────────────────────────
         private void FormatearColumnas()
         {
-            // VALIDA SI EXISTEN COLUMNAS
-            if (dgvKardex.Columns.Count == 0)
-                return;
+            if (dgvKardex.Columns.Count == 0) return;
 
-            // ANCHO DE COLUMNAS
-            dgvKardex.Columns["IdMovimiento"].Width = 90;
+            // ANCHOS
+            dgvKardex.Columns["IdMovimiento"].Width   = 80;
+            dgvKardex.Columns["TipoMovimiento"].Width = 200;
+            dgvKardex.Columns["Producto"].Width       = 330;
+            dgvKardex.Columns["Bodega"].Width         = 200;
+            dgvKardex.Columns["Cantidad"].Width       = 90;
+            dgvKardex.Columns["Fecha"].Width          = 170;
+            dgvKardex.Columns["Observacion"].Width    = 350;
+            dgvKardex.Columns["UsuarioRegistro"].Width = 200;
 
-            dgvKardex.Columns["TipoMovimiento"].Width = 150;
-
-            dgvKardex.Columns["Producto"].Width = 230;
-
-            dgvKardex.Columns["Bodega"].Width = 200;
-
-            dgvKardex.Columns["Cantidad"].Width = 90;
-
-            dgvKardex.Columns["Fecha"].Width = 170;
-
-            dgvKardex.Columns["Observacion"].Width = 250;
-
-            dgvKardex.Columns["UsuarioRegistro"].Width = 160;
-
-            // ALIGNMENTS
-
-            dgvKardex.Columns["IdMovimiento"]
-                .DefaultCellStyle.Alignment =
+            // ALINEACIONES
+            dgvKardex.Columns["IdMovimiento"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+            dgvKardex.Columns["Cantidad"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleCenter;
+            dgvKardex.Columns["Fecha"].DefaultCellStyle.Alignment =
                 DataGridViewContentAlignment.MiddleCenter;
 
-            dgvKardex.Columns["Cantidad"]
-                .DefaultCellStyle.Alignment =
-                DataGridViewContentAlignment.MiddleCenter;
-
-            dgvKardex.Columns["Fecha"]
-                .DefaultCellStyle.Alignment =
-                DataGridViewContentAlignment.MiddleCenter;
-
-            // WRAP
-
-            dgvKardex.Columns["Observacion"]
-                .DefaultCellStyle.WrapMode =
+            // SIN WRAP EN OBSERVACION
+            dgvKardex.Columns["Observacion"].DefaultCellStyle.WrapMode =
                 DataGridViewTriState.False;
 
-            // HEADERS
-
-            dgvKardex.Columns["IdMovimiento"].HeaderText =
-                "ID";
-
-            dgvKardex.Columns["TipoMovimiento"].HeaderText =
-                "Tipo Movimiento";
-
-            dgvKardex.Columns["UsuarioRegistro"].HeaderText =
-                "Usuario Registro";
+            // ENCABEZADOS PERSONALIZADOS
+            dgvKardex.Columns["IdMovimiento"].HeaderText   = "ID";
+            dgvKardex.Columns["TipoMovimiento"].HeaderText = "Tipo Movimiento";
+            dgvKardex.Columns["UsuarioRegistro"].HeaderText = "Usuario Registro";
         }
 
-        // FILTRAR
+        // ─────────────────────────────────────────
+        // BOTON FILTRAR
+        // ─────────────────────────────────────────
 
-        private void btnBuscar_Click(
-            object sender,
-            EventArgs e)
+        private void btnBuscar_Click(object sender, EventArgs e)
         {
             try
             {
-                // VALIDA SI SELECCIONO UN PRODUCTO
                 if (cboProducto.SelectedIndex == -1)
                 {
                     MessageBox.Show(
-                        "Seleccione un producto",
+                        "Seleccione un producto para filtrar.",
                         "Validación",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
-
                     return;
                 }
 
-                // FILTRA EL KARDEX
-                dgvKardex.DataSource =
-                    lKardex.FiltrarProducto(
-                        Convert.ToInt32(
-                            cboProducto.SelectedValue));
+                dgvKardex.DataSource = lKardex.FiltrarProducto(
+                    Convert.ToInt32(cboProducto.SelectedValue));
 
-                // FORMATEA LAS COLUMNAS
                 FormatearColumnas();
             }
             catch (Exception ex)
             {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // RECARGAR
+        // ─────────────────────────────────────────
+        // BOTON MOSTRAR TODO
+        // ─────────────────────────────────────────
 
-        private void btnRecargar_Click(
-            object sender,
-            EventArgs e)
+        private void btnRecargar_Click(object sender, EventArgs e)
         {
-            // MUESTRA EL KARDEX COMPLETO
             MostrarKardex();
-
-            // LIMPIA EL COMBOBOX
             cboProducto.SelectedIndex = -1;
         }
 
-        // EXPORTAR
+        // ─────────────────────────────────────────
+        // BOTON EXPORTAR EXCEL
+        // ─────────────────────────────────────────
 
-        private void btnExportar_Click(
-            object sender,
-            EventArgs e)
+        private void btnExportar_Click(object sender, EventArgs e)
         {
             try
             {
-                // VALIDA SI HAY DATOS
                 if (dgvKardex.Rows.Count == 0)
                 {
                     MessageBox.Show(
-                        "No hay datos para exportar",
+                        "No hay datos para exportar.",
                         "Información",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
-
                     return;
                 }
 
-                // EXPORTA EL REPORTE A EXCEL
-                ExportarExcel.Exportar(
-                    dgvKardex,
-                    "Reporte_Kardex");
+                ExportarExcel.Exportar(dgvKardex, "Reporte_Kardex");
 
-                // MENSAJE DE CONFIRMACION
                 MessageBox.Show(
-                    "Reporte exportado correctamente",
+                    "Reporte exportado correctamente.",
                     "Exportación",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                // MUESTRA EL ERROR
-                MessageBox.Show(
-                    ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void dgvKardex_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
